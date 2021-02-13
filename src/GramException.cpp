@@ -1,6 +1,6 @@
 #include "../include/GramException.hpp"
 
-GramException::GramException(std::string errorMessage)
+GramException::GramException(std::string errorMessage) throw()
 {
     ErrorMessage = errorMessage;
 }
