@@ -1,12 +1,14 @@
 #include <iostream>
 
-#include "include/TcpConnectionManager.hpp"
-#include "include/UdpConnectionManager.hpp"
+#include "include/tcp/TcpConnectionManager.hpp"
+#include "include/udp/UdpConnectionManager.hpp"
 
 int main(int argc, char** argv) {
 
     try
     {
+        std::cout << "Welcome to gram!" << std::endl;
+
         TcpConnectionManager tcpManager;
         UdpConnectionManager udpManager;
 

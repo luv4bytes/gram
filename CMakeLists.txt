@@ -5,10 +5,11 @@ include(CTest)
 enable_testing()
 
 add_executable(gram main.cpp
-                    src/TcpConnectionManager.cpp
-                    src/TcpConnection.cpp
-                    src/UdpConnectionManager.cpp
-                    src/UdpConnection.cpp
+                    src/tcp/TcpConnectionManager.cpp
+                    src/tcp/TcpConnection.cpp
+                    src/tcp/TcpServer.cpp
+                    src/udp/UdpConnectionManager.cpp
+                    src/udp/UdpConnection.cpp
                     src/GramException.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

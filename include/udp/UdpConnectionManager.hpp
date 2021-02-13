@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "UdpConnection.hpp"
-#include "GramException.hpp"
+#include "../GramException.hpp"
 
 class UdpConnectionManager
 {

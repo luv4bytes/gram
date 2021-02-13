@@ -1,5 +1,5 @@
-#ifndef UDPCONNECTION_H
-#define UDPCONNECTION_H
+#ifndef TCPCONNECTION_H
+#define TCPCONNECTION_H
 
 #include <string>
 #include "string.h"
@@ -9,18 +9,19 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "GramException.hpp"
+#include "../GramException.hpp"
 
-class UdpConnection
+class TcpConnection
 {
+
 private:
-    
+
     int socketFd;
 
 public:
-    UdpConnection();
-    UdpConnection(std::string endpointIpOrName, int port);
-    ~UdpConnection();
+    TcpConnection();
+    TcpConnection(std::string endpointIpOrName, int port);
+    ~TcpConnection();
 
     std::string EndpointIpOrName;
     int Port;

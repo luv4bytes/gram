@@ -1,16 +1,12 @@
-#include "../include/TcpConnection.hpp"
+#include "../../include/udp/UdpConnection.hpp"
 
-TcpConnection::TcpConnection()
+UdpConnection::UdpConnection()
 {
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (socketFd == -1)
-        throw GramException("Error creating socket -> " + std::string(strerror(errno)));
 }
 
-TcpConnection::TcpConnection(std::string endpointIpOrName, int port)
+UdpConnection::UdpConnection(std::string endpointIpOrName, int port)
 {
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
     if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
@@ -19,11 +15,11 @@ TcpConnection::TcpConnection(std::string endpointIpOrName, int port)
     Port = port;
 }
 
-TcpConnection::~TcpConnection()
+UdpConnection::~UdpConnection()
 {
 }
 
-void TcpConnection::Open()
+void UdpConnection::Open()
 {
     struct addrinfo* addresses;
 
@@ -40,7 +36,7 @@ void TcpConnection::Open()
         throw GramException("Error connecting to target -> " + std::string(strerror(errno)));
 }
 
-void TcpConnection::Close()
+void UdpConnection::Close()
 {
     if (socketFd == 0)
         return;        
@@ -51,7 +47,7 @@ void TcpConnection::Close()
         throw GramException("Error closing socket -> " + std::string(strerror(errno)));
 }
 
-void TcpConnection::Send(std::string message)
+void UdpConnection::Send(std::string message)
 {
     if (message.empty())
         return;

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "TcpConnection.hpp"
-#include "GramException.hpp"
+#include "../GramException.hpp"
 
 class TcpConnectionManager
 {
