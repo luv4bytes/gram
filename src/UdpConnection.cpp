@@ -23,7 +23,7 @@ void UdpConnection::Open()
 {
     struct addrinfo* addresses;
 
-    int gotInfo = getaddrinfo(EndpointIpOrName.c_str(), std::to_string(Port).c_str(), NULL, &addresses);
+    int gotInfo = getaddrinfo(EndpointIpOrName.c_str(), std::to_string(Port).c_str(), nullptr, &addresses);
 
     if (gotInfo != 0)
         throw GramException("Error getting address information -> " + std::string(gai_strerror(gotInfo)));
