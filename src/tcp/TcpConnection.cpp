@@ -49,6 +49,8 @@ void TcpConnection::Close()
 
     if (closed == -1)
         throw GramException("Error closing socket -> " + std::string(strerror(errno)));
+
+    socketFd = 0;
 }
 
 void TcpConnection::Send(std::string message)

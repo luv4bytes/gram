@@ -1,5 +1,5 @@
-#ifndef UDPCONNECTIONMANAGER_H
-#define UDPCONNECTIONMANAGER_H
+#ifndef UDPCLIENT_H
+#define UDPCLIENT_H
 
 #include <string>
 #include <vector>
@@ -7,14 +7,14 @@
 #include "UdpConnection.hpp"
 #include "../GramException.hpp"
 
-class UdpConnectionManager
+class UdpClient
 {
 
 private:
 
 public:
-    UdpConnectionManager();
-    ~UdpConnectionManager();
+    UdpClient();
+    ~UdpClient();
 
     std::vector<UdpConnection*> Connections;
 

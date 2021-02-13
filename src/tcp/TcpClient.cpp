@@ -1,16 +1,16 @@
-#include "../../include/tcp/TcpConnectionManager.hpp"
+#include "../../include/tcp/TcpClient.hpp"
 
-TcpConnectionManager::TcpConnectionManager()
+TcpClient::TcpClient()
 {
 }
 
-TcpConnectionManager::~TcpConnectionManager()
+TcpClient::~TcpClient()
 {
     for(size_t i = 0; i < Connections.size(); i++)
         delete(Connections.at(i));
 }
 
-TcpConnection* TcpConnectionManager::CreateConnection()
+TcpConnection* TcpClient::CreateConnection()
 {
     TcpConnection* connection = new TcpConnection();
     connection->EndpointIpOrName = nullptr;
@@ -20,7 +20,7 @@ TcpConnection* TcpConnectionManager::CreateConnection()
     return connection;
 }
 
-TcpConnection* TcpConnectionManager::CreateConnection(std::string endpointIpOrName, int port)
+TcpConnection* TcpClient::CreateConnection(std::string endpointIpOrName, int port)
 {
     TcpConnection* connection = new TcpConnection(endpointIpOrName, port);
     
@@ -29,7 +29,7 @@ TcpConnection* TcpConnectionManager::CreateConnection(std::string endpointIpOrNa
     return connection;
 }
 
-void TcpConnectionManager::OpenConnection(TcpConnection* connection)
+void TcpClient::OpenConnection(TcpConnection* connection)
 {
     if (connection == nullptr)
         return;
@@ -37,7 +37,7 @@ void TcpConnectionManager::OpenConnection(TcpConnection* connection)
     connection->Open();
 }
 
-void TcpConnectionManager::CloseConnection(TcpConnection* connection)
+void TcpClient::CloseConnection(TcpConnection* connection)
 {
     if (connection == nullptr)
         return;
@@ -45,7 +45,7 @@ void TcpConnectionManager::CloseConnection(TcpConnection* connection)
     connection->Close();
 }
 
-void TcpConnectionManager::CloseAllConnections()
+void TcpClient::CloseAllConnections()
 {
     if (Connections.empty())
         return;

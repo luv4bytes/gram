@@ -1,18 +1,18 @@
-#ifndef TCPCONNECTIONMANAGER_H
-#define TCPCONNECTIONMANAGER_H
+#ifndef TCPCLIENT_H
+#define TCPCLIENT_H
 
 #include <vector>
 #include "TcpConnection.hpp"
 #include "../GramException.hpp"
 
-class TcpConnectionManager
+class TcpClient
 {
 
 private:
 
 public:
-    TcpConnectionManager();
-    ~TcpConnectionManager();
+    TcpClient();
+    ~TcpClient();
 
     std::vector<TcpConnection*> Connections;
 

@@ -1,16 +1,24 @@
 #include <iostream>
 
-#include "include/tcp/TcpConnectionManager.hpp"
-#include "include/udp/UdpConnectionManager.hpp"
+#include "include/tcp/TcpClient.hpp"
+#include "include/tcp/TcpServer.hpp"
 
-int main(int argc, char** argv) {
+#include "include/udp/UdpClient.hpp"
 
+int main(int argc, char** argv)
+{
     try
     {
         std::cout << "Welcome to gram!" << std::endl;
 
-        TcpConnectionManager tcpManager;
-        UdpConnectionManager udpManager;
+        TcpClient tcpClient;
+        TcpServer tcpServer;
+
+        tcpServer.Start();
+
+        tcpServer.Stop();
+
+        UdpClient udpClient;
 
         return 0;
     }
