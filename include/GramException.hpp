@@ -7,8 +7,8 @@ class GramException : public std::exception
 {
 
 public:
-    GramException(std::string errorMessage) throw();
-    ~GramException();
+    GramException(std::string errorMessage);
+    ~GramException() throw();
 
     std::string ErrorMessage;
 };
