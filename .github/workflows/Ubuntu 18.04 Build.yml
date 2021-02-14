@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir lua-5.4.2
           tar -xzf 3rdparty/lua-5.4.2.tar.gz -C lua-5.4.2/
-          make install -C lua-5.4.2/lua-5.4.2/
+          sudo make install -C lua-5.4.2/lua-5.4.2/
           mkdir build
           cd build
           cmake ..
