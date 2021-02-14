@@ -1,6 +1,7 @@
 # Folders
 build/
 .vscode/
+lua-5.4.2/
 
 # Prerequisites
 *.d

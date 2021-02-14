@@ -18,26 +18,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include <iostream>
+#ifndef LUAAPI_H
+#define LUAAPI_H
 
-#include "include/tcp/TcpClient.hpp"
-#include "include/tcp/TcpServer.hpp"
-
-#include "include/udp/UdpClient.hpp"
-#include "include/udp/UdpServer.hpp"
-
-#include "include/lua_api/LuaApi.hpp"
-
-int main(int argc, char** argv)
-{
-    try
-    {
-        std::cout << "Welcome to gram!" << std::endl;
-        
-        return 0;
-    }
-    catch(const GramException& e)
-    {
-        std::cerr << e.ErrorMessage << '\n';
-    }
+extern "C"{
+    #include <lua.h>
+    #include <lauxlib.h>
+    #include <lualib.h>
 }
+
+#include <string>
+#include <vector>
+
+#include "../exceptions/GramException.hpp"
+
+class Lua
+{
+
+public:
+
+    Lua();
+    ~Lua();
+
+    class LuaConnection
+    {
+    public:
+        std::string EndpointIpOrName;
+        int Port;
+    };
+
+    void Initialize();
+    std::vector<LuaConnection*> SetConnections();
+
+    // TODO: Lua API
+
+private:
+
+    lua_State* luaMachine;
+};
+
+#endif

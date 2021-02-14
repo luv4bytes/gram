@@ -8,6 +8,7 @@ add_executable(gram main.cpp
                     src/udp/UdpClient.cpp
                     src/udp/UdpConnection.cpp
                     src/udp/UdpServer.cpp
+                    src/lua_api/LuaApi.cpp
                     src/exceptions/GramException.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
@@ -15,12 +16,13 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
 target_link_libraries(gram pthread)
+target_link_libraries(gram lua)
 
 include(CTest)
 enable_testing()
 
 
-# ########## TcpClient tests ##########
+# ########## TcpClient Tests ##########
 
 add_executable(TcpClient_CreateConnection tests/tcp/TcpClient/TcpClient_CreateConnection.cpp
                             src/tcp/TcpClient.cpp
@@ -47,7 +49,7 @@ add_executable(TcpClient_CloseAllConnections tests/tcp/TcpClient/TcpClient_Close
 add_test(TcpClient_CloseAllConnections_Test TcpClient_CloseAllConnections)
 
 
-# ########## TcpConnection tests ##########
+# ########## TcpConnection Tests ##########
 
 add_executable(TcpConnection_Open tests/tcp/TcpConnection/TcpConnection_Open.cpp
                             src/tcp/TcpClient.cpp
@@ -68,7 +70,7 @@ add_executable(TcpConnection_Send tests/tcp/TcpConnection/TcpConnection_Send.cpp
 add_test(TcpConnection_Send_Test TcpConnection_Send)
 
 
-# ########## TcpServer tests ##########
+# ########## TcpServer Tests ##########
 
 add_executable(TcpServer_ReceiveMessage tests/tcp/TcpServer/TcpServer_ReceiveMessage.cpp
                             src/tcp/TcpServer.cpp
@@ -78,7 +80,7 @@ add_executable(TcpServer_ReceiveMessage tests/tcp/TcpServer/TcpServer_ReceiveMes
 target_link_libraries(TcpServer_ReceiveMessage pthread)
 add_test(TcpServer_ReceiveMessage_Test TcpServer_ReceiveMessage)
 
-# ########## UdpClient tests ##########
+# ########## UdpClient Tests ##########
 
 add_executable(UdpClient_CreateConnection tests/udp/UdpClient/UdpClient_CreateConnection.cpp
                             src/udp/UdpClient.cpp
@@ -105,7 +107,7 @@ add_executable(UdpClient_CloseAllConnections tests/udp/UdpClient/UdpClient_Close
 add_test(UdpClient_CloseAllConnections_Test UdpClient_CloseAllConnections)
 
 
-# ########## UdpConnection tests ##########
+# ########## UdpConnection Tests ##########
 
 add_executable(UdpConnection_Open tests/udp/UdpConnection/UdpConnection_Open.cpp
                             src/udp/UdpConnection.cpp
@@ -123,7 +125,7 @@ add_executable(UdpConnection_Send tests/udp/UdpConnection/UdpConnection_Send.cpp
 add_test(UdpConnection_Send_Test UdpConnection_Send)
 
 
-# ########## UdpServer tests ##########
+# ########## UdpServer Tests ##########
 
 add_executable(UdpServer_ReceiveMessage tests/udp/UdpServer/UdpServer_ReceiveMessage.cpp
                             src/udp/UdpServer.cpp
@@ -132,3 +134,12 @@ add_executable(UdpServer_ReceiveMessage tests/udp/UdpServer/UdpServer_ReceiveMes
                             src/exceptions/GramException.cpp)
 target_link_libraries(UdpServer_ReceiveMessage pthread)
 add_test(UdpServer_ReceiveMessage_Test UdpServer_ReceiveMessage)
+
+
+# ########## Lua Tests ##########
+
+add_executable(Lua_Initialize tests/lua_api/Lua_Initialize.cpp
+                            src/lua_api/LuaApi.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(Lua_Initialize lua)
+add_test(Lua_Initialize_Test Lua_Initialize)
