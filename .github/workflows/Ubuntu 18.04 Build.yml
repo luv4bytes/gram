@@ -17,6 +17,7 @@ jobs:
         run: |
           tar -xzf 3rdparty/lua-5.4.2.tar.gz
           cd lua-5.4.2
+          sudo make
           sudo make install
           cd ..
           mkdir build
