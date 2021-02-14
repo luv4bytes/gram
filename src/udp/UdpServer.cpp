@@ -18,19 +18,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/tcp/TcpServer.hpp"
+#include "../../include/udp/UdpServer.hpp"
 
-TcpServer::TcpServer()
+UdpServer::UdpServer()
 {
 }
 
-TcpServer::~TcpServer()
+UdpServer::~UdpServer()
 {
 }
 
-void TcpServer::Start()
+void UdpServer::Start()
 {
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
       if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
@@ -44,17 +44,12 @@ void TcpServer::Start()
     if (bound == -1)
         throw GramException("Error binding address -> " + std::string(strerror(errno)));
 
-    int listening = listen(socketFd, LISTEN_BACKLOG);
-
-    if (listening == -1)
-        throw GramException("Error starting to listen -> " + std::string(strerror(errno)));
-
-    waitForConnections();
+    waitForDatagrams();
 }
 
-void TcpServer::Start(int bindPort)
+void UdpServer::Start(int bindPort)
 {
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
       if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
@@ -67,16 +62,11 @@ void TcpServer::Start(int bindPort)
 
     if (bound == -1)
         throw GramException("Error binding address -> " + std::string(strerror(errno)));
-
-    int listening = listen(socketFd, LISTEN_BACKLOG);
-
-    if (listening == -1)
-        throw GramException("Error starting to listen -> " + std::string(strerror(errno)));
-
-    waitForConnections();
+        
+    waitForDatagrams();
 }
 
-void TcpServer::Stop()
+void UdpServer::Stop()
 {
     int closed = close(socketFd);
 
@@ -86,44 +76,20 @@ void TcpServer::Stop()
     socketFd = 0;
 }
 
-void TcpServer::waitForConnections()
+void UdpServer::waitForDatagrams()
 {
     WaitThread = std::thread(
         [&]
         ()
         {
             socklen_t sz = sizeof(address);
-            int acceptedSocketFd = accept(socketFd, (struct sockaddr*)&address, (socklen_t*)&sz);
+            char buffer[UdpServer::BUFFER_SIZE];
 
-            if (acceptedSocketFd == -1)
-                throw GramException("Error accepting incoming connection -> " + std::string(strerror(errno)));
+            ssize_t received = recv(socketFd, buffer, UdpServer::BUFFER_SIZE, 0);
 
-            addConnection(acceptedSocketFd);
+            if (received == -1)
+                throw GramException("Error receiving datagram -> " + std::string(strerror(errno)));
+
+            receivedHandler(std::string(buffer));
         });
-}
-
-void TcpServer::addConnection(int socketFd)
-{
-    std::thread connection = std::thread(
-        [=]
-        ()
-        {
-            char buffer[TcpServer::BUFFER_SIZE];
-
-            while(true)
-            {
-                ssize_t readBytes = read(socketFd, buffer, TcpServer::BUFFER_SIZE);
-
-                if (readBytes == -1)
-                    throw GramException("Error reading bytes -> " + std::string(strerror(errno)));
-
-                if (readBytes == 0)
-                    break;
-
-                receivedHandler(std::string(buffer));
-                memset(buffer, 0, TcpServer::BUFFER_SIZE);
-            }
-        });
-
-    ConnectionThreads.push_back(std::move(connection));
 }

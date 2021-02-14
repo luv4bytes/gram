@@ -18,24 +18,57 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include <iostream>
+#ifndef UDPSERVER_H
+#define UDPSERVER_H
 
-#include "include/tcp/TcpClient.hpp"
-#include "include/tcp/TcpServer.hpp"
+#include <string>
+#include "string.h"
+#include <errno.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <vector>
+#include <thread>
 
-#include "include/udp/UdpClient.hpp"
-#include "include/udp/UdpServer.hpp"
+#include "../exceptions/GramException.hpp"
 
-int main(int argc, char** argv)
+class UdpServer
 {
-    try
-    {
-        std::cout << "Welcome to gram!" << std::endl;
+public:
+    typedef void(*ReceivedHandler)(std::string);
 
-        return 0;
-    }
-    catch(const GramException& e)
+    UdpServer();
+    ~UdpServer();
+
+    static const int STANDARD_PORT = 55557;
+    static const int BUFFER_SIZE = 65535;
+
+    void Start();
+    void Start(int bindPort);
+
+    void Stop();
+
+    template<typename T>
+    void AddReceivedHandler(T handler)
     {
-        std::cerr << e.ErrorMessage << '\n';
+        if (handler == nullptr)
+            return;
+
+        receivedHandler = handler;
     }
-}
+
+private:
+    int socketFd;
+    struct sockaddr_in address;
+
+    std::thread WaitThread;
+    std::vector<std::thread> ConnectionThreads;
+
+    void waitForDatagrams();
+
+    ReceivedHandler receivedHandler;
+};
+
+#endif

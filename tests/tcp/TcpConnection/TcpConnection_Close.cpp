@@ -2,7 +2,7 @@
 
 int main()
 {
-    TcpConnection con("216.58.213.206", 80);
+    TcpConnection con("github.com", 80);
     con.Open();
     con.Close();
 

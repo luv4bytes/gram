@@ -2,7 +2,7 @@
 
 int main()
 {
-    UdpConnection con("216.58.213.206", 80);
+    UdpConnection con("github.com", 80);
     con.Open();
 
     return 0;

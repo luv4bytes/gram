@@ -36,6 +36,29 @@ SOFTWARE. */
 
 class TcpServer
 {
+public:
+    typedef void(*ReceivedHandler)(std::string);
+
+    TcpServer();
+    ~TcpServer();
+
+    static const int STANDARD_PORT = 55556;
+    static const int LISTEN_BACKLOG = 50;
+    static const int BUFFER_SIZE = 4096;
+
+    void Start();
+    void Start(int bindPort);
+
+    void Stop();
+
+    template<typename T>
+    void AddReceivedHandler(T handler)
+    {
+        if (handler == nullptr)
+            return;
+
+        receivedHandler = handler;
+    }
 
 private:
     int socketFd;
@@ -47,17 +70,7 @@ private:
     void waitForConnections();
     void addConnection(int socketFd);
 
-public:
-    TcpServer();
-    ~TcpServer();
-
-    static const int STANDARD_PORT = 55556;
-    static const int LISTEN_BACKLOG = 50;
-
-    void Start();
-    void Start(int bindPort);
-
-    void Stop();
+    ReceivedHandler receivedHandler;
 };
 
 #endif

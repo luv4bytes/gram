@@ -4,7 +4,7 @@ int main()
 {
     TcpClient client;
 
-    auto con = client.CreateConnection("216.58.213.206", 80);
+    auto con = client.CreateConnection("github.com", 80);
     client.OpenConnection(con);
 
     return 0;

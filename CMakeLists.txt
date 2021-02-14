@@ -7,6 +7,7 @@ add_executable(gram main.cpp
                     src/tcp/TcpServer.cpp
                     src/udp/UdpClient.cpp
                     src/udp/UdpConnection.cpp
+                    src/udp/UdpServer.cpp
                     src/exceptions/GramException.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
