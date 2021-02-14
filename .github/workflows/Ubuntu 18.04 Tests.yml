@@ -1,0 +1,24 @@
+name: Ubuntu 18.04 Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - ".github/**"
+
+jobs:
+  make-master:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@master
+      - run: sudo apt install libpthread-stubs0-dev -y
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+          ctest
