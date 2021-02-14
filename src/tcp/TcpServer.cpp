@@ -26,6 +26,7 @@ TcpServer::TcpServer()
 
 TcpServer::~TcpServer()
 {
+    Stop();
 }
 
 void TcpServer::Start()
@@ -82,6 +83,10 @@ void TcpServer::Stop()
 
     if (closed == -1)
         throw GramException("Error closing server socket -> " + std::string(strerror(errno)));
+
+    WaitThread.detach();
+    for(int i = 0; i < ConnectionThreads.size(); i++)
+        ConnectionThreads.at(i).detach();
 
     socketFd = 0;
 }

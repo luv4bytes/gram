@@ -20,7 +20,7 @@ include(CTest)
 enable_testing()
 
 
-# TcpClient tests
+# ########## TcpClient tests ##########
 
 add_executable(TcpClient_CreateConnection tests/tcp/TcpClient/TcpClient_CreateConnection.cpp
                             src/tcp/TcpClient.cpp
@@ -47,7 +47,7 @@ add_executable(TcpClient_CloseAllConnections tests/tcp/TcpClient/TcpClient_Close
 add_test(TcpClient_CloseAllConnections_Test TcpClient_CloseAllConnections)
 
 
-# TcpConnection tests
+# ########## TcpConnection tests ##########
 
 add_executable(TcpConnection_Open tests/tcp/TcpConnection/TcpConnection_Open.cpp
                             src/tcp/TcpClient.cpp
@@ -68,7 +68,17 @@ add_executable(TcpConnection_Send tests/tcp/TcpConnection/TcpConnection_Send.cpp
 add_test(TcpConnection_Send_Test TcpConnection_Send)
 
 
-# UdpClient tests
+# ########## TcpServer tests ##########
+
+add_executable(TcpServer_ReceiveMessage tests/tcp/TcpServer/TcpServer_ReceiveMessage.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(TcpServer_ReceiveMessage pthread)
+add_test(TcpServer_ReceiveMessage_Test TcpServer_ReceiveMessage)
+
+# ########## UdpClient tests ##########
 
 add_executable(UdpClient_CreateConnection tests/udp/UdpClient/UdpClient_CreateConnection.cpp
                             src/udp/UdpClient.cpp
@@ -95,7 +105,7 @@ add_executable(UdpClient_CloseAllConnections tests/udp/UdpClient/UdpClient_Close
 add_test(UdpClient_CloseAllConnections_Test UdpClient_CloseAllConnections)
 
 
-# UdpConnection tests
+# ########## UdpConnection tests ##########
 
 add_executable(UdpConnection_Open tests/udp/UdpConnection/UdpConnection_Open.cpp
                             src/udp/UdpConnection.cpp
@@ -110,4 +120,15 @@ add_test(UdpConnection_Close_Test UdpConnection_Close)
 add_executable(UdpConnection_Send tests/udp/UdpConnection/UdpConnection_Send.cpp
                             src/udp/UdpConnection.cpp
                             src/exceptions/GramException.cpp)
-add_test(UdpConnection_Send_Tests UdpConnection_Send)
+add_test(UdpConnection_Send_Test UdpConnection_Send)
+
+
+# ########## UdpServer tests ##########
+
+add_executable(UdpServer_ReceiveMessage tests/udp/UdpServer/UdpServer_ReceiveMessage.cpp
+                            src/udp/UdpServer.cpp
+                            src/udp/UdpClient.cpp
+                            src/udp/UdpConnection.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(UdpServer_ReceiveMessage pthread)
+add_test(UdpServer_ReceiveMessage_Test UdpServer_ReceiveMessage)

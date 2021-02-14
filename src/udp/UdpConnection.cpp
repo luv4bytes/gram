@@ -37,6 +37,7 @@ UdpConnection::UdpConnection(std::string endpointIpOrName, int port)
 
 UdpConnection::~UdpConnection()
 {
+    Close();
 }
 
 void UdpConnection::Open()
@@ -65,6 +66,8 @@ void UdpConnection::Close()
 
     if (closed == -1)
         throw GramException("Error closing socket -> " + std::string(strerror(errno)));
+
+    socketFd = 0;
 }
 
 void UdpConnection::Send(std::string message)

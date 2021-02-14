@@ -32,6 +32,7 @@ int main(int argc, char** argv)
     {
         std::cout << "Welcome to gram!" << std::endl;
 
+        
         return 0;
     }
     catch(const GramException& e)

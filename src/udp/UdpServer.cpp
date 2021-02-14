@@ -26,6 +26,7 @@ UdpServer::UdpServer()
 
 UdpServer::~UdpServer()
 {
+    Stop();
 }
 
 void UdpServer::Start()
@@ -73,6 +74,7 @@ void UdpServer::Stop()
     if (closed == -1)
         throw GramException("Error closing server socket -> " + std::string(strerror(errno)));
 
+    WaitThread.detach();
     socketFd = 0;
 }
 

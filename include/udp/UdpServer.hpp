@@ -64,7 +64,6 @@ private:
     struct sockaddr_in address;
 
     std::thread WaitThread;
-    std::vector<std::thread> ConnectionThreads;
 
     void waitForDatagrams();
 

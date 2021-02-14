@@ -41,6 +41,7 @@ TcpConnection::TcpConnection(std::string endpointIpOrName, int port)
 
 TcpConnection::~TcpConnection()
 {
+    Close();
 }
 
 void TcpConnection::Open()
