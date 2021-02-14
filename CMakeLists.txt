@@ -100,12 +100,12 @@ add_test(UdpClient_CloseAllConnections_Test UdpClient_CloseAllConnections)
 add_executable(UdpConnection_Open tests/udp/UdpConnection/UdpConnection_Open.cpp
                             src/udp/UdpConnection.cpp
                             src/exceptions/GramException.cpp)
-add_test(UdpConnection_Open_Test UdpConnection_OpenConnection)
+add_test(UdpConnection_Open_Test UdpConnection_Open)
 
 add_executable(UdpConnection_Close tests/udp/UdpConnection/UdpConnection_Close.cpp
                             src/udp/UdpConnection.cpp
                             src/exceptions/GramException.cpp)
-add_test(UdpConnection_Close_Test UdpConnection_CloseConnection)
+add_test(UdpConnection_Close_Test UdpConnection_Close)
 
 add_executable(UdpConnection_Send tests/udp/UdpConnection/UdpConnection_Send.cpp
                             src/udp/UdpConnection.cpp
