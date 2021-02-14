@@ -17,6 +17,11 @@ jobs:
       - run: sudo apt install libpthread-stubs0-dev -y
       - name: Build
         run: |
+          tar -xzf 3rdparty/lua-5.4.2.tar.gz
+          cd lua-5.4.2
+          sudo make
+          sudo make install
+          cd ..
           mkdir build
           cd build
           cmake ..
