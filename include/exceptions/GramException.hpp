@@ -1,6 +1,4 @@
-MIT License
-
-Copyright (c) 2021 Lukas Pfeifer
+/* Copyright (c) 2021 Lukas Pfeifer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -18,4 +16,23 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SOFTWARE. */
+
+#ifndef GRAMEXCEPTION_H
+#define GRAMEXCEPTION_H
+
+#include <string>
+
+class GramException : public std::exception
+{
+
+public:
+    GramException(std::string errorMessage);
+    ~GramException();
+
+    std::string ErrorMessage;
+
+    const char* what() const throw();
+};
+
+#endif

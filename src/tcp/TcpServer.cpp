@@ -1,3 +1,23 @@
+/* Copyright (c) 2021 Lukas Pfeifer
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
 #include "../../include/tcp/TcpServer.hpp"
 
 TcpServer::TcpServer()
@@ -28,6 +48,8 @@ void TcpServer::Start()
 
     if (listening == -1)
         throw GramException("Error starting to listen -> " + std::string(strerror(errno)));
+
+    waitForConnections();
 }
 
 void TcpServer::Start(int bindPort)
@@ -50,6 +72,8 @@ void TcpServer::Start(int bindPort)
 
     if (listening == -1)
         throw GramException("Error starting to listen -> " + std::string(strerror(errno)));
+
+    waitForConnections();
 }
 
 void TcpServer::Stop()
@@ -60,4 +84,39 @@ void TcpServer::Stop()
         throw GramException("Error closing server socket -> " + std::string(strerror(errno)));
 
     socketFd = 0;
+}
+
+void TcpServer::waitForConnections()
+{
+    WaitThread = std::thread(
+        [&]
+        ()
+        {
+            socklen_t sz = sizeof(address);
+            int acceptedSocketFd = accept(socketFd, (struct sockaddr*)&address, (socklen_t*)&sz);
+
+            if (acceptedSocketFd == -1)
+                throw GramException("Error accepting incoming connection -> " + std::string(strerror(errno)));
+
+            addConnection(acceptedSocketFd);
+        });
+}
+
+void TcpServer::addConnection(int socketFd)
+{
+    std::thread connection = std::thread(
+        [socketFd]
+        ()
+        {
+            size_t bufferSize = 1024;
+            char buffer[bufferSize];
+            ssize_t readBytes = read(socketFd, buffer, bufferSize);
+
+            if (readBytes == -1)
+                throw GramException("Error reading bytes -> " + std::string(strerror(errno)));
+
+            // TODO:
+        });
+
+    ConnectionThreads.push_back(std::move(connection));
 }

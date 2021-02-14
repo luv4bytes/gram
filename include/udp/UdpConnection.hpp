@@ -9,7 +9,7 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "../GramException.hpp"
+#include "../exceptions/GramException.hpp"
 
 class UdpConnection
 {
