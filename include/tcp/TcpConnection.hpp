@@ -31,27 +31,30 @@ SOFTWARE. */
 
 #include "../exceptions/GramException.hpp"
 
-class TcpConnection
+namespace gram
 {
+    class TcpConnection
+    {
 
-private:
+    private:
 
-    int socketFd;
+        int socketFd;
 
-public:
-    TcpConnection();
-    TcpConnection(std::string endpointIpOrName, int port);
-    ~TcpConnection();
+    public:
+        TcpConnection();
+        TcpConnection(std::string endpointIpOrName, int port);
+        ~TcpConnection();
 
-    bool Connected;
+        bool Connected;
 
-    std::string EndpointIpOrName;
-    int Port;
+        std::string EndpointIpOrName;
+        int Port;
 
-    void Open();
-    void Close();
+        void Open();
+        void Close();
 
-    void Send(std::string message);
+        void Send(std::string message);
+    };
 };
 
 #endif

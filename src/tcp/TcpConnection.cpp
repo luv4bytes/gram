@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #include "../../include/tcp/TcpConnection.hpp"
 
-TcpConnection::TcpConnection()
+gram::TcpConnection::TcpConnection()
 {
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -28,7 +28,7 @@ TcpConnection::TcpConnection()
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
 }
 
-TcpConnection::TcpConnection(std::string endpointIpOrName, int port)
+gram::TcpConnection::TcpConnection(std::string endpointIpOrName, int port)
 {
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -39,12 +39,12 @@ TcpConnection::TcpConnection(std::string endpointIpOrName, int port)
     Port = port;
 }
 
-TcpConnection::~TcpConnection()
+gram::TcpConnection::~TcpConnection()
 {
     Close();
 }
 
-void TcpConnection::Open()
+void gram::TcpConnection::Open()
 {
     struct addrinfo* addresses;
 
@@ -63,7 +63,7 @@ void TcpConnection::Open()
     Connected = true;
 }
 
-void TcpConnection::Close()
+void gram::TcpConnection::Close()
 {
     if (socketFd == 0)
         return;        
@@ -77,7 +77,7 @@ void TcpConnection::Close()
     Connected = false;
 }
 
-void TcpConnection::Send(std::string message)
+void gram::TcpConnection::Send(std::string message)
 {
     if (message.empty())
         return;

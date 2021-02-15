@@ -7,23 +7,23 @@
 #include "UdpConnection.hpp"
 #include "../exceptions/GramException.hpp"
 
-class UdpClient
+namespace gram
 {
+    class UdpClient
+    {
+    public:
+        UdpClient();
+        ~UdpClient();
 
-private:
+        std::vector<UdpConnection*> Connections;
 
-public:
-    UdpClient();
-    ~UdpClient();
+        UdpConnection* CreateConnection();
+        UdpConnection* CreateConnection(std::string endpointIpOrName, int port);
 
-    std::vector<UdpConnection*> Connections;
-
-    UdpConnection* CreateConnection();
-    UdpConnection* CreateConnection(std::string endpointIpOrName, int port);
-
-    void OpenConnection(UdpConnection* connection);
-    void CloseConnection(UdpConnection* connection);
-    void CloseAllConnections();
+        void OpenConnection(UdpConnection* connection);
+        void CloseConnection(UdpConnection* connection);
+        void CloseAllConnections();
+    };
 };
 
 #endif

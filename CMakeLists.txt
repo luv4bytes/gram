@@ -9,6 +9,7 @@ add_executable(gram main.cpp
                     src/udp/UdpConnection.cpp
                     src/udp/UdpServer.cpp
                     src/lua_api/LuaApi.cpp
+                    src/commands/commands.cpp
                     src/exceptions/GramException.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

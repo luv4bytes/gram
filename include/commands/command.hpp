@@ -18,49 +18,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/udp/UdpClient.hpp"
+#ifndef COMMAND_H
+#define COMMAND_H
 
-gram::UdpClient::UdpClient()
+#include <string>
+#include <map>
+
+namespace gram
 {
-}
+    template <typename ...args>
+    class Command
+    {
+    public:
+        void operator()()
+        {
+            Handler();
+        }
 
-gram::UdpClient::~UdpClient()
-{
-}
+        std::string CommandName;
+        std::string Description;
+        std::string FormatString;
 
-gram::UdpConnection* gram::UdpClient::CreateConnection()
-{
-    UdpConnection* connection = new UdpConnection();
+        typedef void (*CommandHandler)(args... a);
 
-    return connection;
-}
+        CommandHandler Handler;
 
-gram::UdpConnection* gram::UdpClient::CreateConnection(std::string endpointIpOrName, int port)
-{
-    UdpConnection* connection = new UdpConnection(endpointIpOrName, port);
+        void AssignHandler(CommandHandler handler)
+        {
+            Handler = handler;
+        }
+    };
+};
 
-    return connection;
-}
-
-void gram::UdpClient::OpenConnection(UdpConnection* connection)
-{
-    if (connection == nullptr)
-        return;
-
-    connection->Open();
-}
-
-void gram::UdpClient::CloseConnection(UdpConnection* connection)
-{
-    if (connection == nullptr)
-        connection->Close();
-}
-
-void gram::UdpClient::CloseAllConnections()
-{
-    if (Connections.empty())
-        return;
-
-    for(size_t i = 0; i < Connections.size(); i++)
-        Connections.at(i)->Close();
-}
+#endif

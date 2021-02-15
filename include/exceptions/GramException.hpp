@@ -23,16 +23,19 @@ SOFTWARE. */
 
 #include <string>
 
-class GramException : public std::exception
+namespace gram
 {
+    class GramException : public std::exception
+    {
 
-public:
-    GramException(std::string errorMessage);
-    ~GramException();
+    public:
+        GramException(std::string errorMessage);
+        ~GramException();
 
-    std::string ErrorMessage;
+        std::string ErrorMessage;
 
-    const char* what() const throw();
+        const char* what() const throw();
+    };
 };
 
 #endif

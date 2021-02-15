@@ -20,16 +20,16 @@ SOFTWARE. */
 
 #include "../../include/udp/UdpServer.hpp"
 
-UdpServer::UdpServer()
+gram::UdpServer::UdpServer()
 {
 }
 
-UdpServer::~UdpServer()
+gram::UdpServer::~UdpServer()
 {
     Stop();
 }
 
-void UdpServer::Start()
+void gram::UdpServer::Start()
 {
     socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -48,7 +48,7 @@ void UdpServer::Start()
     waitForDatagrams();
 }
 
-void UdpServer::Start(int bindPort)
+void gram::UdpServer::Start(int bindPort)
 {
     socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -67,7 +67,7 @@ void UdpServer::Start(int bindPort)
     waitForDatagrams();
 }
 
-void UdpServer::Stop()
+void gram::UdpServer::Stop()
 {
     int closed = close(socketFd);
 
@@ -78,7 +78,7 @@ void UdpServer::Stop()
     socketFd = 0;
 }
 
-void UdpServer::waitForDatagrams()
+void gram::UdpServer::waitForDatagrams()
 {
     WaitThread = std::thread(
         [&]

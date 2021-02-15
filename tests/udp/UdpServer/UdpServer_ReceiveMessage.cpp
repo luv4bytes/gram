@@ -7,7 +7,7 @@ bool breakRcv = false;
 
 int main()
 {
-    UdpServer server;
+    gram::UdpServer server;
 
     server.AddReceivedHandler([](std::string msg){
         breakRcv = true;
@@ -15,8 +15,8 @@ int main()
 
     server.Start();
 
-    UdpClient client;
-    auto connection = client.CreateConnection("127.0.0.1", UdpServer::STANDARD_PORT);
+    gram::UdpClient client;
+    auto connection = client.CreateConnection("127.0.0.1", gram::UdpServer::STANDARD_PORT);
     connection->Open();
     connection->Send("Hello");
     

@@ -25,23 +25,26 @@ SOFTWARE. */
 #include "TcpConnection.hpp"
 #include "../exceptions/GramException.hpp"
 
-class TcpClient
+namespace gram
 {
+    class TcpClient
+    {
 
-private:
+    private:
 
-public:
-    TcpClient();
-    ~TcpClient();
+    public:
+        TcpClient();
+        ~TcpClient();
 
-    std::vector<TcpConnection*> Connections;
+        std::vector<TcpConnection*> Connections;
 
-    TcpConnection* CreateConnection();
-    TcpConnection* CreateConnection(std::string endpointIpOrName, int port);
+        TcpConnection* CreateConnection();
+        TcpConnection* CreateConnection(std::string endpointIpOrName, int port);
 
-    void OpenConnection(TcpConnection* connection);
-    void CloseConnection(TcpConnection* connection);
-    void CloseAllConnections();
+        void OpenConnection(TcpConnection* connection);
+        void CloseConnection(TcpConnection* connection);
+        void CloseAllConnections();
+    };
 };
 
 #endif

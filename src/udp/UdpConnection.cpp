@@ -20,11 +20,11 @@ SOFTWARE. */
 
 #include "../../include/udp/UdpConnection.hpp"
 
-UdpConnection::UdpConnection()
+gram::UdpConnection::UdpConnection()
 {
 }
 
-UdpConnection::UdpConnection(std::string endpointIpOrName, int port)
+gram::UdpConnection::UdpConnection(std::string endpointIpOrName, int port)
 {
     socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
@@ -35,12 +35,12 @@ UdpConnection::UdpConnection(std::string endpointIpOrName, int port)
     Port = port;
 }
 
-UdpConnection::~UdpConnection()
+gram::UdpConnection::~UdpConnection()
 {
     Close();
 }
 
-void UdpConnection::Open()
+void gram::UdpConnection::Open()
 {
     struct addrinfo* addresses;
 
@@ -57,7 +57,7 @@ void UdpConnection::Open()
         throw GramException("Error connecting to target -> " + std::string(strerror(errno)));
 }
 
-void UdpConnection::Close()
+void gram::UdpConnection::Close()
 {
     if (socketFd == 0)
         return;        
@@ -70,7 +70,7 @@ void UdpConnection::Close()
     socketFd = 0;
 }
 
-void UdpConnection::Send(std::string message)
+void gram::UdpConnection::Send(std::string message)
 {
     if (message.empty())
         return;

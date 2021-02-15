@@ -2,7 +2,7 @@
 
 int main()
 {
-    UdpConnection con("github.com", 80);
+    gram::UdpConnection con("github.com", 80);
     con.Open();
  
     con.Send("Hello GitHub!");

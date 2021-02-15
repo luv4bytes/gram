@@ -20,17 +20,17 @@ SOFTWARE. */
 
 #include "../../include/tcp/TcpClient.hpp"
 
-TcpClient::TcpClient()
+gram::TcpClient::TcpClient()
 {
 }
 
-TcpClient::~TcpClient()
+gram::TcpClient::~TcpClient()
 {
     for(size_t i = 0; i < Connections.size(); i++)
         delete(Connections.at(i));
 }
 
-TcpConnection* TcpClient::CreateConnection()
+gram::TcpConnection* gram::TcpClient::CreateConnection()
 {
     TcpConnection* connection = new TcpConnection();
 
@@ -39,7 +39,7 @@ TcpConnection* TcpClient::CreateConnection()
     return connection;
 }
 
-TcpConnection* TcpClient::CreateConnection(std::string endpointIpOrName, int port)
+gram::TcpConnection* gram::TcpClient::CreateConnection(std::string endpointIpOrName, int port)
 {
     TcpConnection* connection = new TcpConnection(endpointIpOrName, port);
     
@@ -48,7 +48,7 @@ TcpConnection* TcpClient::CreateConnection(std::string endpointIpOrName, int por
     return connection;
 }
 
-void TcpClient::OpenConnection(TcpConnection* connection)
+void gram::TcpClient::OpenConnection(TcpConnection* connection)
 {
     if (connection == nullptr)
         return;
@@ -56,7 +56,7 @@ void TcpClient::OpenConnection(TcpConnection* connection)
     connection->Open();
 }
 
-void TcpClient::CloseConnection(TcpConnection* connection)
+void gram::TcpClient::CloseConnection(TcpConnection* connection)
 {
     if (connection == nullptr)
         return;
@@ -64,7 +64,7 @@ void TcpClient::CloseConnection(TcpConnection* connection)
     connection->Close();
 }
 
-void TcpClient::CloseAllConnections()
+void gram::TcpClient::CloseAllConnections()
 {
     if (Connections.empty())
         return;

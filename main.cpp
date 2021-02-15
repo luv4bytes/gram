@@ -28,15 +28,29 @@ SOFTWARE. */
 
 #include "include/lua_api/LuaApi.hpp"
 
+#include "include/commands/commands.hpp"
+
 int main(int argc, char** argv)
 {
     try
     {
         std::cout << "Welcome to gram!" << std::endl;
-        
+
+        gram::Commands Commands;
+
+        Commands.Exit();
+
+        while(true)
+        {
+            std::string command;
+
+            std::cout << "> ";
+            std::cin >> command;
+        }
+
         return 0;
     }
-    catch(const GramException& e)
+    catch(const gram::GramException& e)
     {
         std::cerr << e.ErrorMessage << '\n';
     }

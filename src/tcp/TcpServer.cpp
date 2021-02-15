@@ -20,16 +20,16 @@ SOFTWARE. */
 
 #include "../../include/tcp/TcpServer.hpp"
 
-TcpServer::TcpServer()
+gram::TcpServer::TcpServer()
 {
 }
 
-TcpServer::~TcpServer()
+gram::TcpServer::~TcpServer()
 {
     Stop();
 }
 
-void TcpServer::Start()
+void gram::TcpServer::Start()
 {
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -53,7 +53,7 @@ void TcpServer::Start()
     waitForConnections();
 }
 
-void TcpServer::Start(int bindPort)
+void gram::TcpServer::Start(int bindPort)
 {
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -77,7 +77,7 @@ void TcpServer::Start(int bindPort)
     waitForConnections();
 }
 
-void TcpServer::Stop()
+void gram::TcpServer::Stop()
 {
     int closed = close(socketFd);
 
@@ -91,7 +91,7 @@ void TcpServer::Stop()
     socketFd = 0;
 }
 
-void TcpServer::waitForConnections()
+void gram::TcpServer::waitForConnections()
 {
     WaitThread = std::thread(
         [&]
@@ -107,7 +107,7 @@ void TcpServer::waitForConnections()
         });
 }
 
-void TcpServer::addConnection(int socketFd)
+void gram::TcpServer::addConnection(int socketFd)
 {
     std::thread connection = std::thread(
         [=]

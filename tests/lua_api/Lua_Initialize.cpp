@@ -2,7 +2,7 @@
 
 int main()
 {
-    Lua lua;
+    gram::Lua lua;
 
     lua.Initialize();
 

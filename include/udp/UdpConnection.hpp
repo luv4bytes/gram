@@ -11,24 +11,27 @@
 
 #include "../exceptions/GramException.hpp"
 
-class UdpConnection
+namespace gram
 {
-private:
-    
-    int socketFd;
+    class UdpConnection
+    {
+    private:
+        
+        int socketFd;
 
-public:
-    UdpConnection();
-    UdpConnection(std::string endpointIpOrName, int port);
-    ~UdpConnection();
+    public:
+        UdpConnection();
+        UdpConnection(std::string endpointIpOrName, int port);
+        ~UdpConnection();
 
-    std::string EndpointIpOrName;
-    int Port;
+        std::string EndpointIpOrName;
+        int Port;
 
-    void Open();
-    void Close();
+        void Open();
+        void Close();
 
-    void Send(std::string message);
+        void Send(std::string message);
+    };
 };
 
 #endif

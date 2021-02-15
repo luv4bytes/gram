@@ -34,40 +34,43 @@ SOFTWARE. */
 
 #include "../exceptions/GramException.hpp"
 
-class UdpServer
+namespace gram
 {
-public:
-    typedef void(*ReceivedHandler)(std::string);
-
-    UdpServer();
-    ~UdpServer();
-
-    static const int STANDARD_PORT = 55557;
-    static const int BUFFER_SIZE = 65535;
-
-    void Start();
-    void Start(int bindPort);
-
-    void Stop();
-
-    template<typename T>
-    void AddReceivedHandler(T handler)
+    class UdpServer
     {
-        if (handler == nullptr)
-            return;
+    public:
+        typedef void(*ReceivedHandler)(std::string);
 
-        receivedHandler = handler;
-    }
+        UdpServer();
+        ~UdpServer();
 
-private:
-    int socketFd;
-    struct sockaddr_in address;
+        static const int STANDARD_PORT = 55557;
+        static const int BUFFER_SIZE = 65535;
 
-    std::thread WaitThread;
+        void Start();
+        void Start(int bindPort);
 
-    void waitForDatagrams();
+        void Stop();
 
-    ReceivedHandler receivedHandler;
+        template<typename T>
+        void AddReceivedHandler(T handler)
+        {
+            if (handler == nullptr)
+                return;
+
+            receivedHandler = handler;
+        }
+
+    private:
+        int socketFd;
+        struct sockaddr_in address;
+
+        std::thread WaitThread;
+
+        void waitForDatagrams();
+
+        ReceivedHandler receivedHandler;
+    };
 };
 
 #endif

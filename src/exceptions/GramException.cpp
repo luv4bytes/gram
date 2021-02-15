@@ -20,16 +20,16 @@ SOFTWARE. */
 
 #include "../../include/exceptions/GramException.hpp"
 
-GramException::GramException(std::string errorMessage)
+gram::GramException::GramException(std::string errorMessage)
 {
     ErrorMessage = errorMessage;
 }
 
-GramException::~GramException()
+gram::GramException::~GramException()
 {
 }
 
-const char* GramException::what() const throw()
+const char* gram::GramException::what() const throw()
 {
     return ErrorMessage.c_str();
 }

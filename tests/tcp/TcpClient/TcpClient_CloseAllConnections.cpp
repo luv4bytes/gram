@@ -2,7 +2,7 @@
 
 int main()
 {
-    TcpClient client;
+    gram::TcpClient client;
 
     auto con80 = client.CreateConnection("github.com", 80);
     auto con443 = client.CreateConnection("github.com", 443);

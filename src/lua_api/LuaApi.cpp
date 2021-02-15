@@ -20,15 +20,15 @@ SOFTWARE. */
 
 #include "../../include/lua_api/LuaApi.hpp"
 
-Lua::Lua()
+gram::Lua::Lua()
 {
 }
 
-Lua::~Lua()
+gram::Lua::~Lua()
 {
 }
 
-void Lua::Initialize()
+void gram::Lua::Initialize()
 {
     luaMachine = luaL_newstate();
 

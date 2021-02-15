@@ -2,7 +2,7 @@
 
 int main()
 {
-    UdpClient client;
+    gram::UdpClient client;
 
     auto con = client.CreateConnection("github.com", 80);
     client.OpenConnection(con);

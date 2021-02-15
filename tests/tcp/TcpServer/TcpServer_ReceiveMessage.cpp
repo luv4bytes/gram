@@ -7,7 +7,7 @@ bool breakRcv = false;
 
 int main()
 {
-    TcpServer server;
+    gram::TcpServer server;
 
     server.AddReceivedHandler([](std::string msg){
         breakRcv = true;
@@ -15,8 +15,8 @@ int main()
 
     server.Start();
 
-    TcpClient client;
-    auto connection = client.CreateConnection("127.0.0.1", TcpServer::STANDARD_PORT);
+    gram::TcpClient client;
+    auto connection = client.CreateConnection("127.0.0.1", gram::TcpServer::STANDARD_PORT);
     connection->Open();
     connection->Send("Hello");
 

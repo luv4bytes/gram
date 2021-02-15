@@ -32,29 +32,32 @@ extern "C"{
 
 #include "../exceptions/GramException.hpp"
 
-class Lua
+namespace gram
 {
-
-public:
-
-    Lua();
-    ~Lua();
-
-    class LuaConnection
+    class Lua
     {
+
     public:
-        std::string EndpointIpOrName;
-        int Port;
+
+        Lua();
+        ~Lua();
+
+        class LuaConnection
+        {
+        public:
+            std::string EndpointIpOrName;
+            int Port;
+        };
+
+        void Initialize();
+        std::vector<LuaConnection*> SetConnections();
+
+        // TODO: Lua API
+
+    private:
+
+        lua_State* luaMachine;
     };
-
-    void Initialize();
-    std::vector<LuaConnection*> SetConnections();
-
-    // TODO: Lua API
-
-private:
-
-    lua_State* luaMachine;
 };
 
 #endif

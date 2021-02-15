@@ -34,43 +34,47 @@ SOFTWARE. */
 
 #include "../exceptions/GramException.hpp"
 
-class TcpServer
+namespace gram
 {
-public:
-    typedef void(*ReceivedHandler)(std::string);
-
-    TcpServer();
-    ~TcpServer();
-
-    static const int STANDARD_PORT = 55556;
-    static const int LISTEN_BACKLOG = 50;
-    static const int BUFFER_SIZE = 4096;
-
-    void Start();
-    void Start(int bindPort);
-
-    void Stop();
-
-    template<typename T>
-    void AddReceivedHandler(T handler)
+    class TcpServer
     {
-        if (handler == nullptr)
-            return;
 
-        receivedHandler = handler;
-    }
+    public:
+        typedef void(*ReceivedHandler)(std::string);
 
-private:
-    int socketFd;
-    struct sockaddr_in address;
+        TcpServer();
+        ~TcpServer();
 
-    std::thread WaitThread;
-    std::vector<std::thread> ConnectionThreads;
+        static const int STANDARD_PORT = 55556;
+        static const int LISTEN_BACKLOG = 50;
+        static const int BUFFER_SIZE = 4096;
 
-    void waitForConnections();
-    void addConnection(int socketFd);
+        void Start();
+        void Start(int bindPort);
 
-    ReceivedHandler receivedHandler;
+        void Stop();
+
+        template<typename Func, typename ...args>
+        void AddReceivedHandler(Func handler)
+        {
+            if (handler == nullptr)
+                return;
+
+            receivedHandler = handler;
+        }
+
+    private:
+        int socketFd;
+        struct sockaddr_in address;
+
+        std::thread WaitThread;
+        std::vector<std::thread> ConnectionThreads;
+
+        void waitForConnections();
+        void addConnection(int socketFd);
+
+        ReceivedHandler receivedHandler;
+    };
 };
 
 #endif
