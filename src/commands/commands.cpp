@@ -44,10 +44,10 @@ void gram::Commands::createExitCommand()
 
 void gram::Commands::createQuitCommand()
 {
-    Exit.CommandName = "quit";
-    Exit.Description = "Quits the program";
-    Exit.FormatString = "quit";
-    Exit.AssignHandler([](){
+    Quit.CommandName = "quit";
+    Quit.Description = "Quits the program";
+    Quit.FormatString = "quit";
+    Quit.AssignHandler([](){
         exit(0);
     });
 }
