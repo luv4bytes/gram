@@ -18,36 +18,44 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/commands/commands.hpp"
+#ifndef COMMANDS_H
+#define COMMANDS_H
 
-gram::Commands::Commands()
-{
-    createCommands();
-}
+#include <iostream>
+#include "string.h"
 
-void gram::Commands::createCommands()
-{
-    createExitCommand();
-    createQuitCommand();
-}
+#include "../tcp/TcpClient.hpp"
+#include "../tcp/TcpServer.hpp"
 
-void gram::Commands::createExitCommand()
-{
-    Exit.CommandName = "exit";
-    Exit.Description = "Quits the program";
-    Exit.FormatString = "exit";
-    Exit.AssignHandler([](){
-        exit(0);
-    });
-}
+#include "../udp/UdpClient.hpp"
+#include "../udp/UdpServer.hpp"
 
+#include "../lua_api/LuaApi.hpp"
 
-void gram::Commands::createQuitCommand()
-{
-    Quit.CommandName = "quit";
-    Quit.Description = "Quits the program";
-    Quit.FormatString = "quit";
-    Quit.AssignHandler([](){
-        exit(0);
-    });
-}
+#include "Command.hpp"
+
+namespace gram{
+
+    class Commands
+    {
+    public:
+
+        static const int COMMAND_SZ = 50;
+
+        Commands();
+
+        std::vector<Command> AvailableCommands;
+
+        void WaitForCommand();
+
+    private:
+
+        void createCommands();
+        void createExitCommand();
+        void createQuitCommand();
+        void createServerTcpCommand();
+        void createServerUdpCommand();
+    };
+};
+
+#endif

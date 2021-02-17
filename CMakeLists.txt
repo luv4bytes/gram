@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(gram VERSION 0.1.0)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 add_executable(gram main.cpp
                     src/tcp/TcpClient.cpp
                     src/tcp/TcpConnection.cpp
@@ -9,7 +11,8 @@ add_executable(gram main.cpp
                     src/udp/UdpConnection.cpp
                     src/udp/UdpServer.cpp
                     src/lua_api/LuaApi.cpp
-                    src/commands/commands.cpp
+                    src/commands/Commands.cpp
+                    src/commands/Command.cpp
                     src/exceptions/GramException.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
@@ -144,3 +147,12 @@ add_executable(Lua_Initialize tests/lua_api/Lua_Initialize.cpp
                             src/exceptions/GramException.cpp)
 target_link_libraries(Lua_Initialize lua)
 add_test(Lua_Initialize_Test Lua_Initialize)
+
+
+# ########## Commands Tests ##########
+
+add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cpp
+                            src/commands/Commands.cpp
+                            src/commands/Command.cpp
+                            src/exceptions/GramException.cpp)
+add_test(Commands_CreateCommands_Test Commands_CreateCommands)

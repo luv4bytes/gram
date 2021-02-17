@@ -18,26 +18,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#include "../../include/commands/Command.hpp"
 
-#include "command.hpp"
+gram::Command::Command()
+{
+}
 
-namespace gram{
+void gram::Command::Execute()
+{
+    Handler();
+}
 
-    class Commands
-    {
-    public:
-        Commands();
+bool gram::Command::Found(std::string input)
+{
+    if (input.compare(CommandName) == 0)
+        return true;
 
-        Command<> Exit;
-        Command<> Quit;
-
-    private:
-        void createCommands();
-        void createExitCommand();
-        void createQuitCommand();
-    };
-};
-
-#endif
+    return false;
+}

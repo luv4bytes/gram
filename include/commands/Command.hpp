@@ -22,31 +22,30 @@ SOFTWARE. */
 #define COMMAND_H
 
 #include <string>
-#include <map>
 
 namespace gram
 {
-    template <typename ...args>
     class Command
     {
     public:
-        void operator()()
-        {
-            Handler();
-        }
+
+        Command();
 
         std::string CommandName;
         std::string Description;
-        std::string FormatString;
 
-        typedef void (*CommandHandler)(args... a);
+        typedef void (*CommandHandler)();
 
         CommandHandler Handler;
 
-        void AssignHandler(CommandHandler handler)
+        template <typename F>
+        void AssignHandler(F handler)
         {
             Handler = handler;
         }
+
+        bool Found(std::string input);
+        void Execute();
     };
 };
 
