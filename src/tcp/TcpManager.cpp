@@ -18,64 +18,41 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef UDPSERVER_H
-#define UDPSERVER_H
+#include "../../include/tcp/TcpManager.hpp"
 
-#include <string>
-#include "string.h"
-#include <errno.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-
-#include <uuid/uuid.h>
-#include <unistd.h>
-#include <vector>
-#include <thread>
-
-#include "../exceptions/GramException.hpp"
-
-namespace gram
+gram::TcpManager::~TcpManager()
 {
-    class UdpServer
-    {
-    public:
-        typedef void(*ReceivedHandler)(std::string);
+    for(size_t i = 0; i < Servers.size(); i++)
+        delete(Servers.at(i));
 
-        UdpServer();
-        ~UdpServer();
+    for(size_t i = 0; i < Clients.size(); i++)
+        delete(Clients.at(i));
+}
 
-        static const int STANDARD_PORT = 55557;
-        static const int BUFFER_SIZE = 65535;
+void gram::TcpManager::AddServer(TcpServer* server)
+{
+    if (server == nullptr)
+        return;
 
-        void Start();
-        void Start(int bindPort);
+    Servers.push_back(server);
+}
 
-        void Stop();
+void gram::TcpManager::AddClient(TcpClient* client)
+{
+    if (client == nullptr)
+        return;
 
-        template<typename T>
-        void AddReceivedHandler(T handler)
-        {
-            if (handler == nullptr)
-                return;
+    Clients.push_back(client);
+}
 
-            receivedHandler = handler;
-        }
+void gram::TcpManager::StopAllServers()
+{
+    for(size_t i = 0; i < Servers.size(); i++)
+        Servers.at(i)->Stop();
+}
 
-        std::string ServerId;
-
-    private:
-        int socketFd;
-        struct sockaddr_in address;
-
-        std::thread WaitThread;
-
-        void waitForDatagrams();
-
-        ReceivedHandler receivedHandler;
-
-        std::string createId();
-    };
-};
-
-#endif
+void gram::TcpManager::CloseAllClients()
+{
+    for(size_t i = 0; i < Clients.size(); i++)
+        Clients.at(i)->CloseAllConnections();
+}

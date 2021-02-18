@@ -27,8 +27,9 @@ SOFTWARE. */
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+
 #include <unistd.h>
-#include <fcntl.h>
+#include <uuid/uuid.h>
 #include <vector>
 #include <thread>
 
@@ -38,7 +39,6 @@ namespace gram
 {
     class TcpServer
     {
-
     public:
         typedef void(*ReceivedHandler)(std::string);
 
@@ -63,6 +63,8 @@ namespace gram
             receivedHandler = handler;
         }
 
+        std::string ServerId;
+
     private:
         int socketFd;
         struct sockaddr_in address;
@@ -74,6 +76,8 @@ namespace gram
         void addConnection(int socketFd);
 
         ReceivedHandler receivedHandler;
+
+        std::string createId();
     };
 };
 

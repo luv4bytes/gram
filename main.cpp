@@ -30,7 +30,14 @@ int main(int argc, char** argv)
 
         while(true)
         {
-            Commands.WaitForCommand();
+            try
+            {
+                Commands.WaitForCommand();
+            }
+            catch(const gram::GramException& e)
+            {
+                std::cerr << e.ErrorMessage << '\n';
+            }
         }
 
         return 0;

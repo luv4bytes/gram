@@ -18,64 +18,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef UDPSERVER_H
-#define UDPSERVER_H
+#ifndef TCPMANAGER_H
+#define TCPMANAGER_H
 
-#include <string>
-#include "string.h"
-#include <errno.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-
-#include <uuid/uuid.h>
-#include <unistd.h>
+#include "TcpClient.hpp"
+#include "TcpServer.hpp"
 #include <vector>
-#include <thread>
-
-#include "../exceptions/GramException.hpp"
 
 namespace gram
 {
-    class UdpServer
+    class TcpManager
     {
     public:
-        typedef void(*ReceivedHandler)(std::string);
 
-        UdpServer();
-        ~UdpServer();
+        ~TcpManager();
 
-        static const int STANDARD_PORT = 55557;
-        static const int BUFFER_SIZE = 65535;
+        std::vector<TcpServer*> Servers;
+        std::vector<TcpClient*> Clients;
 
-        void Start();
-        void Start(int bindPort);
+        void AddServer(TcpServer* server);
+        void AddClient(TcpClient* client);
 
-        void Stop();
-
-        template<typename T>
-        void AddReceivedHandler(T handler)
-        {
-            if (handler == nullptr)
-                return;
-
-            receivedHandler = handler;
-        }
-
-        std::string ServerId;
-
-    private:
-        int socketFd;
-        struct sockaddr_in address;
-
-        std::thread WaitThread;
-
-        void waitForDatagrams();
-
-        ReceivedHandler receivedHandler;
-
-        std::string createId();
+        void StopAllServers();
+        void CloseAllClients();
     };
-};
+}
 
 #endif

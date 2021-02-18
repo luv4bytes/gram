@@ -22,11 +22,26 @@ SOFTWARE. */
 
 gram::TcpServer::TcpServer()
 {
+    ServerId = createId();
 }
 
 gram::TcpServer::~TcpServer()
 {
     Stop();
+}
+
+std::string gram::TcpServer::createId()
+{
+    char str[UUID_STR_LEN];
+    uuid_t uuid;
+
+    uuid_generate(uuid);
+    uuid_unparse(uuid, str);
+    uuid_clear(uuid);
+
+    std::string id("TCP_" + std::string(str).substr(0, 4));
+
+    return id;
 }
 
 void gram::TcpServer::Start()

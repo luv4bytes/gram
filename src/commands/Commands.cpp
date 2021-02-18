@@ -29,8 +29,12 @@ void gram::Commands::createCommands()
 {
     createExitCommand();
     createQuitCommand();
-    createServerTcpCommand();
-    createServerUdpCommand();
+
+    createStartServerTcpCommand();
+    createStartServerUdpCommand();
+
+    createStopServerTcpCommand();
+    createStopServerUdpCommand();
 }
 
 void gram::Commands::createExitCommand()
@@ -59,20 +63,29 @@ void gram::Commands::createQuitCommand()
     AvailableCommands.push_back(quit);
 }
 
-void gram::Commands::createServerTcpCommand()
+void gram::Commands::createStartServerTcpCommand()
 {
     Command tcpServer;
     tcpServer.CommandName = "start server tcp";
-    tcpServer.Description = "Starts a TCP server on the requested port";
+    tcpServer.Description = "Starts a TCP server on the given port";
 
     tcpServer.AssignHandler([](){
 
         int port = 0;
 
-        std::cout << "Port: ";
+        std::cout << "Port (0 for std port): ";
         std::cin >> port;
 
-        // TODO:         
+        TcpServer* server = new TcpServer();
+
+        // TODO: message handler
+
+        GlobalTcpManager.AddServer(server);
+
+        if (port != 0)
+            server->Start(port);
+        else
+            server->Start();
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
@@ -80,19 +93,61 @@ void gram::Commands::createServerTcpCommand()
     AvailableCommands.push_back(tcpServer);
 }
 
-void gram::Commands::createServerUdpCommand()
+void gram::Commands::createStartServerUdpCommand()
 {
     Command udpServer;
     udpServer.CommandName = "start server udp";
-    udpServer.Description = "Starts a UDP server on the requested port";
+    udpServer.Description = "Starts a UDP server on the given port";
 
     udpServer.AssignHandler([](){
 
-        // TODO:
+         int port = 0;
+
+        std::cout << "Port (0 for std port): ";
+        std::cin >> port;
+
+        UdpServer* server = new UdpServer();
+        
+        // TODO: message handler
+
+        GlobalUdpManager.AddServer(server);
+
+        if (port != 0)
+            server->Start(port);
+        else
+            server->Start();
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     });
 
     AvailableCommands.push_back(udpServer);
+}
+
+void gram::Commands::createStopServerTcpCommand()
+{
+    Command stopServerTcp;
+    stopServerTcp.CommandName = "stop server tcp";
+    stopServerTcp.Description = "Stops a server with given id";
+
+    // TODO:
+}
+
+void gram::Commands::createStopServerUdpCommand()
+{
+    // TODO:
+}
+
+static inline void trim(std::string& s)
+{
+    s.erase(0, s.find_first_not_of(' '));
+    s.erase(s.find_last_not_of(' ') + 1);
+}
+
+static inline void tolower(std::string& s)
+{
+    for(size_t i = 0; i < s.size(); i++)
+        s[i] = std::tolower(s[i]);
 }
 
 void gram::Commands::WaitForCommand()
@@ -108,6 +163,8 @@ void gram::Commands::WaitForCommand()
         return;  
 
     std::string command(input);
+    trim(command);
+    tolower(command);
 
     for(size_t i = 0; i < AvailableCommands.size(); i++)
     {

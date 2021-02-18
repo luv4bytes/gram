@@ -22,11 +22,26 @@ SOFTWARE. */
 
 gram::UdpServer::UdpServer()
 {
+    ServerId = createId();
 }
 
 gram::UdpServer::~UdpServer()
 {
     Stop();
+}
+
+std::string gram::UdpServer::createId()
+{
+    char str[UUID_STR_LEN];
+    uuid_t uuid;
+
+    uuid_generate(uuid);
+    uuid_unparse(uuid, str);
+    uuid_clear(uuid);
+
+    std::string id("UDP_" + std::string(str).substr(0, 4));
+
+    return id;
 }
 
 void gram::UdpServer::Start()

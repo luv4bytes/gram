@@ -18,61 +18,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#include "../../include/globals/Globals.hpp"
 
-#include <iostream>
-#include "string.h"
-
-#include "../globals/Globals.hpp"
-
-#include "../tcp/TcpClient.hpp"
-#include "../tcp/TcpServer.hpp"
-
-#include "../udp/UdpClient.hpp"
-#include "../udp/UdpServer.hpp"
-
-#include "../lua_api/LuaApi.hpp"
-
-#include "Command.hpp"
-
-namespace gram{
-
-    class Commands
-    {
-    public:
-
-        static const int COMMAND_SZ = 50;
-
-        Commands();
-
-        std::vector<Command> AvailableCommands;
-
-        void WaitForCommand();
-
-    private:
-
-        /*
-            TODO: 
-
-            - List servers
-            - List clients
-            - Stop servers
-            - Close clients
-            - Stop single server
-            - Close single client
-        */
-
-        void createCommands();
-        void createExitCommand();
-        void createQuitCommand();
-        
-        void createStartServerTcpCommand();
-        void createStartServerUdpCommand();
-
-        void createStopServerTcpCommand();
-        void createStopServerUdpCommand();
-    };
-};
-
-#endif
+gram::TcpManager GlobalTcpManager;
+gram::UdpManager GlobalUdpManager;
