@@ -56,3 +56,9 @@ void gram::UdpManager::CloseAllClients()
     for(size_t i = 0; i < Clients.size(); i++)
         Clients.at(i)->CloseAllConnections();
 }
+
+void gram::UdpManager::PrintServers()
+{
+    for(size_t i = 0; i < Servers.size(); i++)
+        std::cout << Servers.at(i)->ServerId << " - Port: " << Servers.at(i)->GetListenerPort() << std::endl;
+}

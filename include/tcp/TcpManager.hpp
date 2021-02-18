@@ -23,6 +23,8 @@ SOFTWARE. */
 
 #include "TcpClient.hpp"
 #include "TcpServer.hpp"
+
+#include <iostream>
 #include <vector>
 
 namespace gram
@@ -41,6 +43,8 @@ namespace gram
 
         void StopAllServers();
         void CloseAllClients();
+
+        void PrintServers();
     };
 }
 

@@ -63,6 +63,7 @@ namespace gram
             receivedHandler = handler;
         }
 
+        int GetListenerPort();
         std::string ServerId;
 
     private:

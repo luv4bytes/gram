@@ -24,6 +24,8 @@ SOFTWARE. */
 
 #include "UdpClient.hpp"
 #include "UdpServer.hpp"
+
+#include <iostream>
 #include <vector>
 
 namespace gram
@@ -42,6 +44,8 @@ namespace gram
 
         void StopAllServers();
         void CloseAllClients();
+
+        void PrintServers();
     };
 }
 

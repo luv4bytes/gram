@@ -93,6 +93,19 @@ void gram::UdpServer::Stop()
     socketFd = 0;
 }
 
+int gram::UdpServer::GetListenerPort()
+{
+    if (socketFd == 0)
+        return -1;
+
+    struct sockaddr_in addr;
+    socklen_t sz = sizeof(addr);
+
+    int port = getsockname(socketFd, (struct sockaddr*) &addr, &sz);
+
+    return ntohs(addr.sin_port);
+}
+
 void gram::UdpServer::waitForDatagrams()
 {
     WaitThread = std::thread(

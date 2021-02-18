@@ -35,6 +35,10 @@ void gram::Commands::createCommands()
 
     createStopServerTcpCommand();
     createStopServerUdpCommand();
+
+    createListServersCommand();
+    createListTcpServersCommand();
+    createListUdpServersCommand();
 }
 
 void gram::Commands::createExitCommand()
@@ -74,18 +78,25 @@ void gram::Commands::createStartServerTcpCommand()
         int port = 0;
 
         std::cout << "Port (0 for std port): ";
-        std::cin >> port;
+
+        if (!(std::cin >> port))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting port");
+        }
 
         TcpServer* server = new TcpServer();
 
         // TODO: message handler
 
-        GlobalTcpManager.AddServer(server);
-
         if (port != 0)
             server->Start(port);
         else
             server->Start();
+
+        GlobalTcpManager.AddServer(server);
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
@@ -101,24 +112,30 @@ void gram::Commands::createStartServerUdpCommand()
 
     udpServer.AssignHandler([](){
 
-         int port = 0;
+        int port = 0;
 
         std::cout << "Port (0 for std port): ";
-        std::cin >> port;
+
+        if (!(std::cin >> port))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            throw GramException("Error setting port");
+        }  
 
         UdpServer* server = new UdpServer();
         
         // TODO: message handler
-
-        GlobalUdpManager.AddServer(server);
 
         if (port != 0)
             server->Start(port);
         else
             server->Start();
 
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        GlobalUdpManager.AddServer(server);
 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
 
     AvailableCommands.push_back(udpServer);
@@ -128,14 +145,103 @@ void gram::Commands::createStopServerTcpCommand()
 {
     Command stopServerTcp;
     stopServerTcp.CommandName = "stop server tcp";
-    stopServerTcp.Description = "Stops a server with given id";
+    stopServerTcp.Description = "Stops a TCP server with given id";
 
-    // TODO:
+    stopServerTcp.AssignHandler([](){
+
+        std::string serverId;
+
+        std::cout << "Server Id: ";
+
+        if (!(std::cin >> serverId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting server id");
+        }
+
+        // TODO:
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    });
+
+    AvailableCommands.push_back(stopServerTcp);
 }
 
 void gram::Commands::createStopServerUdpCommand()
 {
-    // TODO:
+    Command stopServerUdp;
+    stopServerUdp.CommandName = "stop server udp";
+    stopServerUdp.Description = "Stops a UDP server with given id";
+
+    stopServerUdp.AssignHandler([](){
+
+        std::string serverId;
+
+        std::cout << "Server Id: ";
+        
+        if (!(std::cin >> serverId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting server id");
+        }
+
+        // TODO:
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    });
+
+    AvailableCommands.push_back(stopServerUdp);
+}
+
+void gram::Commands::createListServersCommand()
+{
+    Command listServers;
+    listServers.CommandName = "list servers";
+    listServers.Description = "Prints out a list of all servers";
+
+    listServers.AssignHandler([](){
+
+        GlobalTcpManager.PrintServers();
+        std::cout << "\n";
+        GlobalUdpManager.PrintServers();            
+
+    });
+
+    AvailableCommands.push_back(listServers);
+}
+
+void gram::Commands::createListTcpServersCommand()
+{
+    Command listTcpServers;
+    listTcpServers.CommandName = "list servers tcp";
+    listTcpServers.Description = "Prints out a list of current TCP servers";
+    
+    listTcpServers.AssignHandler([](){
+
+        GlobalTcpManager.PrintServers();
+
+    });
+
+    AvailableCommands.push_back(listTcpServers);
+}
+
+void gram::Commands::createListUdpServersCommand()
+{
+    Command listUdpServers;
+    listUdpServers.CommandName = "list servers udp";
+    listUdpServers.Description = "Prints out a list of current UDP servers";
+    
+    listUdpServers.AssignHandler([](){
+
+        GlobalUdpManager.PrintServers();
+
+    });
+
+    AvailableCommands.push_back(listUdpServers);
 }
 
 static inline void trim(std::string& s)

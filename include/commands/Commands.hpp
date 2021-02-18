@@ -72,6 +72,10 @@ namespace gram{
 
         void createStopServerTcpCommand();
         void createStopServerUdpCommand();
+
+        void createListServersCommand();
+        void createListTcpServersCommand();
+        void createListUdpServersCommand();
     };
 };
 
