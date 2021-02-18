@@ -30,7 +30,6 @@ SOFTWARE. */
 
 #include <uuid/uuid.h>
 #include <unistd.h>
-#include <vector>
 #include <thread>
 
 #include "../exceptions/GramException.hpp"

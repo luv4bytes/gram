@@ -161,7 +161,18 @@ void gram::Commands::createStopServerTcpCommand()
             throw GramException("Error setting server id");
         }
 
-        // TODO:
+        TcpServer* server = GlobalTcpManager.WhereServer([=](TcpServer* server){
+            return (server->ServerId.compare(serverId) == 0);
+        });
+
+        if (server == nullptr)
+        {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return;
+        }
+
+        server->Stop();
+        GlobalTcpManager.RemoveServer(server);
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
@@ -180,7 +191,7 @@ void gram::Commands::createStopServerUdpCommand()
         std::string serverId;
 
         std::cout << "Server Id: ";
-        
+
         if (!(std::cin >> serverId))
         {
             std::cin.clear();
@@ -189,7 +200,18 @@ void gram::Commands::createStopServerUdpCommand()
             throw GramException("Error setting server id");
         }
 
-        // TODO:
+        UdpServer* server = GlobalUdpManager.WhereServer([=](UdpServer* server){
+            return (server->ServerId.compare(serverId) == 0);
+        });
+
+        if (server == nullptr)
+        {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return;
+        }
+
+        server->Stop();
+        GlobalUdpManager.RemoveServer(server);
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
@@ -206,7 +228,6 @@ void gram::Commands::createListServersCommand()
     listServers.AssignHandler([](){
 
         GlobalTcpManager.PrintServers();
-        std::cout << "\n";
         GlobalUdpManager.PrintServers();            
 
     });

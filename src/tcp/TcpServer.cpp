@@ -27,7 +27,6 @@ gram::TcpServer::TcpServer()
 
 gram::TcpServer::~TcpServer()
 {
-    Stop();
 }
 
 std::string gram::TcpServer::createId()
@@ -129,7 +128,7 @@ void gram::TcpServer::waitForConnections()
             int acceptedSocketFd = accept(socketFd, (struct sockaddr*)&address, (socklen_t*)&sz);
 
             if (acceptedSocketFd == -1)
-                throw GramException("Error accepting incoming connection -> " + std::string(strerror(errno)));
+                return;
 
             addConnection(acceptedSocketFd);
         });
@@ -147,10 +146,7 @@ void gram::TcpServer::addConnection(int socketFd)
             {
                 ssize_t readBytes = read(socketFd, buffer, TcpServer::BUFFER_SIZE);
 
-                if (readBytes == -1)
-                    throw GramException("Error reading bytes -> " + std::string(strerror(errno)));
-
-                if (readBytes == 0)
+                if (readBytes == -1 || readBytes == 0)
                     break;
 
                 receivedHandler(std::string(buffer));

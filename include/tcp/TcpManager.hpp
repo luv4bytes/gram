@@ -45,6 +45,18 @@ namespace gram
         void CloseAllClients();
 
         void PrintServers();
+
+        template <typename F>
+        TcpServer* WhereServer(F predicate)
+        {
+            for(size_t i = 0; i < Servers.size(); i++)
+                if (predicate(Servers.at(i)))
+                    return Servers.at(i);
+
+            return nullptr;
+        }
+
+        void RemoveServer(TcpServer* server);
     };
 }
 

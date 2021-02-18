@@ -62,3 +62,20 @@ void gram::TcpManager::PrintServers()
     for(size_t i = 0; i < Servers.size(); i++)
         std::cout << Servers.at(i)->ServerId << " - Port: " << Servers.at(i)->GetListenerPort() << std::endl;
 }
+
+void gram::TcpManager::RemoveServer(TcpServer* server)
+{
+    if (server == nullptr)
+        return;
+
+    for(size_t i = 0; i < Servers.size(); i++)
+    {
+        if (Servers.at(i)->ServerId.compare(server->ServerId) == 0)
+        {
+            Servers.erase(Servers.begin() + i);
+            break;
+        }
+    }
+
+    delete(server);
+}

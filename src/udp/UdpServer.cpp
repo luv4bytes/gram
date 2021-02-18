@@ -27,7 +27,6 @@ gram::UdpServer::UdpServer()
 
 gram::UdpServer::~UdpServer()
 {
-    Stop();
 }
 
 std::string gram::UdpServer::createId()
@@ -118,7 +117,7 @@ void gram::UdpServer::waitForDatagrams()
             ssize_t received = recv(socketFd, buffer, UdpServer::BUFFER_SIZE, 0);
 
             if (received == -1)
-                throw GramException("Error receiving datagram -> " + std::string(strerror(errno)));
+                return;
 
             receivedHandler(std::string(buffer));
         });

@@ -28,9 +28,10 @@ SOFTWARE. */
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#include <vector>
+#include <iostream>
 #include <unistd.h>
 #include <uuid/uuid.h>
-#include <vector>
 #include <thread>
 
 #include "../exceptions/GramException.hpp"
