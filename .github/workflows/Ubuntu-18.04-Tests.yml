@@ -1,4 +1,4 @@
-name: Ubuntu 18.04 Build
+name: Ubuntu-18.04-Tests
 
 on:
   push:
@@ -24,3 +24,4 @@ jobs:
           cd build
           cmake ..
           make
+          ctest
