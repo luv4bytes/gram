@@ -49,6 +49,11 @@ void gram::UdpManager::StopAllServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
         Servers.at(i)->Stop();
+
+    for(size_t i = 0; i < Servers.size(); i++)
+        delete(Servers.at(i));
+
+    Servers.clear();
 }
 
 void gram::UdpManager::CloseAllClients()
@@ -78,4 +83,10 @@ void gram::UdpManager::RemoveServer(UdpServer* server)
     }
 
     delete(server);
+}
+
+void gram::UdpManager::CleanUp()
+{
+    CloseAllClients();
+    StopAllServers();
 }

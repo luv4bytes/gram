@@ -58,6 +58,8 @@ namespace gram
         }
 
         void RemoveServer(UdpServer* server);
+
+        void CleanUp();
     };
 }
 

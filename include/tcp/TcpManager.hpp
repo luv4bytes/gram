@@ -57,6 +57,8 @@ namespace gram
         }
 
         void RemoveServer(TcpServer* server);
+
+        void CleanUp();
     };
 }
 

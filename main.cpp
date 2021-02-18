@@ -27,6 +27,7 @@ int main(int argc, char** argv)
         std::cout << "Welcome to gram!" << std::endl;
 
         gram::Commands Commands;
+        GlobalCommandsPtr = &Commands;
 
         while(true)
         {

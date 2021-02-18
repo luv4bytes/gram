@@ -28,7 +28,7 @@ SOFTWARE. */
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include <uuid/uuid.h>
+#include "uuid/uuid.h"
 #include <unistd.h>
 #include <thread>
 

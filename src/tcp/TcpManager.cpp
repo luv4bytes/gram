@@ -49,6 +49,11 @@ void gram::TcpManager::StopAllServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
         Servers.at(i)->Stop();
+
+    for(size_t i = 0; i < Servers.size(); i++)
+        delete(Servers.at(i));
+
+    Servers.clear();
 }
 
 void gram::TcpManager::CloseAllClients()
@@ -78,4 +83,10 @@ void gram::TcpManager::RemoveServer(TcpServer* server)
     }
 
     delete(server);
+}
+
+void gram::TcpManager::CleanUp()
+{
+    CloseAllClients();
+    StopAllServers();
 }

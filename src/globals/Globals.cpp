@@ -22,3 +22,5 @@ SOFTWARE. */
 
 gram::TcpManager GlobalTcpManager;
 gram::UdpManager GlobalUdpManager;
+
+gram::Commands* GlobalCommandsPtr;

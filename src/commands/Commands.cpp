@@ -33,12 +33,15 @@ void gram::Commands::createCommands()
     createStartServerTcpCommand();
     createStartServerUdpCommand();
 
+    createStopAllServersCommand();
     createStopServerTcpCommand();
     createStopServerUdpCommand();
 
-    createListServersCommand();
-    createListTcpServersCommand();
-    createListUdpServersCommand();
+    createListServerCommand();
+    createListTcpServerCommand();
+    createListUdpServerCommand();
+
+    createHelpCommand();
 }
 
 void gram::Commands::createExitCommand()
@@ -48,6 +51,10 @@ void gram::Commands::createExitCommand()
     cmdExit.Description = "Quits the program";
 
     cmdExit.AssignHandler([](){
+
+        GlobalTcpManager.CleanUp();
+        GlobalUdpManager.CleanUp();
+
         exit(0);
     });
 
@@ -61,6 +68,10 @@ void gram::Commands::createQuitCommand()
     quit.Description = "Quits the program";
 
     quit.AssignHandler([](){
+
+        GlobalTcpManager.CleanUp();
+        GlobalUdpManager.CleanUp();
+
         exit(0);
     });
 
@@ -141,6 +152,20 @@ void gram::Commands::createStartServerUdpCommand()
     AvailableCommands.push_back(udpServer);
 }
 
+void gram::Commands::createStopAllServersCommand()
+{
+    Command stopAllServers;
+    stopAllServers.CommandName = "stop server all";
+
+    stopAllServers.AssignHandler([](){
+
+        GlobalTcpManager.StopAllServers();
+        GlobalUdpManager.StopAllServers();
+    });
+
+    AvailableCommands.push_back(stopAllServers);
+}
+
 void gram::Commands::createStopServerTcpCommand()
 {
     Command stopServerTcp;
@@ -219,10 +244,10 @@ void gram::Commands::createStopServerUdpCommand()
     AvailableCommands.push_back(stopServerUdp);
 }
 
-void gram::Commands::createListServersCommand()
+void gram::Commands::createListServerCommand()
 {
     Command listServers;
-    listServers.CommandName = "list servers";
+    listServers.CommandName = "list server";
     listServers.Description = "Prints out a list of all servers";
 
     listServers.AssignHandler([](){
@@ -235,10 +260,10 @@ void gram::Commands::createListServersCommand()
     AvailableCommands.push_back(listServers);
 }
 
-void gram::Commands::createListTcpServersCommand()
+void gram::Commands::createListTcpServerCommand()
 {
     Command listTcpServers;
-    listTcpServers.CommandName = "list servers tcp";
+    listTcpServers.CommandName = "list server tcp";
     listTcpServers.Description = "Prints out a list of current TCP servers";
     
     listTcpServers.AssignHandler([](){
@@ -250,10 +275,10 @@ void gram::Commands::createListTcpServersCommand()
     AvailableCommands.push_back(listTcpServers);
 }
 
-void gram::Commands::createListUdpServersCommand()
+void gram::Commands::createListUdpServerCommand()
 {
     Command listUdpServers;
-    listUdpServers.CommandName = "list servers udp";
+    listUdpServers.CommandName = "list server udp";
     listUdpServers.Description = "Prints out a list of current UDP servers";
     
     listUdpServers.AssignHandler([](){
@@ -263,6 +288,27 @@ void gram::Commands::createListUdpServersCommand()
     });
 
     AvailableCommands.push_back(listUdpServers);
+}
+
+void gram::Commands::createHelpCommand()
+{
+    Command help;
+    help.CommandName = "help";
+    help.Description = "Prints information about commands";
+
+    help.AssignHandler([](){
+        
+        std::string format = "   %-25s|  %-30s\n";
+
+        printf("Following commands can be used to control gram:\n\n");
+        printf("--------------------------------------------------------------\n");
+
+        for(size_t i = 0; i < GlobalCommandsPtr->AvailableCommands.size(); i++)
+            printf(format.c_str(), GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(), 
+                           GlobalCommandsPtr->AvailableCommands.at(i).Description.c_str());
+    });
+
+    AvailableCommands.push_back(help);
 }
 
 static inline void trim(std::string& s)
