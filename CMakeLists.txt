@@ -90,6 +90,85 @@ target_link_libraries(TcpServer_ReceiveMessage pthread)
 target_link_libraries(TcpServer_ReceiveMessage uuid)
 add_test(TcpServer_ReceiveMessage_Test TcpServer_ReceiveMessage)
 
+# ########## TcpManager Tests ##########
+
+add_executable(TcpManager_AddServer tests/tcp/TcpManager/TcpManager_AddServer.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/tcp/TcpManager.cpp
+                            src/exceptions/GramException.cpp)
+
+target_link_libraries(TcpManager_AddServer pthread)
+target_link_libraries(TcpManager_AddServer uuid)
+add_test(TcpManager_AddServer_Test TcpManager_AddServer)
+
+add_executable(TcpManager_AddClient tests/tcp/TcpManager/TcpManager_AddClient.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/tcp/TcpManager.cpp
+                            src/exceptions/GramException.cpp)
+
+target_link_libraries(TcpManager_AddClient pthread)
+target_link_libraries(TcpManager_AddClient uuid)
+add_test(TcpManager_AddClient_Test TcpManager_AddClient)
+
+add_executable(TcpManager_StopAllServers tests/tcp/TcpManager/TcpManager_StopAllServers.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/tcp/TcpManager.cpp
+                            src/exceptions/GramException.cpp)
+
+target_link_libraries(TcpManager_StopAllServers pthread)
+target_link_libraries(TcpManager_StopAllServers uuid)
+add_test(TcpManager_StopAllServers_Test TcpManager_StopAllServers)
+
+add_executable(TcpManager_CloseAllClients tests/tcp/TcpManager/TcpManager_CloseAllClients.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/tcp/TcpManager.cpp
+                            src/exceptions/GramException.cpp)
+
+target_link_libraries(TcpManager_CloseAllClients pthread)
+target_link_libraries(TcpManager_CloseAllClients uuid)
+add_test(TcpManager_CloseAllClients_Test TcpManager_CloseAllClients)
+
+add_executable(TcpManager_PrintServers tests/tcp/TcpManager/TcpManager_PrintServers.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/tcp/TcpManager.cpp
+                            src/exceptions/GramException.cpp)
+
+target_link_libraries(TcpManager_PrintServers pthread)
+target_link_libraries(TcpManager_PrintServers uuid)
+add_test(TcpManager_PrintServers_Test TcpManager_PrintServers)
+
+add_executable(TcpManager_RemoveServer tests/tcp/TcpManager/TcpManager_RemoveServer.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/tcp/TcpManager.cpp
+                            src/exceptions/GramException.cpp)
+
+target_link_libraries(TcpManager_RemoveServer pthread)
+target_link_libraries(TcpManager_RemoveServer uuid)
+add_test(TcpManager_RemoveServer_Test TcpManager_RemoveServer)
+
+add_executable(TcpManager_CleanUp tests/tcp/TcpManager/TcpManager_CleanUp.cpp
+                            src/tcp/TcpServer.cpp
+                            src/tcp/TcpClient.cpp
+                            src/tcp/TcpConnection.cpp
+                            src/tcp/TcpManager.cpp
+                            src/exceptions/GramException.cpp)
+
+target_link_libraries(TcpManager_CleanUp pthread)
+target_link_libraries(TcpManager_CleanUp uuid)
+add_test(TcpManager_CleanUp_Test TcpManager_CleanUp)
+
 # ########## UdpClient Tests ##########
 
 add_executable(UdpClient_CreateConnection tests/udp/UdpClient/UdpClient_CreateConnection.cpp

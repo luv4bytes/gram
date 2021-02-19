@@ -92,8 +92,7 @@ void gram::UdpServer::Stop()
     if (closed == -1)
         throw GramException("Error closing server socket -> " + std::string(strerror(errno)));
 
-    WaitThread.detach();
-    socketFd = 0;
+    WaitThread.detach();   
 }
 
 void gram::UdpServer::setSocketOptions()
@@ -127,14 +126,39 @@ void gram::UdpServer::waitForDatagrams()
         [&]
         ()
         {
-            socklen_t sz = sizeof(address);
-            char buffer[UdpServer::BUFFER_SIZE];
+            timeval timeout;
+            fd_set readSocket;
+            FD_ZERO(&readSocket);
+            FD_SET(socketFd, &readSocket);
 
-            ssize_t received = recv(socketFd, buffer, UdpServer::BUFFER_SIZE, 0);
+            while(true)
+            {
+                timeout.tv_usec = UdpServer::SELECT_TIMEOUT_MICROSECONDS;
 
-            if (received == -1)
-                return;
+                int sel = select(socketFd + 1, &readSocket, NULL, NULL, &timeout);
 
-            receivedHandler(std::string(buffer));
+                if (sel == -1)
+                    break;
+
+                if (sel == 0)
+                {
+                    int readable = fcntl(socketFd, F_GETFD);
+
+                    if (readable == -1)
+                        break;
+
+                    continue;
+                }
+
+                socklen_t sz = sizeof(address);
+                char buffer[UdpServer::BUFFER_SIZE];
+
+                ssize_t received = recv(socketFd, buffer, UdpServer::BUFFER_SIZE, 0);
+
+                if (received == -1)
+                    return;
+
+                receivedHandler(std::string(buffer));
+            }
         });
 }

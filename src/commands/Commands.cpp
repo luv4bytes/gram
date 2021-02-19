@@ -291,6 +291,16 @@ void gram::Commands::createListUdpServerCommand()
     AvailableCommands.push_back(listUdpServers);
 }
 
+void gram::Commands::createStartTcpClientCommand()
+{
+
+}
+
+void gram::Commands::createStartUdpClientCommand()
+{
+    
+}
+
 void gram::Commands::createHelpCommand()
 {
     Command help;

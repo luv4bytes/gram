@@ -31,6 +31,7 @@ SOFTWARE. */
 #include <vector>
 #include <iostream>
 #include <unistd.h>
+#include "fcntl.h"
 #include "uuid/uuid.h"
 #include <thread>
 
@@ -49,6 +50,7 @@ namespace gram
         static const int STANDARD_PORT = 55556;
         static const int LISTEN_BACKLOG = 50;
         static const int BUFFER_SIZE = 4096;
+        static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
 
         void Start();
         void Start(int bindPort);

@@ -117,8 +117,6 @@ void gram::TcpServer::Stop()
     WaitThread.detach();
     for (int i = 0; i < ConnectionThreads.size(); i++)
         ConnectionThreads.at(i).detach();
-
-    socketFd = 0;
 }
 
 int gram::TcpServer::GetListenerPort()
@@ -139,10 +137,30 @@ void gram::TcpServer::waitForConnections()
     WaitThread = std::thread(
         [&]() {
 
-            fd_set readfds;
+            timeval timeout;
+            fd_set readSocket;
+            FD_ZERO(&readSocket);
+            FD_SET(socketFd, &readSocket);
 
-            if (select(socketFd, &readfds, NULL, NULL, NULL) > 0)
+            while(true)
             {
+                timeout.tv_usec = TcpServer::SELECT_TIMEOUT_MICROSECONDS;
+
+                int sel = select(socketFd + 1, &readSocket, NULL, NULL, &timeout);
+
+                if (sel == -1)
+                    break;
+
+                if (sel == 0)
+                {
+                    int readable = fcntl(socketFd, F_GETFD);
+
+                    if (readable == -1)
+                        break;
+
+                    continue;
+                }
+
                 socklen_t sz = sizeof(address);
                 int acceptedSocketFd = accept(socketFd, (struct sockaddr *)&address, (socklen_t *)&sz);
 

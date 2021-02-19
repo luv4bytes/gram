@@ -28,6 +28,7 @@ SOFTWARE. */
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#include "fcntl.h"
 #include "uuid/uuid.h"
 #include <unistd.h>
 #include <thread>
@@ -46,6 +47,7 @@ namespace gram
 
         static const int STANDARD_PORT = 55557;
         static const int BUFFER_SIZE = 65535;
+        static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
 
         void Start();
         void Start(int bindPort);

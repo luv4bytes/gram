@@ -57,9 +57,7 @@ namespace gram{
 
             - Message handling
             - List clients
-            - Stop servers
             - Close clients
-            - Stop single server
             - Close single client
         */
 
@@ -77,6 +75,9 @@ namespace gram{
         void createListServerCommand();
         void createListTcpServerCommand();
         void createListUdpServerCommand();
+
+        void createStartTcpClientCommand();
+        void createStartUdpClientCommand();
 
         void createHelpCommand();
     };
