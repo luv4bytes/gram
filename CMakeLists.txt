@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(gram VERSION 0.1.0)
 
 set(CMAKE_BUILD_TYPE Debug)
+add_compile_definitions(GRAM_VERSION="1.0")
 
 add_executable(gram main.cpp
                     src/tcp/TcpClient.cpp
@@ -15,6 +16,7 @@ add_executable(gram main.cpp
                     src/lua_api/LuaApi.cpp
                     src/commands/Commands.cpp
                     src/commands/Command.cpp
+                    src/settings/ServerSettings.cpp
                     src/globals/Globals.cpp
                     src/exceptions/GramException.cpp)
 
@@ -84,6 +86,7 @@ add_executable(TcpServer_ReceiveMessage tests/tcp/TcpServer/TcpServer_ReceiveMes
                             src/tcp/TcpServer.cpp
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpServer_ReceiveMessage pthread)
@@ -97,6 +100,7 @@ add_executable(TcpManager_AddServer tests/tcp/TcpManager/TcpManager_AddServer.cp
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpManager_AddServer pthread)
@@ -108,6 +112,7 @@ add_executable(TcpManager_AddClient tests/tcp/TcpManager/TcpManager_AddClient.cp
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpManager_AddClient pthread)
@@ -119,6 +124,7 @@ add_executable(TcpManager_StopAllServers tests/tcp/TcpManager/TcpManager_StopAll
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpManager_StopAllServers pthread)
@@ -130,6 +136,7 @@ add_executable(TcpManager_CloseAllClients tests/tcp/TcpManager/TcpManager_CloseA
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpManager_CloseAllClients pthread)
@@ -141,6 +148,7 @@ add_executable(TcpManager_PrintServers tests/tcp/TcpManager/TcpManager_PrintServ
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpManager_PrintServers pthread)
@@ -152,6 +160,7 @@ add_executable(TcpManager_RemoveServer tests/tcp/TcpManager/TcpManager_RemoveSer
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpManager_RemoveServer pthread)
@@ -163,6 +172,7 @@ add_executable(TcpManager_CleanUp tests/tcp/TcpManager/TcpManager_CleanUp.cpp
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(TcpManager_CleanUp pthread)
@@ -220,6 +230,7 @@ add_executable(UdpServer_ReceiveMessage tests/udp/UdpServer/UdpServer_ReceiveMes
                             src/udp/UdpServer.cpp
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpServer_ReceiveMessage uuid)
@@ -234,6 +245,7 @@ add_executable(UdpManager_AddServer tests/udp/UdpManager/UdpManager_AddServer.cp
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpManager_AddServer pthread)
@@ -245,6 +257,7 @@ add_executable(UdpManager_AddClient tests/udp/UdpManager/UdpManager_AddClient.cp
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpManager_AddClient pthread)
@@ -256,6 +269,7 @@ add_executable(UdpManager_StopAllServers tests/udp/UdpManager/UdpManager_StopAll
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpManager_StopAllServers pthread)
@@ -267,6 +281,7 @@ add_executable(UdpManager_CloseAllClients tests/udp/UdpManager/UdpManager_CloseA
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpManager_CloseAllClients pthread)
@@ -278,6 +293,7 @@ add_executable(UdpManager_PrintServers tests/udp/UdpManager/UdpManager_PrintServ
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpManager_PrintServers pthread)
@@ -289,6 +305,7 @@ add_executable(UdpManager_RemoveServer tests/udp/UdpManager/UdpManager_RemoveSer
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpManager_RemoveServer pthread)
@@ -300,6 +317,7 @@ add_executable(UdpManager_CleanUp tests/udp/UdpManager/UdpManager_CleanUp.cpp
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpManager.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(UdpManager_CleanUp pthread)
@@ -329,6 +347,7 @@ add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cp
                             src/commands/Commands.cpp
                             src/commands/Command.cpp
                             src/globals/Globals.cpp
+                            src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(Commands_CreateCommands pthread)

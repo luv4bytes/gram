@@ -293,12 +293,12 @@ void gram::Commands::createListUdpServerCommand()
 
 void gram::Commands::createStartTcpClientCommand()
 {
-
+    // TODO:
 }
 
 void gram::Commands::createStartUdpClientCommand()
 {
-    
+    // TODO:
 }
 
 void gram::Commands::createHelpCommand()
@@ -317,6 +317,9 @@ void gram::Commands::createHelpCommand()
         for(size_t i = 0; i < GlobalCommandsPtr->AvailableCommands.size(); i++)
             printf(format.c_str(), GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(), 
                            GlobalCommandsPtr->AvailableCommands.at(i).Description.c_str());
+
+        printf("\n\ngram is licensed under MIT License\n");
+        printf("Lukas Pfeifer - https://github.com/luv4bytes\n");
     });
 
     AvailableCommands.push_back(help);

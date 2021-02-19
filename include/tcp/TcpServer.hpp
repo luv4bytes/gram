@@ -35,6 +35,7 @@ SOFTWARE. */
 #include "uuid/uuid.h"
 #include <thread>
 
+#include "../settings/ServerSettings.hpp"
 #include "../exceptions/GramException.hpp"
 
 namespace gram
@@ -46,6 +47,8 @@ namespace gram
 
         TcpServer();
         ~TcpServer();
+
+        ServerSettings Settings;
 
         static const int STANDARD_PORT = 55556;
         static const int LISTEN_BACKLOG = 50;

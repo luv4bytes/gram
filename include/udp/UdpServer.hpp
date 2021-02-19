@@ -33,6 +33,7 @@ SOFTWARE. */
 #include <unistd.h>
 #include <thread>
 
+#include "../settings/ServerSettings.hpp"
 #include "../exceptions/GramException.hpp"
 
 namespace gram
@@ -44,6 +45,8 @@ namespace gram
 
         UdpServer();
         ~UdpServer();
+
+        ServerSettings Settings;
 
         static const int STANDARD_PORT = 55557;
         static const int BUFFER_SIZE = 65535;

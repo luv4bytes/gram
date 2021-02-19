@@ -18,33 +18,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "include/commands/Commands.hpp"
+#ifndef SERVERSETTINGS_H
+#define SERVERSETTINGS_H
 
-int main(int argc, char** argv)
+#include <string>
+#include <iostream>
+#include <fstream>
+
+namespace gram
 {
-    try
+    class ServerSettings
     {
-        std::cout << "gram " << GRAM_VERSION << "\nType \"help\" to get a list of commands!" << std::endl;
+    public:
+        std::string OutputFile;
+        std::ofstream OutputStream;
 
-        gram::Commands Commands;
-        GlobalCommandsPtr = &Commands;
+        // TODO:
 
-        while(true)
-        {
-            try
-            {
-                Commands.WaitForCommand();
-            }
-            catch(const gram::GramException& e)
-            {
-                std::cerr << e.ErrorMessage << '\n';
-            }
-        }
+    private:
+        int outputFileDescriptor;
 
-        return 0;
-    }
-    catch(const gram::GramException& e)
-    {
-        std::cerr << e.ErrorMessage << '\n';
-    }
+    };
 }
+
+#endif
