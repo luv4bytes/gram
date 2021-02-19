@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 {
     try
     {
-        std::cout << "Welcome to gram!" << std::endl;
+        std::cout << "Welcome to gram!\nType \"help\" to get a list of commands!" << std::endl;
 
         gram::Commands Commands;
         GlobalCommandsPtr = &Commands;

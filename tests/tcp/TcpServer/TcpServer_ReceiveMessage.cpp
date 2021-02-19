@@ -22,5 +22,7 @@ int main()
 
     while(!breakRcv){}
 
+    server.Stop();
+
     return 0;
 }

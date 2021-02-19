@@ -68,6 +68,8 @@ namespace gram
         int socketFd;
         struct sockaddr_in address;
 
+        void setSocketOptions();
+
         std::thread WaitThread;
 
         void waitForDatagrams();

@@ -71,6 +71,8 @@ namespace gram
         int socketFd;
         struct sockaddr_in address;
 
+        void setSocketOptions();
+
         std::thread WaitThread;
         std::vector<std::thread> ConnectionThreads;
 

@@ -47,14 +47,16 @@ void gram::TcpServer::Start()
 {
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
-      if (socketFd == -1)
+    if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
+
+    setSocketOptions();
 
     address.sin_family = AF_INET;
     address.sin_port = htons(STANDARD_PORT);
     address.sin_addr.s_addr = INADDR_ANY;
 
-    int bound = bind(socketFd, (struct sockaddr*)&address, sizeof(address));
+    int bound = bind(socketFd, (struct sockaddr *)&address, sizeof(address));
 
     if (bound == -1)
         throw GramException("Error binding address -> " + std::string(strerror(errno)));
@@ -71,14 +73,16 @@ void gram::TcpServer::Start(int bindPort)
 {
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
-      if (socketFd == -1)
+    if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
+
+    setSocketOptions();
 
     address.sin_family = AF_INET;
     address.sin_port = htons(bindPort);
     address.sin_addr.s_addr = INADDR_ANY;
 
-    int bound = bind(socketFd, (struct sockaddr*)&address, sizeof(address));
+    int bound = bind(socketFd, (struct sockaddr *)&address, sizeof(address));
 
     if (bound == -1)
         throw GramException("Error binding address -> " + std::string(strerror(errno)));
@@ -91,6 +95,18 @@ void gram::TcpServer::Start(int bindPort)
     waitForConnections();
 }
 
+void gram::TcpServer::setSocketOptions()
+{
+    int optVal = 1;
+    int setSockOpt = setsockopt(socketFd, SOL_SOCKET, SO_REUSEADDR, &optVal, sizeof(socketFd));
+
+    if (setSockOpt == -1)
+    {
+        close(socketFd);
+        throw GramException("Error setting socket option -> " + std::string(strerror(errno)));
+    }
+}
+
 void gram::TcpServer::Stop()
 {
     int closed = close(socketFd);
@@ -99,7 +115,7 @@ void gram::TcpServer::Stop()
         throw GramException("Error closing server socket -> " + std::string(strerror(errno)));
 
     WaitThread.detach();
-    for(int i = 0; i < ConnectionThreads.size(); i++)
+    for (int i = 0; i < ConnectionThreads.size(); i++)
         ConnectionThreads.at(i).detach();
 
     socketFd = 0;
@@ -113,7 +129,7 @@ int gram::TcpServer::GetListenerPort()
     struct sockaddr_in addr;
     socklen_t sz = sizeof(addr);
 
-    int port = getsockname(socketFd, (struct sockaddr*) &addr, &sz);
+    int port = getsockname(socketFd, (struct sockaddr *)&addr, &sz);
 
     return ntohs(addr.sin_port);
 }
@@ -121,28 +137,30 @@ int gram::TcpServer::GetListenerPort()
 void gram::TcpServer::waitForConnections()
 {
     WaitThread = std::thread(
-        [&]
-        ()
-        {
-            socklen_t sz = sizeof(address);
-            int acceptedSocketFd = accept(socketFd, (struct sockaddr*)&address, (socklen_t*)&sz);
+        [&]() {
 
-            if (acceptedSocketFd == -1)
-                return;
+            fd_set readfds;
 
-            addConnection(acceptedSocketFd);
+            if (select(socketFd, &readfds, NULL, NULL, NULL) > 0)
+            {
+                socklen_t sz = sizeof(address);
+                int acceptedSocketFd = accept(socketFd, (struct sockaddr *)&address, (socklen_t *)&sz);
+
+                if (acceptedSocketFd == -1)
+                    return;
+
+                addConnection(acceptedSocketFd);
+            }
         });
 }
 
 void gram::TcpServer::addConnection(int socketFd)
 {
     std::thread connection = std::thread(
-        [=]
-        ()
-        {
+        [=]() {
             char buffer[TcpServer::BUFFER_SIZE];
 
-            while(true)
+            while (true)
             {
                 ssize_t readBytes = read(socketFd, buffer, TcpServer::BUFFER_SIZE);
 
@@ -152,6 +170,8 @@ void gram::TcpServer::addConnection(int socketFd)
                 receivedHandler(std::string(buffer));
                 memset(buffer, 0, TcpServer::BUFFER_SIZE);
             }
+
+            close(socketFd);
         });
 
     ConnectionThreads.push_back(std::move(connection));

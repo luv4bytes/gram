@@ -156,6 +156,7 @@ void gram::Commands::createStopAllServersCommand()
 {
     Command stopAllServers;
     stopAllServers.CommandName = "stop server all";
+    stopAllServers.Description = "Stops all running servers";
 
     stopAllServers.AssignHandler([](){
 

@@ -50,6 +50,8 @@ void gram::UdpServer::Start()
       if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
 
+    setSocketOptions();
+
     address.sin_family = AF_INET;
     address.sin_port = htons(STANDARD_PORT);
     address.sin_addr.s_addr = INADDR_ANY;
@@ -66,8 +68,10 @@ void gram::UdpServer::Start(int bindPort)
 {
     socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
-      if (socketFd == -1)
+    if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
+
+    setSocketOptions();
 
     address.sin_family = AF_INET;
     address.sin_port = htons(bindPort);
@@ -90,6 +94,18 @@ void gram::UdpServer::Stop()
 
     WaitThread.detach();
     socketFd = 0;
+}
+
+void gram::UdpServer::setSocketOptions()
+{
+    int optVal = 1;
+    int setSockOpt = setsockopt(socketFd, SOL_SOCKET, SO_REUSEADDR, &optVal, sizeof(socketFd));
+
+    if (setSockOpt == -1)
+    {
+        close(socketFd);
+        throw GramException("Error setting socket option -> " + std::string(strerror(errno)));
+    }
 }
 
 int gram::UdpServer::GetListenerPort()
