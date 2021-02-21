@@ -80,19 +80,6 @@ add_executable(TcpConnection_Send tests/tcp/TcpConnection/TcpConnection_Send.cpp
 add_test(TcpConnection_Send_Test TcpConnection_Send)
 
 
-# ########## TcpServer Tests ##########
-
-add_executable(TcpServer_ReceiveMessage tests/tcp/TcpServer/TcpServer_ReceiveMessage.cpp
-                            src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(TcpServer_ReceiveMessage pthread)
-target_link_libraries(TcpServer_ReceiveMessage uuid)
-add_test(TcpServer_ReceiveMessage_Test TcpServer_ReceiveMessage)
-
 # ########## TcpManager Tests ##########
 
 add_executable(TcpManager_AddServer tests/tcp/TcpManager/TcpManager_AddServer.cpp
@@ -222,20 +209,6 @@ add_executable(UdpConnection_Send tests/udp/UdpConnection/UdpConnection_Send.cpp
                             src/udp/UdpConnection.cpp
                             src/exceptions/GramException.cpp)
 add_test(UdpConnection_Send_Test UdpConnection_Send)
-
-
-# ########## UdpServer Tests ##########
-
-add_executable(UdpServer_ReceiveMessage tests/udp/UdpServer/UdpServer_ReceiveMessage.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpServer_ReceiveMessage uuid)
-target_link_libraries(UdpServer_ReceiveMessage pthread)
-add_test(UdpServer_ReceiveMessage_Test UdpServer_ReceiveMessage)
 
 
 # ########## UdpManager Tests ##########

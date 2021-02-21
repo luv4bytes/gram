@@ -29,6 +29,38 @@ gram::UdpServer::~UdpServer()
 {
 }
 
+gram::UdpServer* gram::UdpServer::PromptAndCreateNewServer()
+{
+    int port = 0;
+    char name[UdpServer::NAME_LENGTH];
+    memset(name, 0, UdpServer::NAME_LENGTH);
+
+    std::cout << "Port (0 for std port): ";
+
+    if (!(std::cin >> port))
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        throw GramException("Error setting port");
+    }  
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Name (optional, 50 chars): ";
+    std::cin.getline(name, UdpServer::NAME_LENGTH);
+
+    UdpServer* server = new UdpServer();
+    server->ServerName = name;
+
+    if (port == 0)
+        port = STANDARD_PORT;
+
+    server->Port = port;
+
+    return server;
+}
+
 std::string gram::UdpServer::createId()
 {
     char str[UUID_STR_LEN];
@@ -53,7 +85,7 @@ void gram::UdpServer::Start()
     setSocketOptions();
 
     address.sin_family = AF_INET;
-    address.sin_port = htons(STANDARD_PORT);
+    address.sin_port = htons(Port);
     address.sin_addr.s_addr = INADDR_ANY;
 
     int bound = bind(socketFd, (struct sockaddr*)&address, sizeof(address));
@@ -61,27 +93,6 @@ void gram::UdpServer::Start()
     if (bound == -1)
         throw GramException("Error binding address -> " + std::string(strerror(errno)));
 
-    waitForDatagrams();
-}
-
-void gram::UdpServer::Start(int bindPort)
-{
-    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
-
-    if (socketFd == -1)
-        throw GramException("Error creating socket -> " + std::string(strerror(errno)));
-
-    setSocketOptions();
-
-    address.sin_family = AF_INET;
-    address.sin_port = htons(bindPort);
-    address.sin_addr.s_addr = INADDR_ANY;
-
-    int bound = bind(socketFd, (struct sockaddr*)&address, sizeof(address));
-
-    if (bound == -1)
-        throw GramException("Error binding address -> " + std::string(strerror(errno)));
-        
     waitForDatagrams();
 }
 
@@ -105,19 +116,6 @@ void gram::UdpServer::setSocketOptions()
         close(socketFd);
         throw GramException("Error setting socket option -> " + std::string(strerror(errno)));
     }
-}
-
-int gram::UdpServer::GetListenerPort()
-{
-    if (socketFd == 0)
-        return -1;
-
-    struct sockaddr_in addr;
-    socklen_t sz = sizeof(addr);
-
-    int port = getsockname(socketFd, (struct sockaddr*) &addr, &sz);
-
-    return ntohs(addr.sin_port);
 }
 
 void gram::UdpServer::waitForDatagrams()
@@ -161,4 +159,9 @@ void gram::UdpServer::waitForDatagrams()
                 receivedHandler(std::string(buffer));
             }
         });
+}
+
+void gram::UdpServer::receivedHandler(std::string message)
+{
+    // TODO:
 }

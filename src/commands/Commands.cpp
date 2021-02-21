@@ -89,36 +89,10 @@ void gram::Commands::createStartServerTcpCommand()
 
     tcpServer.AssignHandler([](){
 
-        int port = 0;
-        char name[TcpServer::NAME_LENGTH];
-        memset(name, 0, TcpServer::NAME_LENGTH);
+        TcpServer* newServer = TcpServer::PromptAndCreateNewServer();
+        newServer->Start();
 
-        std::cout << "Port (0 for std port): ";
-
-        if (!(std::cin >> port))
-        {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            throw GramException("Error setting port");
-        }
-
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        std::cout << "Name (optional, 50 chars): ";
-        std::cin.getline(name, TcpServer::NAME_LENGTH);
-
-        TcpServer* server = new TcpServer();
-        server->ServerName = std::string(name);
-
-        // TODO: message handler
-
-        if (port != 0)
-            server->Start(port);
-        else
-            server->Start();
-
-        GlobalTcpManager.AddServer(server);
+        GlobalTcpManager.AddServer(newServer);
     });
 
     AvailableCommands.push_back(tcpServer);
@@ -132,36 +106,10 @@ void gram::Commands::createStartServerUdpCommand()
 
     udpServer.AssignHandler([](){
 
-        int port = 0;
-        char name[UdpServer::NAME_LENGTH];
-        memset(name, 0, UdpServer::NAME_LENGTH);
+        UdpServer* newServer = UdpServer::PromptAndCreateNewServer();
+        newServer->Start();
 
-        std::cout << "Port (0 for std port): ";
-
-        if (!(std::cin >> port))
-        {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            
-            throw GramException("Error setting port");
-        }  
-
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        std::cout << "Name (optional, 50 chars): ";
-        std::cin.getline(name, UdpServer::NAME_LENGTH);
-
-        UdpServer* server = new UdpServer();
-        server->ServerName = name;
-
-        // TODO: message handler
-
-        if (port != 0)
-            server->Start(port);
-        else
-            server->Start();
-
-        GlobalUdpManager.AddServer(server);        
+        GlobalUdpManager.AddServer(newServer);        
     });
 
     AvailableCommands.push_back(udpServer);

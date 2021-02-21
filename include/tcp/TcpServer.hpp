@@ -43,8 +43,6 @@ namespace gram
     class TcpServer
     {
     public:
-        typedef void(*ReceivedHandler)(std::string);
-
         TcpServer();
         ~TcpServer();
 
@@ -57,22 +55,13 @@ namespace gram
         static const int NAME_LENGTH = 50;
 
         void Start();
-        void Start(int bindPort);
-
         void Stop();
 
-        template<typename Func, typename ...args>
-        void AddReceivedHandler(Func handler)
-        {
-            if (handler == nullptr)
-                return;
-
-            receivedHandler = handler;
-        }
-
-        int GetListenerPort();
         std::string ServerId;
         std::string ServerName;
+        int Port;
+
+        static TcpServer* PromptAndCreateNewServer();
 
     private:
         int socketFd;
@@ -85,10 +74,9 @@ namespace gram
 
         void waitForConnections();
         void addConnection(int socketFd);
-
-        ReceivedHandler receivedHandler;
-
         std::string createId();
+
+        void receivedHandler(std::string message);
     };
 };
 

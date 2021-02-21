@@ -21,6 +21,7 @@ SOFTWARE. */
 #ifndef UDPSERVER_H
 #define UDPSERVER_H
 
+#include <iostream>
 #include <string>
 #include "string.h"
 #include <errno.h>
@@ -41,8 +42,6 @@ namespace gram
     class UdpServer
     {
     public:
-        typedef void(*ReceivedHandler)(std::string);
-
         UdpServer();
         ~UdpServer();
 
@@ -54,22 +53,13 @@ namespace gram
         static const int NAME_LENGTH = 50;
 
         void Start();
-        void Start(int bindPort);
-
         void Stop();
 
-        template<typename T>
-        void AddReceivedHandler(T handler)
-        {
-            if (handler == nullptr)
-                return;
-
-            receivedHandler = handler;
-        }
-
-        int GetListenerPort();
         std::string ServerId;
         std::string ServerName;
+        int Port;
+
+        static UdpServer* PromptAndCreateNewServer();
 
     private:
         int socketFd;
@@ -81,9 +71,9 @@ namespace gram
 
         void waitForDatagrams();
 
-        ReceivedHandler receivedHandler;
-
         std::string createId();
+
+        void receivedHandler(std::string message);
     };
 };
 

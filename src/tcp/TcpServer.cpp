@@ -29,6 +29,38 @@ gram::TcpServer::~TcpServer()
 {
 }
 
+gram::TcpServer* gram::TcpServer::PromptAndCreateNewServer()
+{
+    int port = 0;
+    char name[TcpServer::NAME_LENGTH];
+    memset(name, 0, TcpServer::NAME_LENGTH);
+
+    std::cout << "Port (0 for std port): ";
+
+    if (!(std::cin >> port))
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        throw GramException("Error setting port");
+    }  
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Name (optional, 50 chars): ";
+    std::cin.getline(name, TcpServer::NAME_LENGTH);
+
+    TcpServer* server = new TcpServer();
+    server->ServerName = name;
+
+    if (port == 0)
+        port = STANDARD_PORT;
+
+    server->Port = port;
+
+    return server;
+}
+
 std::string gram::TcpServer::createId()
 {
     char str[UUID_STR_LEN];
@@ -69,32 +101,6 @@ void gram::TcpServer::Start()
     waitForConnections();
 }
 
-void gram::TcpServer::Start(int bindPort)
-{
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (socketFd == -1)
-        throw GramException("Error creating socket -> " + std::string(strerror(errno)));
-
-    setSocketOptions();
-
-    address.sin_family = AF_INET;
-    address.sin_port = htons(bindPort);
-    address.sin_addr.s_addr = INADDR_ANY;
-
-    int bound = bind(socketFd, (struct sockaddr *)&address, sizeof(address));
-
-    if (bound == -1)
-        throw GramException("Error binding address -> " + std::string(strerror(errno)));
-
-    int listening = listen(socketFd, LISTEN_BACKLOG);
-
-    if (listening == -1)
-        throw GramException("Error starting to listen -> " + std::string(strerror(errno)));
-
-    waitForConnections();
-}
-
 void gram::TcpServer::setSocketOptions()
 {
     int optVal = 1;
@@ -117,19 +123,6 @@ void gram::TcpServer::Stop()
     WaitThread.detach();
     for (int i = 0; i < ConnectionThreads.size(); i++)
         ConnectionThreads.at(i).detach();
-}
-
-int gram::TcpServer::GetListenerPort()
-{
-    if (socketFd == 0)
-        return -1;
-
-    struct sockaddr_in addr;
-    socklen_t sz = sizeof(addr);
-
-    int port = getsockname(socketFd, (struct sockaddr *)&addr, &sz);
-
-    return ntohs(addr.sin_port);
 }
 
 void gram::TcpServer::waitForConnections()
@@ -193,4 +186,9 @@ void gram::TcpServer::addConnection(int socketFd)
         });
 
     ConnectionThreads.push_back(std::move(connection));
+}
+
+void gram::TcpServer::receivedHandler(std::string message)
+{
+    // TODO:
 }
