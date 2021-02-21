@@ -20,10 +20,18 @@ SOFTWARE. */
 
 #include "../../include/settings/ServerSettings.hpp"
 
+gram::ServerSettings::ServerSettings()
+{
+    createWriteToFileSetting();
+    createOutputFileSetting();
+    createCloseAfterTimeoutSetting();
+}
+
 void gram::ServerSettings::createWriteToFileSetting()
 {
     WriteToFile.Name = "WriteToFile";
     WriteToFile.Description = "Controls if received messages should be written to a given file";
+    WriteToFile.Id = 0;
     WriteToFile.Value = false;
 }
 
@@ -31,6 +39,7 @@ void gram::ServerSettings::createOutputFileSetting()
 {
     OutputFile.Name = "OutputFile";
     OutputFile.Description = "If set, this is the file the output is written to";
+    OutputFile.Id = 1;
     OutputFile.Value = std::string();
 }
 
@@ -38,5 +47,15 @@ void gram::ServerSettings::createCloseAfterTimeoutSetting()
 {
     CloseAfterTimeout.Name = "CloseAfterTimeout";
     CloseAfterTimeout.Description = "Sets a timeout after a server should be stopped";
+    CloseAfterTimeout.Id = 2;
     CloseAfterTimeout.Value = -1;
+}
+
+void gram::ServerSettings::PrintServerSettings()
+{
+    std::string format = "  %-3d|  %-20s|  %-40s\n";
+
+    printf(format.c_str(), WriteToFile.Id, WriteToFile.Name.c_str(), WriteToFile.Description.c_str());
+    printf(format.c_str(), OutputFile.Id, OutputFile.Name.c_str(), OutputFile.Description.c_str());
+    printf(format.c_str(), CloseAfterTimeout.Id, CloseAfterTimeout.Name.c_str(), CloseAfterTimeout.Description.c_str());
 }

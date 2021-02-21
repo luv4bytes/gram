@@ -17,6 +17,7 @@ add_executable(gram main.cpp
                     src/commands/Commands.cpp
                     src/commands/Command.cpp
                     src/settings/ServerSettings.cpp
+                    src/settings/SettingsInfo.cpp
                     src/globals/Globals.cpp
                     src/exceptions/GramException.cpp)
 
@@ -321,6 +322,7 @@ add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cp
                             src/commands/Command.cpp
                             src/globals/Globals.cpp
                             src/settings/ServerSettings.cpp
+                            src/settings/SettingsInfo.cpp
                             src/exceptions/GramException.cpp)
 
 target_link_libraries(Commands_CreateCommands pthread)

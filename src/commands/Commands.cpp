@@ -44,6 +44,8 @@ void gram::Commands::createCommands()
     createStartTcpClientCommand();
     createStartUdpClientCommand();
 
+    createListServerSettingsInfoCommand();
+
     createHelpCommand();
 }
 
@@ -262,6 +264,19 @@ void gram::Commands::createStartTcpClientCommand()
 void gram::Commands::createStartUdpClientCommand()
 {
     // TODO:
+}
+
+void gram::Commands::createListServerSettingsInfoCommand()
+{
+    Command listServerSettings;
+    listServerSettings.CommandName = "list server settings";
+    listServerSettings.Description = "Prints available settings to set for servers";
+
+    listServerSettings.AssignHandler([](){
+        GlobalSettingsInfo.PrintServerSettingsInfo();
+    });
+
+    AvailableCommands.push_back(listServerSettings);
 }
 
 void gram::Commands::createHelpCommand()

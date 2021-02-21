@@ -23,6 +23,7 @@ SOFTWARE. */
 
 #include "../tcp/TcpManager.hpp"
 #include "../udp/UdpManager.hpp"
+#include "../settings/SettingsInfo.hpp"
 
 namespace gram{
     class Commands;
@@ -32,5 +33,7 @@ extern gram::TcpManager GlobalTcpManager;
 extern gram::UdpManager GlobalUdpManager;
 
 extern gram::Commands* GlobalCommandsPtr;
+
+extern gram::SettingsInfo GlobalSettingsInfo;
 
 #endif

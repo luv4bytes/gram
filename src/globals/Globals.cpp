@@ -24,3 +24,5 @@ gram::TcpManager GlobalTcpManager;
 gram::UdpManager GlobalUdpManager;
 
 gram::Commands* GlobalCommandsPtr;
+
+gram::SettingsInfo GlobalSettingsInfo;

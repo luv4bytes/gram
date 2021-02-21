@@ -59,7 +59,6 @@ namespace gram{
 
             - Server settings
             - Message handling
-            
 
             Clients:
             
@@ -85,6 +84,8 @@ namespace gram{
 
         void createStartTcpClientCommand();
         void createStartUdpClientCommand();
+
+        void createListServerSettingsInfoCommand();
 
         void createHelpCommand();
     };

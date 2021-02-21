@@ -18,45 +18,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef SERVERSETTINGS_H
-#define SERVERSETTINGS_H
+#include "../../include/settings/SettingsInfo.hpp"
 
-#include <string>
-#include <vector>
-#include <iostream>
-
-namespace gram
+void gram::SettingsInfo::PrintServerSettingsInfo()
 {
-    class ServerSettings
-    {
-    public:
-
-        ServerSettings();
-
-        template <typename T>
-        class SettingsEntry
-        {
-        public:
-            std::string Name;
-            std::string Description;
-            int Id;
-            T Value;
-        };
-
-        SettingsEntry<bool> WriteToFile;
-        SettingsEntry<std::string> OutputFile;
-
-        SettingsEntry<int> CloseAfterTimeout;
-
-        void PrintServerSettings();
-
-        // TODO: Set settings
-
-    private:
-        void createWriteToFileSetting();
-        void createOutputFileSetting();
-        void createCloseAfterTimeoutSetting();
-    };
+    Server.PrintServerSettings();
 }
-
-#endif
