@@ -328,3 +328,9 @@ add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cp
 target_link_libraries(Commands_CreateCommands pthread)
 target_link_libraries(Commands_CreateCommands uuid)
 add_test(Commands_CreateCommands_Test Commands_CreateCommands)
+
+# ########## Settings Tests ##########
+
+add_executable(ServerSettings_PrintServerSettings tests/settings/ServerSettings/ServerSettings_PrintServerSettings.cpp
+                            src/settings/ServerSettings.cpp)
+add_test(ServerSettings_PrintServerSettings_Test ServerSettings_PrintServerSettings)

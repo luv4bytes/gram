@@ -37,9 +37,17 @@ namespace gram
         class SettingsEntry
         {
         public:
-            std::string Name;
-            std::string Description;
-            int Id;
+            SettingsEntry(std::string name, std::string description, int id, T value) :
+                Name(name),
+                Description(description),
+                Id(id),
+                Value(value)
+            {
+            }
+
+            const std::string Name;
+            const std::string Description;
+            const int Id;
             T Value;
         };
 
@@ -51,11 +59,6 @@ namespace gram
         void PrintServerSettings();
 
         // TODO: Set settings
-
-    private:
-        void createWriteToFileSetting();
-        void createOutputFileSetting();
-        void createCloseAfterTimeoutSetting();
     };
 }
 

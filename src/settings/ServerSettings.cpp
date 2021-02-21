@@ -21,34 +21,10 @@ SOFTWARE. */
 #include "../../include/settings/ServerSettings.hpp"
 
 gram::ServerSettings::ServerSettings()
+    : WriteToFile("WriteToFile", "Controls if received messages should be written to a given file", 0, false),
+      OutputFile("OutputFile", "If set, this is the file the output is written to", 1, ""),
+      CloseAfterTimeout("CloseAfterTimeout", "Sets a timeout after a server should be stopped", 2, -1)
 {
-    createWriteToFileSetting();
-    createOutputFileSetting();
-    createCloseAfterTimeoutSetting();
-}
-
-void gram::ServerSettings::createWriteToFileSetting()
-{
-    WriteToFile.Name = "WriteToFile";
-    WriteToFile.Description = "Controls if received messages should be written to a given file";
-    WriteToFile.Id = 0;
-    WriteToFile.Value = false;
-}
-
-void gram::ServerSettings::createOutputFileSetting()
-{
-    OutputFile.Name = "OutputFile";
-    OutputFile.Description = "If set, this is the file the output is written to";
-    OutputFile.Id = 1;
-    OutputFile.Value = std::string();
-}
-
-void gram::ServerSettings::createCloseAfterTimeoutSetting()
-{
-    CloseAfterTimeout.Name = "CloseAfterTimeout";
-    CloseAfterTimeout.Description = "Sets a timeout after a server should be stopped";
-    CloseAfterTimeout.Id = 2;
-    CloseAfterTimeout.Value = -1;
 }
 
 void gram::ServerSettings::PrintServerSettings()
