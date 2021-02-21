@@ -65,7 +65,7 @@ void gram::TcpManager::CloseAllClients()
 void gram::TcpManager::PrintServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
-        std::cout << Servers.at(i)->ServerId << " - Port: " << Servers.at(i)->GetListenerPort() << std::endl;
+        std::cout << Servers.at(i)->ServerId << " - Port: " << Servers.at(i)->GetListenerPort() << " - Name: " << Servers.at(i)->ServerName << std::endl;
 }
 
 void gram::TcpManager::RemoveServer(TcpServer* server)

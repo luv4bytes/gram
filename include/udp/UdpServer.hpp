@@ -51,6 +51,7 @@ namespace gram
         static const int STANDARD_PORT = 55557;
         static const int BUFFER_SIZE = 65535;
         static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
+        static const int NAME_LENGTH = 50;
 
         void Start();
         void Start(int bindPort);
@@ -68,6 +69,7 @@ namespace gram
 
         int GetListenerPort();
         std::string ServerId;
+        std::string ServerName;
 
     private:
         int socketFd;

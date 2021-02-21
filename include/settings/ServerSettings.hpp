@@ -22,22 +22,35 @@ SOFTWARE. */
 #define SERVERSETTINGS_H
 
 #include <string>
-#include <iostream>
 #include <fstream>
+#include <vector>
 
 namespace gram
 {
     class ServerSettings
     {
     public:
-        std::string OutputFile;
-        std::ofstream OutputStream;
+
+        template <typename T>
+        class SettingsEntry
+        {
+        public:
+            std::string Name;
+            std::string Description;
+            T Value;
+        };
+
+        SettingsEntry<bool> WriteToFile;
+        SettingsEntry<std::string> OutputFile;
+
+        SettingsEntry<int> CloseAfterTimeout;
 
         // TODO:
 
     private:
-        int outputFileDescriptor;
-
+        void createWriteToFileSetting();
+        void createOutputFileSetting();
+        void createCloseAfterTimeoutSetting();
     };
 }
 

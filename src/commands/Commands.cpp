@@ -41,6 +41,9 @@ void gram::Commands::createCommands()
     createListTcpServerCommand();
     createListUdpServerCommand();
 
+    createStartTcpClientCommand();
+    createStartUdpClientCommand();
+
     createHelpCommand();
 }
 
@@ -87,6 +90,8 @@ void gram::Commands::createStartServerTcpCommand()
     tcpServer.AssignHandler([](){
 
         int port = 0;
+        char name[TcpServer::NAME_LENGTH];
+        memset(name, 0, TcpServer::NAME_LENGTH);
 
         std::cout << "Port (0 for std port): ";
 
@@ -98,7 +103,13 @@ void gram::Commands::createStartServerTcpCommand()
             throw GramException("Error setting port");
         }
 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Name (optional, 50 chars): ";
+        std::cin.getline(name, TcpServer::NAME_LENGTH);
+
         TcpServer* server = new TcpServer();
+        server->ServerName = std::string(name);
 
         // TODO: message handler
 
@@ -108,8 +119,6 @@ void gram::Commands::createStartServerTcpCommand()
             server->Start();
 
         GlobalTcpManager.AddServer(server);
-
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
 
     AvailableCommands.push_back(tcpServer);
@@ -124,6 +133,8 @@ void gram::Commands::createStartServerUdpCommand()
     udpServer.AssignHandler([](){
 
         int port = 0;
+        char name[UdpServer::NAME_LENGTH];
+        memset(name, 0, UdpServer::NAME_LENGTH);
 
         std::cout << "Port (0 for std port): ";
 
@@ -135,8 +146,14 @@ void gram::Commands::createStartServerUdpCommand()
             throw GramException("Error setting port");
         }  
 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Name (optional, 50 chars): ";
+        std::cin.getline(name, UdpServer::NAME_LENGTH);
+
         UdpServer* server = new UdpServer();
-        
+        server->ServerName = name;
+
         // TODO: message handler
 
         if (port != 0)
@@ -144,9 +161,7 @@ void gram::Commands::createStartServerUdpCommand()
         else
             server->Start();
 
-        GlobalUdpManager.AddServer(server);
-
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        GlobalUdpManager.AddServer(server);        
     });
 
     AvailableCommands.push_back(udpServer);

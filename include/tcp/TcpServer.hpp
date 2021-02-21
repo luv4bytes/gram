@@ -54,6 +54,7 @@ namespace gram
         static const int LISTEN_BACKLOG = 50;
         static const int BUFFER_SIZE = 4096;
         static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
+        static const int NAME_LENGTH = 50;
 
         void Start();
         void Start(int bindPort);
@@ -71,6 +72,7 @@ namespace gram
 
         int GetListenerPort();
         std::string ServerId;
+        std::string ServerName;
 
     private:
         int socketFd;

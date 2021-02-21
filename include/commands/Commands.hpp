@@ -55,8 +55,14 @@ namespace gram{
         /*
             TODO: 
 
-            - Message handling
+            Server:
+
             - Server settings
+            - Message handling
+            
+
+            Clients:
+            
             - List clients
             - Close clients
             - Close single client
