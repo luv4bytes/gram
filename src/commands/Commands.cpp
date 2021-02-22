@@ -39,9 +39,6 @@ void gram::Commands::createCommands()
 
     createListServerCommand();
     
-    createStartTcpClientCommand();
-    createStartUdpClientCommand();
-
     createListServerSettingsInfoCommand();
     createSetServerSettingCommand();
 
@@ -221,16 +218,6 @@ void gram::Commands::createListServerCommand()
     AvailableCommands.push_back(listServers);
 }
 
-void gram::Commands::createStartTcpClientCommand()
-{
-    // TODO:
-}
-
-void gram::Commands::createStartUdpClientCommand()
-{
-    // TODO:
-}
-
 void gram::Commands::createListServerSettingsInfoCommand()
 {
     Command listServerSettings;
@@ -260,7 +247,7 @@ void gram::Commands::createSetServerSettingCommand()
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             
-            throw GramException("Error setting server id");
+            throw GramException("Server id not valid");
         }
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -271,7 +258,7 @@ void gram::Commands::createSetServerSettingCommand()
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             
-            throw GramException("Error setting settings id");
+            throw GramException("Settings id not valid");
         }
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -282,6 +269,8 @@ void gram::Commands::createSetServerSettingCommand()
 
         if (server == nullptr)
             return;
+
+        server->PromptAndSetSetting(settingsId);
     });
 
     AvailableCommands.push_back(setServerSetting);

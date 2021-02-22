@@ -71,7 +71,7 @@ namespace gram
         void addConnection(int socketFd);
         std::string createId();
 
-        void receivedHandler(std::string message);
+        void received(std::string message) override;
     };
 };
 

@@ -35,3 +35,20 @@ void gram::ServerBase::Start()
 void gram::ServerBase::Stop()
 {
 }
+
+void gram::ServerBase::received(std::string message)
+{
+    std::cout << message << std::endl;
+}
+
+void gram::ServerBase::PromptAndSetSetting(int settingId)
+{
+    for(size_t i = 0; i < Settings.Entries.size(); i++)
+    {
+        if (Settings.Entries.at(i).Id == settingId)
+        {
+            Settings.Entries.at(i).PromptAndSet();
+            break;
+        }
+    }
+}

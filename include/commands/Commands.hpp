@@ -81,9 +81,6 @@ namespace gram{
 
         void createListServerCommand();
 
-        void createStartTcpClientCommand();
-        void createStartUdpClientCommand();
-
         void createListServerSettingsInfoCommand();
         void createSetServerSettingCommand();
 

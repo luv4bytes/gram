@@ -152,17 +152,17 @@ void gram::UdpServer::waitForDatagrams()
                 socklen_t sz = sizeof(address);
                 char buffer[UdpServer::BUFFER_SIZE];
 
-                ssize_t received = recv(socketFd, buffer, UdpServer::BUFFER_SIZE, 0);
+                ssize_t rcvdBytes = recv(socketFd, buffer, UdpServer::BUFFER_SIZE, 0);
 
-                if (received == -1)
+                if (rcvdBytes == -1)
                     return;
-
-                receivedHandler(std::string(buffer));
+                    
+                received(std::string(buffer));
             }
         });
 }
 
-void gram::UdpServer::receivedHandler(std::string message)
+void gram::UdpServer::received(std::string message)
 {
     // TODO:
 }

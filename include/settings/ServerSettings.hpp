@@ -25,6 +25,8 @@ SOFTWARE. */
 #include <vector>
 #include <iostream>
 
+#include "../exceptions/GramException.hpp"
+
 namespace gram
 {
     class ServerSettings
@@ -33,32 +35,31 @@ namespace gram
 
         ServerSettings();
 
-        template <typename T>
         class SettingsEntry
         {
         public:
-            SettingsEntry(std::string name, std::string description, int id, T value) :
-                Name(name),
-                Description(description),
-                Id(id),
-                Value(value)
-            {
-            }
+
+            typedef bool (*ValidatorFunction)(std::string val);
+
+            SettingsEntry(std::string name, std::string description, int id, std::string value);
+            SettingsEntry(std::string name, std::string description, int id, std::string value, ValidatorFunction validator);
 
             const std::string Name;
             const std::string Description;
             const int Id;
-            T Value;
+            const ValidatorFunction Validator;
+            std::string Value;            
+            
+            void PromptAndSet();
         };
 
-        SettingsEntry<bool> WriteToFile;
-        SettingsEntry<std::string> OutputFile;
+        SettingsEntry WriteToFile;
+        SettingsEntry OutputFile;
+        SettingsEntry CloseAfterTimeout;
 
-        SettingsEntry<int> CloseAfterTimeout;
+        std::vector<SettingsEntry> Entries;
 
         void PrintServerSettings();
-
-        // TODO: Set settings
     };
 }
 

@@ -68,7 +68,7 @@ namespace gram
 
         std::string createId();
 
-        void receivedHandler(std::string message);
+        void received(std::string message) override;
     };
 };
 

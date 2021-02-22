@@ -50,6 +50,11 @@ namespace gram
 
         virtual void Start();
         virtual void Stop();
+
+        void PromptAndSetSetting(int settingId);
+
+    private:
+        virtual void received(std::string message);
     };
 }
 

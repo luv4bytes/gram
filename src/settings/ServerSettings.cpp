@@ -20,11 +20,68 @@ SOFTWARE. */
 
 #include "../../include/settings/ServerSettings.hpp"
 
-gram::ServerSettings::ServerSettings()
-    : WriteToFile("WriteToFile", "Controls if received messages should be written to a given file", 0, false),
-      OutputFile("OutputFile", "If set, this is the file the output is written to", 1, ""),
-      CloseAfterTimeout("CloseAfterTimeout", "Sets a timeout after a server should be stopped", 2, -1)
+gram::ServerSettings::SettingsEntry::SettingsEntry(std::string name, std::string description, int id, std::string value) :
+    Name(name),
+    Description(description),
+    Id(id),
+    Value(value),
+    Validator(nullptr)
 {
+}
+
+gram::ServerSettings::SettingsEntry::SettingsEntry(std::string name, std::string description, int id, std::string value, ValidatorFunction validator) :
+    Name(name),
+    Description(description),
+    Id(id),
+    Value(value),
+    Validator(validator)
+{
+}
+
+void gram::ServerSettings::SettingsEntry::PromptAndSet()
+{
+    std::string val;
+    std::cout << "Enter value: ";
+    std::cin >> val;
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    if (Validator != nullptr)
+        if (!Validator(val))
+            throw GramException("Given value not valid");
+    
+    Value = val;
+}
+
+static bool
+isNumeric(std::string input)
+{
+    if (input.empty())
+        return false;
+
+    for(size_t i = 0; i < input.size(); i++)
+        if (!isdigit(input[i]))
+            return false;
+
+    return true;
+}
+
+gram::ServerSettings::ServerSettings()
+    : WriteToFile("WriteToFile", "Controls if received messages should be written to a given file", 0, "false",
+                  [](std::string val){
+                      if (val.compare("false") == 0 || val.compare("true") == 0)  
+                        return true;
+                      return false;
+                  }),
+      OutputFile("OutputFile", "If set, this is the file the output is written to", 1, ""),
+      CloseAfterTimeout("CloseAfterTimeout", "Sets a timeout after a server should be stopped", 2, "-1",
+                   [](std::string val){
+                      return isNumeric(val);
+                   })
+{
+    Entries.push_back(WriteToFile);
+    Entries.push_back(OutputFile);
+    Entries.push_back(CloseAfterTimeout);
 }
 
 void gram::ServerSettings::PrintServerSettings()

@@ -179,7 +179,7 @@ void gram::TcpServer::addConnection(int socketFd)
                 if (readBytes == -1 || readBytes == 0)
                     break;
 
-                receivedHandler(std::string(buffer));
+                received(std::string(buffer));
                 memset(buffer, 0, TcpServer::BUFFER_SIZE);
             }
 
@@ -189,7 +189,7 @@ void gram::TcpServer::addConnection(int socketFd)
     ConnectionThreads.push_back(std::move(connection));
 }
 
-void gram::TcpServer::receivedHandler(std::string message)
+void gram::TcpServer::received(std::string message)
 {
     // TODO:
 }
