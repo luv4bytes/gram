@@ -23,6 +23,7 @@ SOFTWARE. */
 gram::ServerBase::ServerBase()
 {
     createId();
+    clearRingBuffer();
 }
 
 gram::ServerBase::~ServerBase()
@@ -37,9 +38,18 @@ void gram::ServerBase::Stop()
 {
 }
 
-void gram::ServerBase::received(std::string message)
+void gram::ServerBase::createId()
 {
-    std::cout << message << std::endl;
+    char str[UUID_STR_LEN];
+    uuid_t uuid;
+
+    uuid_generate(uuid);
+    uuid_unparse(uuid, str);
+    uuid_clear(uuid);
+
+    std::string id("S" + std::string(str).substr(0, 3));
+
+    ServerId = id;
 }
 
 void gram::ServerBase::PromptAndSetSetting(int settingId)
@@ -54,16 +64,68 @@ void gram::ServerBase::PromptAndSetSetting(int settingId)
     }
 }
 
-void gram::ServerBase::createId()
+void gram::ServerBase::clearRingBuffer()
 {
-    char str[UUID_STR_LEN];
-    uuid_t uuid;
+    memset(RingBuffer, 0, RINGBUFFER_LENGTH);
+    RingBufferCurrent = RingBuffer;
+    RingBufferEnd = RingBuffer + RINGBUFFER_LENGTH;
+}
 
-    uuid_generate(uuid);
-    uuid_unparse(uuid, str);
-    uuid_clear(uuid);
+void gram::ServerBase::received(std::string message)
+{
+    std::cout << message << std::endl;
+}
 
-    std::string id("S" + std::string(str).substr(0, 3));
+void gram::ServerBase::writeMessageToFile(std::string message)
+{
+    if (message.empty())
+        return;
 
-    ServerId = id;
+    std::string file = Settings.OutputFile.Value;
+
+    std::ofstream stream;
+    stream.open(file, std::ios_base::app);
+
+    if (!stream.is_open())
+        throw GramException("Error opening output file");
+
+    stream.write(message.c_str(), message.size());
+
+    stream.close();
+}
+
+void gram::ServerBase::writeMessageToRingbuffer(std::string message)
+{
+    if (message.empty())
+        return; 
+
+    size_t i = 0;
+
+    while(true)
+    {
+        if (RingBufferCurrent == RingBufferEnd)
+            clearRingBuffer();
+
+        *RingBufferCurrent = message.c_str()[i];
+
+        i++;
+        RingBufferCurrent++;
+
+        if (i == message.size())
+            return;
+    }
+}
+
+std::string gram::ServerBase::ServerTypeName()
+{
+    switch(Type)
+    {
+        case TCP:
+            return "TCP";
+        
+        case UDP:
+            return "UDP";
+    }
+
+    return "none";
 }

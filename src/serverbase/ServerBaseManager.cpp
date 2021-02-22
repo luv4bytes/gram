@@ -48,7 +48,10 @@ void gram::ServerBaseManager::StopAllServers()
 void gram::ServerBaseManager::PrintServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
-        std::cout << Servers.at(i)->ServerId << " - Port: " << Servers.at(i)->Port << " - Name: " << Servers.at(i)->ServerName << std::endl;
+    {
+        ServerBase* server = Servers.at(i);
+        std::cout << server->ServerId << " (" << server->ServerTypeName() << ") - Port: " << server->Port << " - Name: " << server->ServerName << std::endl;
+    }
 }
 
 void gram::ServerBaseManager::RemoveServer(ServerBase* server)

@@ -22,6 +22,9 @@ SOFTWARE. */
 #define SERVERBASE_H
 
 #include "uuid/uuid.h"
+#include <fstream>
+#include <string.h>
+
 #include "../settings/ServerSettings.hpp"
 
 namespace gram
@@ -44,19 +47,32 @@ namespace gram
 
         static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
         static const int NAME_LENGTH = 50;
+        static const int RINGBUFFER_LENGTH = 128000;
 
         std::string ServerId;
         std::string ServerName;
         int Port;
+
+        char RingBuffer[RINGBUFFER_LENGTH];
+        char* RingBufferCurrent;
+        char* RingBufferEnd;
 
         virtual void Start();
         virtual void Stop();
 
         void PromptAndSetSetting(int settingId);
 
+        void writeMessageToFile(std::string message);
+        void writeMessageToRingbuffer(std::string message);
+
+        std::string ServerTypeName();
+
     private:
-        virtual void received(std::string message);
         void createId();
+
+        void clearRingBuffer();
+        
+        virtual void received(std::string message);
     };
 }
 

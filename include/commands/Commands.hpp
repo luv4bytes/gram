@@ -85,6 +85,8 @@ namespace gram{
         void createListServerSettingsCommand();
         void createSetServerSettingCommand();
 
+        void createPrintServerRingbufferCommand();
+
         void createHelpCommand();
     };
 };

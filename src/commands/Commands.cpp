@@ -43,6 +43,8 @@ void gram::Commands::createCommands()
     createListServerSettingsCommand();
     createSetServerSettingCommand();
 
+    createPrintServerRingbufferCommand();
+
     createHelpCommand();
 }
 
@@ -82,6 +84,7 @@ void gram::Commands::createStartServerTcpCommand()
 {
     Command tcpServer;
     tcpServer.CommandName = "start server tcp";
+    tcpServer.ShortCommand = "stcp";
     tcpServer.Description = "Starts a TCP server on the given port";
 
     tcpServer.AssignHandler([](){
@@ -99,6 +102,7 @@ void gram::Commands::createStartServerUdpCommand()
 {
     Command udpServer;
     udpServer.CommandName = "start server udp";
+    udpServer.ShortCommand = "sudp";
     udpServer.Description = "Starts a UDP server on the given port";
 
     udpServer.AssignHandler([](){
@@ -130,6 +134,7 @@ void gram::Commands::createStopServerTcpCommand()
 {
     Command stopServerTcp;
     stopServerTcp.CommandName = "stop server tcp";
+    stopServerTcp.ShortCommand = "sstcp";
     stopServerTcp.Description = "Stops a TCP server with given id";
 
     stopServerTcp.AssignHandler([](){
@@ -169,6 +174,7 @@ void gram::Commands::createStopServerUdpCommand()
 {
     Command stopServerUdp;
     stopServerUdp.CommandName = "stop server udp";
+    stopServerUdp.ShortCommand = "ssudp";
     stopServerUdp.Description = "Stops a UDP server with given id";
 
     stopServerUdp.AssignHandler([](){
@@ -208,6 +214,7 @@ void gram::Commands::createListServerCommand()
 {
     Command listServers;
     listServers.CommandName = "list server";
+    listServers.ShortCommand = "lsrv";
     listServers.Description = "Prints out a list of all servers";
 
     listServers.AssignHandler([](){
@@ -223,6 +230,7 @@ void gram::Commands::createListServerSettingsInfoCommand()
 {
     Command listServerSettingsInfo;
     listServerSettingsInfo.CommandName = "server settings info";
+    listServerSettingsInfo.ShortCommand = "sseti";
     listServerSettingsInfo.Description = "Prints available settings to set for servers";
 
     listServerSettingsInfo.AssignHandler([](){
@@ -236,6 +244,7 @@ void gram::Commands::createListServerSettingsCommand()
 {
     Command listServerSettings;
     listServerSettings.CommandName = "server settings";
+    listServerSettings.ShortCommand = "sset";
     listServerSettings.Description = "Prints out current settings for a given server";
 
     listServerSettings.AssignHandler([](){
@@ -270,6 +279,7 @@ void gram::Commands::createSetServerSettingCommand()
 {
     Command setServerSetting;
     setServerSetting.CommandName = "set server setting";
+    setServerSetting.ShortCommand = "ssets";
     setServerSetting.Description = "Prompts the user to enter settings for a server";
 
     setServerSetting.AssignHandler([](){
@@ -311,6 +321,41 @@ void gram::Commands::createSetServerSettingCommand()
     AvailableCommands.push_back(setServerSetting);
 }
 
+void gram::Commands::createPrintServerRingbufferCommand()
+{
+    Command printRingbuffer;
+    printRingbuffer.CommandName = "print server ringbuffer";
+    printRingbuffer.ShortCommand = "psrb";
+    printRingbuffer.Description = "Prints the ringbuffer of the given server";
+
+    printRingbuffer.AssignHandler([](){
+
+        std::string serverId;
+
+        std::cout << "Server Id: ";
+        if (!(std::cin >> serverId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            throw GramException("Server id not valid");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+            return (server->ServerId.compare(serverId) == 0);
+        });
+        
+        if (server == nullptr)
+            return;
+
+        std::cout << server->RingBuffer << std::endl;
+    });
+
+    AvailableCommands.push_back(printRingbuffer);
+}
+
 void gram::Commands::createHelpCommand()
 {
     Command help;
@@ -319,13 +364,14 @@ void gram::Commands::createHelpCommand()
 
     help.AssignHandler([](){
         
-        std::string format = "   %-25s|  %-30s\n";
+        std::string format = "   %-25s|  %-10s|  %-30s\n";
 
         printf("Following commands can be used to control gram:\n\n");
         printf("--------------------------------------------------------------\n");
 
         for(size_t i = 0; i < GlobalCommandsPtr->AvailableCommands.size(); i++)
-            printf(format.c_str(), GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(), 
+            printf(format.c_str(), GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(),
+                           GlobalCommandsPtr->AvailableCommands.at(i).ShortCommand.c_str(),
                            GlobalCommandsPtr->AvailableCommands.at(i).Description.c_str());
 
         printf("\n\ngram is licensed under MIT License\n");

@@ -31,7 +31,7 @@ void gram::Command::Execute()
 
 bool gram::Command::Found(std::string input)
 {
-    if (input.compare(CommandName) == 0)
+    if (input.compare(CommandName) == 0 || input.compare(ShortCommand) == 0)
         return true;
 
     return false;

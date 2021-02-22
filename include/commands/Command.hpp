@@ -32,6 +32,7 @@ namespace gram
         Command();
 
         std::string CommandName;
+        std::string ShortCommand;
         std::string Description;
 
         typedef void (*CommandHandler)();

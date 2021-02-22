@@ -82,6 +82,24 @@ add_executable(TcpConnection_Send tests/tcp/TcpConnection/TcpConnection_Send.cpp
 add_test(TcpConnection_Send_Test TcpConnection_Send)
 
 
+# ########## ServerBase Tests ##########
+
+add_executable(ServerBase_writeMessageToFile tests/serverbase/ServerBase/ServerBase_writeMessageToFile.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/settings/ServerSettings.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(ServerBase_writeMessageToFile pthread)
+target_link_libraries(ServerBase_writeMessageToFile uuid)
+add_test(ServerBase_writeMessageToFile_Test ServerBase_writeMessageToFile)
+
+add_executable(ServerBase_writeMessageToRingbuffer tests/serverbase/ServerBase/ServerBase_writeMessageToRingbuffer.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/settings/ServerSettings.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(ServerBase_writeMessageToRingbuffer pthread)
+target_link_libraries(ServerBase_writeMessageToRingbuffer uuid)
+add_test(ServerBase_writeMessageToRingbuffer_Test ServerBase_writeMessageToRingbuffer)
+
 # ########## ServerBaseManager Tests ##########
 
 add_executable(ServerBaseManager_AddServer tests/serverbase/ServerBaseManager/ServerBaseManager_AddServer.cpp

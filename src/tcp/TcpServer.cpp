@@ -178,5 +178,13 @@ void gram::TcpServer::addConnection(int socketFd)
 
 void gram::TcpServer::received(std::string message)
 {
-    // TODO:
+    bool setWriteToFile = Settings.WriteToFile.GetValueAsBool();
+
+    if (setWriteToFile)
+    {
+        writeMessageToFile(message);
+        return;
+    }
+
+    writeMessageToRingbuffer(message);
 }
