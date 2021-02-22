@@ -214,5 +214,6 @@ add_test(Commands_CreateCommands_Test Commands_CreateCommands)
 # ########## Settings Tests ##########
 
 add_executable(ServerSettings_PrintServerSettings tests/settings/ServerSettings/ServerSettings_PrintServerSettings.cpp
-                            src/settings/ServerSettings.cpp)
+                            src/settings/ServerSettings.cpp
+                            src/exceptions/GramException.cpp)
 add_test(ServerSettings_PrintServerSettings_Test ServerSettings_PrintServerSettings)
