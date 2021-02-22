@@ -21,6 +21,7 @@ SOFTWARE. */
 #ifndef SERVERBASE_H
 #define SERVERBASE_H
 
+#include "uuid/uuid.h"
 #include "../settings/ServerSettings.hpp"
 
 namespace gram
@@ -55,6 +56,7 @@ namespace gram
 
     private:
         virtual void received(std::string message);
+        void createId();
     };
 }
 

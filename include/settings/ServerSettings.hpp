@@ -51,11 +51,12 @@ namespace gram
             std::string Value;            
             
             void PromptAndSet();
+
+            bool GetValueAsBool();
         };
 
         SettingsEntry WriteToFile;
         SettingsEntry OutputFile;
-        SettingsEntry CloseAfterTimeout;
 
         std::vector<SettingsEntry*> Entries;
 

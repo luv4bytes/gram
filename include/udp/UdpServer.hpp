@@ -30,7 +30,6 @@ SOFTWARE. */
 #include <netdb.h>
 
 #include "fcntl.h"
-#include "uuid/uuid.h"
 #include <unistd.h>
 #include <thread>
 
@@ -65,8 +64,6 @@ namespace gram
         std::thread WaitThread;
 
         void waitForDatagrams();
-
-        std::string createId();
 
         void received(std::string message) override;
     };

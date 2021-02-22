@@ -53,6 +53,20 @@ void gram::ServerSettings::SettingsEntry::PromptAndSet()
     Value = val;
 }
 
+bool gram::ServerSettings::SettingsEntry::GetValueAsBool()
+{
+    if (Value.empty())
+        return false;
+
+    if (Value.compare("false") == 0)
+        return false;
+    
+    if (Value.compare("true") == 0)
+        return true;
+
+    return false;
+}
+
 static bool
 isNumeric(std::string input)
 {
@@ -67,21 +81,18 @@ isNumeric(std::string input)
 }
 
 gram::ServerSettings::ServerSettings()
-    : WriteToFile("WriteToFile", "Controls if received messages should be written to a given file", 0, "false",
+    : 
+    WriteToFile("WriteToFile", "Controls if received messages should be written to a given file", 0, "true",
                   [](std::string val){
                       if (val.compare("false") == 0 || val.compare("true") == 0)  
                         return true;
-                      return false;
+                      throw GramException("Please enter \"true\" or \"false\"");
                   }),
-      OutputFile("OutputFile", "If set, this is the file the output is written to", 1, ""),
-      CloseAfterTimeout("CloseAfterTimeout", "Sets a timeout after a server should be stopped", 2, "-1",
-                   [](std::string val){
-                      return isNumeric(val);
-                   })
+
+      OutputFile("OutputFile", "If set, this is the file the output is written to", 1, "")
 {
     Entries.push_back(&WriteToFile);
     Entries.push_back(&OutputFile);
-    Entries.push_back(&CloseAfterTimeout);
 }
 
 void gram::ServerSettings::PrintServerSettingsInfo()
@@ -94,7 +105,6 @@ void gram::ServerSettings::PrintServerSettingsInfo()
 
     printf(format, WriteToFile.Id, WriteToFile.Name.c_str(), WriteToFile.Description.c_str());
     printf(format, OutputFile.Id, OutputFile.Name.c_str(), OutputFile.Description.c_str());
-    printf(format, CloseAfterTimeout.Id, CloseAfterTimeout.Name.c_str(), CloseAfterTimeout.Description.c_str());
 }
 
 void gram::ServerSettings::PrintServerSettings()
@@ -107,5 +117,4 @@ void gram::ServerSettings::PrintServerSettings()
 
     printf(format, WriteToFile.Id, WriteToFile.Name.c_str(), WriteToFile.Value.c_str());
     printf(format, OutputFile.Id, OutputFile.Name.c_str(), OutputFile.Value.c_str());
-    printf(format, CloseAfterTimeout.Id, CloseAfterTimeout.Name.c_str(), CloseAfterTimeout.Value.c_str());
 }

@@ -32,7 +32,6 @@ SOFTWARE. */
 #include <iostream>
 #include <unistd.h>
 #include "fcntl.h"
-#include "uuid/uuid.h"
 #include <thread>
 
 #include "../serverbase/ServerBase.hpp"
@@ -69,7 +68,6 @@ namespace gram
 
         void waitForConnections();
         void addConnection(int socketFd);
-        std::string createId();
 
         void received(std::string message) override;
     };

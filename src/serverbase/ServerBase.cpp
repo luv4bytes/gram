@@ -22,6 +22,7 @@ SOFTWARE. */
 
 gram::ServerBase::ServerBase()
 {
+    createId();
 }
 
 gram::ServerBase::~ServerBase()
@@ -51,4 +52,18 @@ void gram::ServerBase::PromptAndSetSetting(int settingId)
             break;
         }
     }
+}
+
+void gram::ServerBase::createId()
+{
+    char str[UUID_STR_LEN];
+    uuid_t uuid;
+
+    uuid_generate(uuid);
+    uuid_unparse(uuid, str);
+    uuid_clear(uuid);
+
+    std::string id("S" + std::string(str).substr(0, 3));
+
+    ServerId = id;
 }

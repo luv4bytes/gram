@@ -22,7 +22,6 @@ SOFTWARE. */
 
 gram::UdpServer::UdpServer()
 {
-    ServerId = createId();
 }
 
 gram::UdpServer::~UdpServer()
@@ -62,20 +61,6 @@ gram::UdpServer* gram::UdpServer::PromptAndCreateNewServer()
     return server;
 }
 
-std::string gram::UdpServer::createId()
-{
-    char str[UUID_STR_LEN];
-    uuid_t uuid;
-
-    uuid_generate(uuid);
-    uuid_unparse(uuid, str);
-    uuid_clear(uuid);
-
-    std::string id("UDP_" + std::string(str).substr(0, 4));
-
-    return id;
-}
-
 void gram::UdpServer::Start()
 {
     socketFd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -93,6 +78,8 @@ void gram::UdpServer::Start()
 
     if (bound == -1)
         throw GramException("Error binding address -> " + std::string(strerror(errno)));
+
+    std::cout << "Server " + ServerId + " running" << std::endl;
 
     waitForDatagrams();
 }

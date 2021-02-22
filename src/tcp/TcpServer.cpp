@@ -22,7 +22,6 @@ SOFTWARE. */
 
 gram::TcpServer::TcpServer()
 {
-    ServerId = createId();
 }
 
 gram::TcpServer::~TcpServer()
@@ -62,20 +61,6 @@ gram::TcpServer* gram::TcpServer::PromptAndCreateNewServer()
     return server;
 }
 
-std::string gram::TcpServer::createId()
-{
-    char str[UUID_STR_LEN];
-    uuid_t uuid;
-
-    uuid_generate(uuid);
-    uuid_unparse(uuid, str);
-    uuid_clear(uuid);
-
-    std::string id("TCP_" + std::string(str).substr(0, 4));
-
-    return id;
-}
-
 void gram::TcpServer::Start()
 {
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -98,6 +83,8 @@ void gram::TcpServer::Start()
 
     if (listening == -1)
         throw GramException("Error starting to listen -> " + std::string(strerror(errno)));
+
+    std::cout << "Server " + ServerId + " running" << std::endl;
 
     waitForConnections();
 }
