@@ -57,8 +57,9 @@ namespace gram
         SettingsEntry OutputFile;
         SettingsEntry CloseAfterTimeout;
 
-        std::vector<SettingsEntry> Entries;
+        std::vector<SettingsEntry*> Entries;
 
+        void PrintServerSettingsInfo();
         void PrintServerSettings();
     };
 }

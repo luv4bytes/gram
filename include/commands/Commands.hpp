@@ -82,6 +82,7 @@ namespace gram{
         void createListServerCommand();
 
         void createListServerSettingsInfoCommand();
+        void createListServerSettingsCommand();
         void createSetServerSettingCommand();
 
         void createHelpCommand();

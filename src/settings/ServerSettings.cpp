@@ -79,12 +79,12 @@ gram::ServerSettings::ServerSettings()
                       return isNumeric(val);
                    })
 {
-    Entries.push_back(WriteToFile);
-    Entries.push_back(OutputFile);
-    Entries.push_back(CloseAfterTimeout);
+    Entries.push_back(&WriteToFile);
+    Entries.push_back(&OutputFile);
+    Entries.push_back(&CloseAfterTimeout);
 }
 
-void gram::ServerSettings::PrintServerSettings()
+void gram::ServerSettings::PrintServerSettingsInfo()
 {   
     const char* header = "  %-3s|  %-20s|  %-40s\n";
     const char* format = "  %-3d|  %-20s|  %-40s\n";
@@ -95,4 +95,17 @@ void gram::ServerSettings::PrintServerSettings()
     printf(format, WriteToFile.Id, WriteToFile.Name.c_str(), WriteToFile.Description.c_str());
     printf(format, OutputFile.Id, OutputFile.Name.c_str(), OutputFile.Description.c_str());
     printf(format, CloseAfterTimeout.Id, CloseAfterTimeout.Name.c_str(), CloseAfterTimeout.Description.c_str());
+}
+
+void gram::ServerSettings::PrintServerSettings()
+{
+    const char* header = "  %-3s|  %-20s|  %-40s\n";
+    const char* format = "  %-3d|  %-20s|  %-40s\n";
+
+    printf(header, "Id", "Name", "Value");
+    printf("--------------------------------------------------------------\n");
+
+    printf(format, WriteToFile.Id, WriteToFile.Name.c_str(), WriteToFile.Value.c_str());
+    printf(format, OutputFile.Id, OutputFile.Name.c_str(), OutputFile.Value.c_str());
+    printf(format, CloseAfterTimeout.Id, CloseAfterTimeout.Name.c_str(), CloseAfterTimeout.Value.c_str());
 }

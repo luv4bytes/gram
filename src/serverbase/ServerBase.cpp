@@ -45,9 +45,9 @@ void gram::ServerBase::PromptAndSetSetting(int settingId)
 {
     for(size_t i = 0; i < Settings.Entries.size(); i++)
     {
-        if (Settings.Entries.at(i).Id == settingId)
+        if (Settings.Entries.at(i)->Id == settingId)
         {
-            Settings.Entries.at(i).PromptAndSet();
+            Settings.Entries.at(i)->PromptAndSet();
             break;
         }
     }

@@ -40,6 +40,7 @@ void gram::Commands::createCommands()
     createListServerCommand();
     
     createListServerSettingsInfoCommand();
+    createListServerSettingsCommand();
     createSetServerSettingCommand();
 
     createHelpCommand();
@@ -220,12 +221,46 @@ void gram::Commands::createListServerCommand()
 
 void gram::Commands::createListServerSettingsInfoCommand()
 {
+    Command listServerSettingsInfo;
+    listServerSettingsInfo.CommandName = "server settings info";
+    listServerSettingsInfo.Description = "Prints available settings to set for servers";
+
+    listServerSettingsInfo.AssignHandler([](){
+        GlobalSettingsInfo.PrintServerSettingsInfo();
+    });
+
+    AvailableCommands.push_back(listServerSettingsInfo);
+}
+
+void gram::Commands::createListServerSettingsCommand()
+{
     Command listServerSettings;
-    listServerSettings.CommandName = "list server settings";
-    listServerSettings.Description = "Prints available settings to set for servers";
+    listServerSettings.CommandName = "server settings";
+    listServerSettings.Description = "Prints out current settings for a given server";
 
     listServerSettings.AssignHandler([](){
-        GlobalSettingsInfo.PrintServerSettingsInfo();
+
+        std::string serverId;
+        std::cout << "Server Id: ";
+
+        if (!(std::cin >> serverId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            throw GramException("Server id not valid");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+            return server->ServerId.compare(serverId) == 0;
+        });
+
+        if (server == nullptr)
+            return;
+        
+        server->Settings.PrintServerSettings();
     });
 
     AvailableCommands.push_back(listServerSettings);

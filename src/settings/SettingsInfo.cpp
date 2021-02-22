@@ -22,5 +22,5 @@ SOFTWARE. */
 
 void gram::SettingsInfo::PrintServerSettingsInfo()
 {
-    Server.PrintServerSettings();
+    Server.PrintServerSettingsInfo();
 }
