@@ -18,37 +18,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef UDPMANAGER_H
-#define UDPMANAGER_H
+#ifndef SERVERBASEMANAGER_H
+#define SERVERBASEMANAGER_H
 
-
-#include "UdpClient.hpp"
-#include "UdpServer.hpp"
-
-#include <iostream>
-#include <vector>
+#include "ServerBase.hpp"
 
 namespace gram
 {
-    class UdpManager
+    class ServerBaseManager
     {
     public:
 
-        ~UdpManager();
+        ~ServerBaseManager();
 
-        std::vector<UdpServer*> Servers;
-        std::vector<UdpClient*> Clients;
+        std::vector<ServerBase*> Servers;
 
-        void AddServer(UdpServer* server);
-        void AddClient(UdpClient* client);
+        void AddServer(ServerBase* server);
 
         void StopAllServers();
-        void CloseAllClients();
 
         void PrintServers();
 
         template <typename F>
-        UdpServer* WhereServer(F predicate)
+        ServerBase* WhereServer(F predicate)
         {
             for(size_t i = 0; i < Servers.size(); i++)
                 if (predicate(Servers.at(i)))
@@ -57,11 +49,10 @@ namespace gram
             return nullptr;
         }
 
-        void RemoveServer(UdpServer* server);
+        void RemoveServer(ServerBase* server);
 
         void CleanUp();
     };
 }
-
 
 #endif

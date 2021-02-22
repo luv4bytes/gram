@@ -38,13 +38,12 @@ void gram::Commands::createCommands()
     createStopServerUdpCommand();
 
     createListServerCommand();
-    createListTcpServerCommand();
-    createListUdpServerCommand();
-
+    
     createStartTcpClientCommand();
     createStartUdpClientCommand();
 
     createListServerSettingsInfoCommand();
+    createSetServerSettingCommand();
 
     createHelpCommand();
 }
@@ -57,8 +56,7 @@ void gram::Commands::createExitCommand()
 
     cmdExit.AssignHandler([](){
 
-        GlobalTcpManager.CleanUp();
-        GlobalUdpManager.CleanUp();
+        GlobalServerManager.CleanUp();
 
         exit(0);
     });
@@ -74,8 +72,7 @@ void gram::Commands::createQuitCommand()
 
     quit.AssignHandler([](){
 
-        GlobalTcpManager.CleanUp();
-        GlobalUdpManager.CleanUp();
+        GlobalServerManager.CleanUp();
 
         exit(0);
     });
@@ -94,7 +91,7 @@ void gram::Commands::createStartServerTcpCommand()
         TcpServer* newServer = TcpServer::PromptAndCreateNewServer();
         newServer->Start();
 
-        GlobalTcpManager.AddServer(newServer);
+        GlobalServerManager.AddServer(newServer);
     });
 
     AvailableCommands.push_back(tcpServer);
@@ -111,7 +108,7 @@ void gram::Commands::createStartServerUdpCommand()
         UdpServer* newServer = UdpServer::PromptAndCreateNewServer();
         newServer->Start();
 
-        GlobalUdpManager.AddServer(newServer);        
+        GlobalServerManager.AddServer(newServer);        
     });
 
     AvailableCommands.push_back(udpServer);
@@ -125,8 +122,7 @@ void gram::Commands::createStopAllServersCommand()
 
     stopAllServers.AssignHandler([](){
 
-        GlobalTcpManager.StopAllServers();
-        GlobalUdpManager.StopAllServers();
+        GlobalServerManager.StopAllServers();
     });
 
     AvailableCommands.push_back(stopAllServers);
@@ -152,8 +148,8 @@ void gram::Commands::createStopServerTcpCommand()
             throw GramException("Error setting server id");
         }
 
-        TcpServer* server = GlobalTcpManager.WhereServer([=](TcpServer* server){
-            return (server->ServerId.compare(serverId) == 0);
+        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+            return ((server->ServerId.compare(serverId) == 0) && (server->Type == ServerBase::TCP));
         });
 
         if (server == nullptr)
@@ -163,7 +159,7 @@ void gram::Commands::createStopServerTcpCommand()
         }
 
         server->Stop();
-        GlobalTcpManager.RemoveServer(server);
+        GlobalServerManager.RemoveServer(server);
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
@@ -191,8 +187,8 @@ void gram::Commands::createStopServerUdpCommand()
             throw GramException("Error setting server id");
         }
 
-        UdpServer* server = GlobalUdpManager.WhereServer([=](UdpServer* server){
-            return (server->ServerId.compare(serverId) == 0);
+        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+            return ((server->ServerId.compare(serverId) == 0) && (server->Type == ServerBase::UDP));
         });
 
         if (server == nullptr)
@@ -202,7 +198,7 @@ void gram::Commands::createStopServerUdpCommand()
         }
 
         server->Stop();
-        GlobalUdpManager.RemoveServer(server);
+        GlobalServerManager.RemoveServer(server);
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     });
@@ -218,42 +214,11 @@ void gram::Commands::createListServerCommand()
 
     listServers.AssignHandler([](){
 
-        GlobalTcpManager.PrintServers();
-        GlobalUdpManager.PrintServers();            
+        GlobalServerManager.PrintServers();
 
     });
 
     AvailableCommands.push_back(listServers);
-}
-
-void gram::Commands::createListTcpServerCommand()
-{
-    Command listTcpServers;
-    listTcpServers.CommandName = "list server tcp";
-    listTcpServers.Description = "Prints out a list of current TCP servers";
-    
-    listTcpServers.AssignHandler([](){
-
-        GlobalTcpManager.PrintServers();
-
-    });
-
-    AvailableCommands.push_back(listTcpServers);
-}
-
-void gram::Commands::createListUdpServerCommand()
-{
-    Command listUdpServers;
-    listUdpServers.CommandName = "list server udp";
-    listUdpServers.Description = "Prints out a list of current UDP servers";
-    
-    listUdpServers.AssignHandler([](){
-
-        GlobalUdpManager.PrintServers();
-
-    });
-
-    AvailableCommands.push_back(listUdpServers);
 }
 
 void gram::Commands::createStartTcpClientCommand()
@@ -277,6 +242,49 @@ void gram::Commands::createListServerSettingsInfoCommand()
     });
 
     AvailableCommands.push_back(listServerSettings);
+}
+
+void gram::Commands::createSetServerSettingCommand()
+{
+    Command setServerSetting;
+    setServerSetting.CommandName = "set server setting";
+    setServerSetting.Description = "Prompts the user to enter settings for a server";
+
+    setServerSetting.AssignHandler([](){
+        std::string serverId;
+        int settingsId = 0;
+
+        std::cout << "Server Id: ";
+        if (!(std::cin >> serverId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            throw GramException("Error setting server id");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Settings Id: ";
+        if (!(std::cin >> settingsId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            throw GramException("Error setting settings id");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+            return server->ServerId.compare(serverId) == 0;
+        });
+
+        if (server == nullptr)
+            return;
+    });
+
+    AvailableCommands.push_back(setServerSetting);
 }
 
 void gram::Commands::createHelpCommand()

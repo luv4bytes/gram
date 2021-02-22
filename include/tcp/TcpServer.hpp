@@ -35,18 +35,17 @@ SOFTWARE. */
 #include "uuid/uuid.h"
 #include <thread>
 
+#include "../serverbase/ServerBase.hpp"
 #include "../settings/ServerSettings.hpp"
 #include "../exceptions/GramException.hpp"
 
 namespace gram
 {
-    class TcpServer
+    class TcpServer : public ServerBase
     {
     public:
         TcpServer();
         ~TcpServer();
-
-        ServerSettings Settings;
 
         static const int STANDARD_PORT = 55556;
         static const int LISTEN_BACKLOG = 50;
@@ -54,12 +53,8 @@ namespace gram
         static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
         static const int NAME_LENGTH = 50;
 
-        void Start();
-        void Stop();
-
-        std::string ServerId;
-        std::string ServerName;
-        int Port;
+        void Start() override;
+        void Stop() override;
 
         static TcpServer* PromptAndCreateNewServer();
 

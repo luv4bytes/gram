@@ -21,19 +21,15 @@ SOFTWARE. */
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "../tcp/TcpManager.hpp"
-#include "../udp/UdpManager.hpp"
+#include "../serverbase/ServerBaseManager.hpp"
 #include "../settings/SettingsInfo.hpp"
 
 namespace gram{
     class Commands;
 }
 
-extern gram::TcpManager GlobalTcpManager;
-extern gram::UdpManager GlobalUdpManager;
-
+extern gram::ServerBaseManager GlobalServerManager;
 extern gram::Commands* GlobalCommandsPtr;
-
 extern gram::SettingsInfo GlobalSettingsInfo;
 
 #endif

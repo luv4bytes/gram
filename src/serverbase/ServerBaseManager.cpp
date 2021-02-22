@@ -18,18 +18,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/udp/UdpManager.hpp"
+#include "../../include/serverbase/ServerBaseManager.hpp"
 
-gram::UdpManager::~UdpManager()
+gram::ServerBaseManager::~ServerBaseManager()
 {
     for(size_t i = 0; i < Servers.size(); i++)
         delete(Servers.at(i));
-
-    for(size_t i = 0; i < Clients.size(); i++)
-        delete(Clients.at(i));
 }
 
-void gram::UdpManager::AddServer(UdpServer* server)
+void gram::ServerBaseManager::AddServer(ServerBase* server)
 {
     if (server == nullptr)
         return;
@@ -37,15 +34,7 @@ void gram::UdpManager::AddServer(UdpServer* server)
     Servers.push_back(server);
 }
 
-void gram::UdpManager::AddClient(UdpClient* client)
-{
-    if (client == nullptr)
-        return;
-
-    Clients.push_back(client);
-}
-
-void gram::UdpManager::StopAllServers()
+void gram::ServerBaseManager::StopAllServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
         Servers.at(i)->Stop();
@@ -56,19 +45,13 @@ void gram::UdpManager::StopAllServers()
     Servers.clear();
 }
 
-void gram::UdpManager::CloseAllClients()
-{
-    for(size_t i = 0; i < Clients.size(); i++)
-        Clients.at(i)->CloseAllConnections();
-}
-
-void gram::UdpManager::PrintServers()
+void gram::ServerBaseManager::PrintServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
         std::cout << Servers.at(i)->ServerId << " - Port: " << Servers.at(i)->Port << " - Name: " << Servers.at(i)->ServerName << std::endl;
 }
 
-void gram::UdpManager::RemoveServer(UdpServer* server)
+void gram::ServerBaseManager::RemoveServer(ServerBase* server)
 {
     if (server == nullptr)
         return;
@@ -85,8 +68,7 @@ void gram::UdpManager::RemoveServer(UdpServer* server)
     delete(server);
 }
 
-void gram::UdpManager::CleanUp()
+void gram::ServerBaseManager::CleanUp()
 {
-    CloseAllClients();
     StopAllServers();
 }

@@ -28,10 +28,14 @@ gram::ServerSettings::ServerSettings()
 }
 
 void gram::ServerSettings::PrintServerSettings()
-{
-    std::string format = "  %-3d|  %-20s|  %-40s\n";
+{   
+    const char* header = "  %-3s|  %-20s|  %-40s\n";
+    const char* format = "  %-3d|  %-20s|  %-40s\n";
 
-    printf(format.c_str(), WriteToFile.Id, WriteToFile.Name.c_str(), WriteToFile.Description.c_str());
-    printf(format.c_str(), OutputFile.Id, OutputFile.Name.c_str(), OutputFile.Description.c_str());
-    printf(format.c_str(), CloseAfterTimeout.Id, CloseAfterTimeout.Name.c_str(), CloseAfterTimeout.Description.c_str());
+    printf(header, "Id", "Name", "Description");
+    printf("--------------------------------------------------------------\n");
+
+    printf(format, WriteToFile.Id, WriteToFile.Name.c_str(), WriteToFile.Description.c_str());
+    printf(format, OutputFile.Id, OutputFile.Name.c_str(), OutputFile.Description.c_str());
+    printf(format, CloseAfterTimeout.Id, CloseAfterTimeout.Name.c_str(), CloseAfterTimeout.Description.c_str());
 }

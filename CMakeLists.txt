@@ -8,11 +8,11 @@ add_executable(gram main.cpp
                     src/tcp/TcpClient.cpp
                     src/tcp/TcpConnection.cpp
                     src/tcp/TcpServer.cpp
-                    src/tcp/TcpManager.cpp
                     src/udp/UdpClient.cpp
                     src/udp/UdpConnection.cpp
                     src/udp/UdpServer.cpp
-                    src/udp/UdpManager.cpp
+                    src/serverbase/ServerBase.cpp
+                    src/serverbase/ServerBaseManager.cpp
                     src/lua_api/LuaApi.cpp
                     src/commands/Commands.cpp
                     src/commands/Command.cpp
@@ -81,91 +81,58 @@ add_executable(TcpConnection_Send tests/tcp/TcpConnection/TcpConnection_Send.cpp
 add_test(TcpConnection_Send_Test TcpConnection_Send)
 
 
-# ########## TcpManager Tests ##########
+# ########## ServerBaseManager Tests ##########
 
-add_executable(TcpManager_AddServer tests/tcp/TcpManager/TcpManager_AddServer.cpp
+add_executable(ServerBaseManager_AddServer tests/serverbase/ServerBaseManager/ServerBaseManager_AddServer.cpp
                             src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/tcp/TcpManager.cpp
+                            src/udp/UdpServer.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/serverbase/ServerBaseManager.cpp
                             src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
+target_link_libraries(ServerBaseManager_AddServer pthread)
+target_link_libraries(ServerBaseManager_AddServer uuid)
+add_test(ServerBaseManager_AddServer_Test ServerBaseManager_AddServer)
 
-target_link_libraries(TcpManager_AddServer pthread)
-target_link_libraries(TcpManager_AddServer uuid)
-add_test(TcpManager_AddServer_Test TcpManager_AddServer)
-
-add_executable(TcpManager_AddClient tests/tcp/TcpManager/TcpManager_AddClient.cpp
+add_executable(ServerBaseManager_StopAllServers tests/serverbase/ServerBaseManager/ServerBaseManager_StopAllServers.cpp
                             src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/tcp/TcpManager.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/serverbase/ServerBaseManager.cpp
                             src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
+target_link_libraries(ServerBaseManager_StopAllServers pthread)
+target_link_libraries(ServerBaseManager_StopAllServers uuid)
+add_test(ServerBaseManager_StopAllServers_Test ServerBaseManager_StopAllServers)
 
-target_link_libraries(TcpManager_AddClient pthread)
-target_link_libraries(TcpManager_AddClient uuid)
-add_test(TcpManager_AddClient_Test TcpManager_AddClient)
-
-add_executable(TcpManager_StopAllServers tests/tcp/TcpManager/TcpManager_StopAllServers.cpp
-                            src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/tcp/TcpManager.cpp
+add_executable(ServerBaseManager_PrintServers tests/serverbase/ServerBaseManager/ServerBaseManager_PrintServers.cpp
+                            src/udp/UdpServer.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/serverbase/ServerBaseManager.cpp
                             src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
+target_link_libraries(ServerBaseManager_PrintServers pthread)
+target_link_libraries(ServerBaseManager_PrintServers uuid)
+add_test(ServerBaseManager_PrintServers_Test ServerBaseManager_PrintServers)
 
-target_link_libraries(TcpManager_StopAllServers pthread)
-target_link_libraries(TcpManager_StopAllServers uuid)
-add_test(TcpManager_StopAllServers_Test TcpManager_StopAllServers)
-
-add_executable(TcpManager_CloseAllClients tests/tcp/TcpManager/TcpManager_CloseAllClients.cpp
-                            src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/tcp/TcpManager.cpp
+add_executable(ServerBaseManager_RemoveServer tests/serverbase/ServerBaseManager/ServerBaseManager_RemoveServer.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/serverbase/ServerBaseManager.cpp
                             src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
+target_link_libraries(ServerBaseManager_RemoveServer pthread)
+target_link_libraries(ServerBaseManager_RemoveServer uuid)
+add_test(ServerBaseManager_RemoveServer_Test ServerBaseManager_RemoveServer)
 
-target_link_libraries(TcpManager_CloseAllClients pthread)
-target_link_libraries(TcpManager_CloseAllClients uuid)
-add_test(TcpManager_CloseAllClients_Test TcpManager_CloseAllClients)
-
-add_executable(TcpManager_PrintServers tests/tcp/TcpManager/TcpManager_PrintServers.cpp
+add_executable(ServerBaseManager_CleanUp tests/serverbase/ServerBaseManager/ServerBaseManager_CleanUp.cpp
                             src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/tcp/TcpManager.cpp
+                            src/udp/UdpServer.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/serverbase/ServerBaseManager.cpp
                             src/settings/ServerSettings.cpp
                             src/exceptions/GramException.cpp)
-
-target_link_libraries(TcpManager_PrintServers pthread)
-target_link_libraries(TcpManager_PrintServers uuid)
-add_test(TcpManager_PrintServers_Test TcpManager_PrintServers)
-
-add_executable(TcpManager_RemoveServer tests/tcp/TcpManager/TcpManager_RemoveServer.cpp
-                            src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/tcp/TcpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(TcpManager_RemoveServer pthread)
-target_link_libraries(TcpManager_RemoveServer uuid)
-add_test(TcpManager_RemoveServer_Test TcpManager_RemoveServer)
-
-add_executable(TcpManager_CleanUp tests/tcp/TcpManager/TcpManager_CleanUp.cpp
-                            src/tcp/TcpServer.cpp
-                            src/tcp/TcpClient.cpp
-                            src/tcp/TcpConnection.cpp
-                            src/tcp/TcpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(TcpManager_CleanUp pthread)
-target_link_libraries(TcpManager_CleanUp uuid)
-add_test(TcpManager_CleanUp_Test TcpManager_CleanUp)
+target_link_libraries(ServerBaseManager_CleanUp pthread)
+target_link_libraries(ServerBaseManager_CleanUp uuid)
+add_test(ServerBaseManager_CleanUp_Test ServerBaseManager_CleanUp)
 
 # ########## UdpClient Tests ##########
 
@@ -212,92 +179,6 @@ add_executable(UdpConnection_Send tests/udp/UdpConnection/UdpConnection_Send.cpp
 add_test(UdpConnection_Send_Test UdpConnection_Send)
 
 
-# ########## UdpManager Tests ##########
-
-add_executable(UdpManager_AddServer tests/udp/UdpManager/UdpManager_AddServer.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/udp/UdpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpManager_AddServer pthread)
-target_link_libraries(UdpManager_AddServer uuid)
-add_test(UdpManager_AddServer_Test UdpManager_AddServer)
-
-add_executable(UdpManager_AddClient tests/udp/UdpManager/UdpManager_AddClient.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/udp/UdpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpManager_AddClient pthread)
-target_link_libraries(UdpManager_AddClient uuid)
-add_test(UdpManager_AddClient_Test UdpManager_AddClient)
-
-add_executable(UdpManager_StopAllServers tests/udp/UdpManager/UdpManager_StopAllServers.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/udp/UdpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpManager_StopAllServers pthread)
-target_link_libraries(UdpManager_StopAllServers uuid)
-add_test(UdpManager_StopAllServers_Test UdpManager_StopAllServers)
-
-add_executable(UdpManager_CloseAllClients tests/udp/UdpManager/UdpManager_CloseAllClients.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/udp/UdpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpManager_CloseAllClients pthread)
-target_link_libraries(UdpManager_CloseAllClients uuid)
-add_test(UdpManager_CloseAllClients_Test UdpManager_CloseAllClients)
-
-add_executable(UdpManager_PrintServers tests/udp/UdpManager/UdpManager_PrintServers.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/udp/UdpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpManager_PrintServers pthread)
-target_link_libraries(UdpManager_PrintServers uuid)
-add_test(UdpManager_PrintServers_Test UdpManager_PrintServers)
-
-add_executable(UdpManager_RemoveServer tests/udp/UdpManager/UdpManager_RemoveServer.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/udp/UdpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpManager_RemoveServer pthread)
-target_link_libraries(UdpManager_RemoveServer uuid)
-add_test(UdpManager_RemoveServer_Test UdpManager_RemoveServer)
-
-add_executable(UdpManager_CleanUp tests/udp/UdpManager/UdpManager_CleanUp.cpp
-                            src/udp/UdpServer.cpp
-                            src/udp/UdpClient.cpp
-                            src/udp/UdpConnection.cpp
-                            src/udp/UdpManager.cpp
-                            src/settings/ServerSettings.cpp
-                            src/exceptions/GramException.cpp)
-
-target_link_libraries(UdpManager_CleanUp pthread)
-target_link_libraries(UdpManager_CleanUp uuid)
-add_test(UdpManager_CleanUp_Test UdpManager_CleanUp)
-
 # ########## Lua Tests ##########
 
 add_executable(Lua_Initialize tests/lua_api/Lua_Initialize.cpp
@@ -313,11 +194,11 @@ add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cp
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpConnection.cpp
                             src/tcp/TcpServer.cpp
-                            src/tcp/TcpManager.cpp
                             src/udp/UdpClient.cpp
                             src/udp/UdpConnection.cpp
                             src/udp/UdpServer.cpp
-                            src/udp/UdpManager.cpp
+                            src/serverbase/ServerBase.cpp
+                            src/serverbase/ServerBaseManager.cpp
                             src/commands/Commands.cpp
                             src/commands/Command.cpp
                             src/globals/Globals.cpp

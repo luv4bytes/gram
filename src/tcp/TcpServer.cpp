@@ -52,6 +52,7 @@ gram::TcpServer* gram::TcpServer::PromptAndCreateNewServer()
 
     TcpServer* server = new TcpServer();
     server->ServerName = name;
+    server->Type = TCP;
 
     if (port == 0)
         port = STANDARD_PORT;

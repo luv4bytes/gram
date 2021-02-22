@@ -18,47 +18,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef TCPMANAGER_H
-#define TCPMANAGER_H
+#ifndef SERVERBASE_H
+#define SERVERBASE_H
 
-#include "TcpClient.hpp"
-#include "TcpServer.hpp"
-
-#include <iostream>
-#include <vector>
+#include "../settings/ServerSettings.hpp"
 
 namespace gram
 {
-    class TcpManager
+    class ServerBase
     {
     public:
+        ServerBase();
+        ~ServerBase();
 
-        ~TcpManager();
-
-        std::vector<TcpServer*> Servers;
-        std::vector<TcpClient*> Clients;
-
-        void AddServer(TcpServer* server);
-        void AddClient(TcpClient* client);
-
-        void StopAllServers();
-        void CloseAllClients();
-
-        void PrintServers();
-
-        template <typename F>
-        TcpServer* WhereServer(F predicate)
+        enum ServerType
         {
-            for(size_t i = 0; i < Servers.size(); i++)
-                if (predicate(Servers.at(i)))
-                    return Servers.at(i);
+            TCP,
+            UDP
+        };
 
-            return nullptr;
-        }
+        ServerType Type;
 
-        void RemoveServer(TcpServer* server);
+        ServerSettings Settings;
 
-        void CleanUp();
+        static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
+        static const int NAME_LENGTH = 50;
+
+        std::string ServerId;
+        std::string ServerName;
+        int Port;
+
+        virtual void Start();
+        virtual void Stop();
     };
 }
 

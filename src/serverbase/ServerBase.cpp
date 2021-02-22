@@ -18,8 +18,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/globals/Globals.hpp"
+#include "../../include/serverbase/ServerBase.hpp"
 
-gram::ServerBaseManager GlobalServerManager;
-gram::Commands* GlobalCommandsPtr;
-gram::SettingsInfo GlobalSettingsInfo;
+gram::ServerBase::ServerBase()
+{
+}
+
+gram::ServerBase::~ServerBase()
+{
+}
+
+void gram::ServerBase::Start()
+{
+}
+
+void gram::ServerBase::Stop()
+{
+}

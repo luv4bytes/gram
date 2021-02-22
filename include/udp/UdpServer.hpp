@@ -34,12 +34,13 @@ SOFTWARE. */
 #include <unistd.h>
 #include <thread>
 
+#include "../serverbase/ServerBase.hpp"
 #include "../settings/ServerSettings.hpp"
 #include "../exceptions/GramException.hpp"
 
 namespace gram
 {
-    class UdpServer
+    class UdpServer : public ServerBase
     {
     public:
         UdpServer();
@@ -49,15 +50,9 @@ namespace gram
 
         static const int STANDARD_PORT = 55557;
         static const int BUFFER_SIZE = 65535;
-        static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
-        static const int NAME_LENGTH = 50;
 
-        void Start();
-        void Stop();
-
-        std::string ServerId;
-        std::string ServerName;
-        int Port;
+        void Start() override;
+        void Stop() override;
 
         static UdpServer* PromptAndCreateNewServer();
 
