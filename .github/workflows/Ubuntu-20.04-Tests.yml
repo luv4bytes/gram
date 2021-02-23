@@ -1,0 +1,27 @@
+name: Ubuntu-20.04-Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  make-master:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@master
+      - run: sudo apt install libpthread-stubs0-dev uuid-dev -y
+      - name: Build
+        run: |
+          tar -xzf 3rdparty/lua-5.4.2.tar.gz
+          cd lua-5.4.2
+          sudo make
+          sudo make install
+          cd ..
+          mkdir build
+          cd build
+          cmake ..
+          make
+          ctest
