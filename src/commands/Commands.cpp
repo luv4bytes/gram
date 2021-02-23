@@ -361,6 +361,7 @@ void gram::Commands::createPrintServerOutputFileCommand()
 {
     Command printOutputFile;
     printOutputFile.CommandName = "print server output file";
+    printOutputFile.Description = "Prints the contents of the specified output file for the server";
     printOutputFile.ShortCommand = "psof";
 
     printOutputFile.AssignHandler([](){
