@@ -1,7 +1,9 @@
 # gram
+[![Ubuntu-18.04-Build](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-18.04-Build.yml/badge.svg)](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-18.04-Build.yml)   
+[![Ubuntu-18.04-Tests](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-18.04-Tests.yml/badge.svg)](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-18.04-Tests.yml)
 
-![](https://github.com/luv4bytes/gram/workflows/ubuntu-18.04-build/badge.svg)
-![](https://github.com/luv4bytes/gram/workflows/ubuntu-18.04-tests/badge.svg)
+[![Ubuntu-20.04-Build](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-20.04-Build.yml/badge.svg)](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-20.04-Build.yml)   
+[![Ubuntu-20.04-Tests](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-20.04-Tests.yml/badge.svg)](https://github.com/luv4bytes/gram/actions/workflows/Ubuntu-20.04-Tests.yml)
 
 CLI tool for Linux to send and receive UDP and TCP datagrams.
 <br><br>
