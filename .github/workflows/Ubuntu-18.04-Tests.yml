@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - run: sudo apt install libpthread-stubs0-dev -y
+      - run: sudo apt install libpthread-stubs0-dev uuid-dev -y
       - name: Build
         run: |
           tar -xzf 3rdparty/lua-5.4.2.tar.gz
