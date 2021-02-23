@@ -175,9 +175,9 @@ void gram::TcpServer::received(std::string message)
 
     if (setWriteToFile)
     {
-        writeMessageToFile(message);
+        WriteMessageToFile(message);
         return;
     }
 
-    writeMessageToRingbuffer(message);
+    WriteMessageToRingbuffer(message);
 }

@@ -62,8 +62,8 @@ namespace gram
 
         void PromptAndSetSetting(int settingId);
 
-        void writeMessageToFile(std::string message);
-        void writeMessageToRingbuffer(std::string message);
+        void WriteMessageToFile(std::string message); 
+        void WriteMessageToRingbuffer(std::string message);
 
         std::string ServerTypeName();
 

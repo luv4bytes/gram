@@ -76,7 +76,7 @@ void gram::ServerBase::received(std::string message)
     std::cout << message << std::endl;
 }
 
-void gram::ServerBase::writeMessageToFile(std::string message)
+void gram::ServerBase::WriteMessageToFile(std::string message)
 {
     if (message.empty())
         return;
@@ -94,7 +94,7 @@ void gram::ServerBase::writeMessageToFile(std::string message)
     stream.close();
 }
 
-void gram::ServerBase::writeMessageToRingbuffer(std::string message)
+void gram::ServerBase::WriteMessageToRingbuffer(std::string message)
 {
     if (message.empty())
         return; 

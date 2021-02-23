@@ -44,6 +44,7 @@ void gram::Commands::createCommands()
     createSetServerSettingCommand();
 
     createPrintServerRingbufferCommand();
+    createPrintServerOutputFileCommand();
 
     createHelpCommand();
 }
@@ -354,6 +355,58 @@ void gram::Commands::createPrintServerRingbufferCommand()
     });
 
     AvailableCommands.push_back(printRingbuffer);
+}
+
+void gram::Commands::createPrintServerOutputFileCommand()
+{
+    Command printOutputFile;
+    printOutputFile.CommandName = "print server output file";
+    printOutputFile.ShortCommand = "psof";
+
+    printOutputFile.AssignHandler([](){
+
+        std::string serverId;
+
+        std::cout << "Server Id: ";
+        if (!(std::cin >> serverId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            throw GramException("Server id not valid");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+            return (server->ServerId.compare(serverId) == 0);
+        });
+
+        if (server == nullptr)
+            return;
+
+        std::ifstream stream;
+        stream.open(server->Settings.OutputFile.Value);
+
+        if (!stream.is_open())
+            throw GramException("Error opening output file");
+
+        stream.seekg(0, std::ios::end);
+        size_t len = stream.tellg();
+
+        char buffer[len];
+        memset(buffer, 0, len);
+
+        stream.seekg(0, std::ios::beg);
+        stream.read(buffer, len);
+
+        std::string bufferS(buffer);
+        std::cout << bufferS << std::endl;
+
+        stream.close();
+    });
+
+    AvailableCommands.push_back(printOutputFile);
 }
 
 void gram::Commands::createHelpCommand()

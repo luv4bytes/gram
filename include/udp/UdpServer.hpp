@@ -46,8 +46,6 @@ namespace gram
         UdpServer();
         ~UdpServer();
 
-        ServerSettings Settings;
-
         static const int STANDARD_PORT = 55557;
         static const int BUFFER_SIZE = 65535;
 

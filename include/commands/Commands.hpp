@@ -57,8 +57,6 @@ namespace gram{
 
             Server:
 
-            - Print content of associated output file
-            - Server settings
             - Message handling
 
             Clients:
@@ -87,6 +85,7 @@ namespace gram{
         void createSetServerSettingCommand();
 
         void createPrintServerRingbufferCommand();
+        void createPrintServerOutputFileCommand();
 
         void createHelpCommand();
     };

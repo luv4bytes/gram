@@ -2,7 +2,7 @@
 
 int main()
 {
-    gram::TcpConnection con("localhost", 55556);
+    gram::TcpConnection con("github.com", 80);
     con.Open();
  
     con.Send("Hello GitHub!");
