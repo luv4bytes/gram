@@ -45,7 +45,7 @@ namespace gram
 
         ServerSettings Settings;
 
-        static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
+        static const int POLL_TIMEOUT_MILLISEC = 500;
         static const int NAME_LENGTH = 50;
         static const int RINGBUFFER_LENGTH = 128000;
 

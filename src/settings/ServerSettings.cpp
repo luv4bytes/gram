@@ -82,7 +82,7 @@ isNumeric(std::string input)
 
 gram::ServerSettings::ServerSettings()
     : 
-    WriteToFile("WriteToFile", "Controls if received messages should be written to a given file", 0, "true",
+    WriteToFile("WriteToFile", "Controls if received messages should be written to a given file", 0, "false",
                   [](std::string val){
                       if (val.compare("false") == 0 || val.compare("true") == 0)  
                         return true;

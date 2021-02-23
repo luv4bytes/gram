@@ -118,29 +118,22 @@ void gram::TcpServer::waitForConnections()
     WaitThread = std::thread(
         [&]() {
 
-            timeval timeout;
-            fd_set readSocket;
-            FD_ZERO(&readSocket);
-            FD_SET(socketFd, &readSocket);
-
+            pollfd fd_socket;
+            fd_socket.fd = socketFd;
+            fd_socket.events = POLLIN | POLLERR | POLLNVAL;
+            
             while(true)
             {
-                timeout.tv_usec = TcpServer::SELECT_TIMEOUT_MICROSECONDS;
+                int action = poll(&fd_socket, 1, ServerBase::POLL_TIMEOUT_MILLISEC);
 
-                int sel = select(socketFd + 1, &readSocket, NULL, NULL, &timeout);
-
-                if (sel == -1)
-                    break;
-
-                if (sel == 0)
-                {
-                    int readable = fcntl(socketFd, F_GETFD);
-
-                    if (readable == -1)
-                        break;
-
+                if (action == 0)
                     continue;
-                }
+
+                if (action == -1)
+                    throw GramException("Error on socket poll -> " + std::string(strerror(errno)));
+
+                if ((fd_socket.revents & POLLNVAL) || fd_socket.revents & POLLERR)
+                    return;
 
                 socklen_t sz = sizeof(address);
                 int acceptedSocketFd = accept(socketFd, (struct sockaddr *)&address, (socklen_t *)&sz);

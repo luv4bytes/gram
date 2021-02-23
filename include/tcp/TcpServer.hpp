@@ -28,6 +28,7 @@ SOFTWARE. */
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#include "poll.h"
 #include <vector>
 #include <iostream>
 #include <unistd.h>
@@ -49,7 +50,6 @@ namespace gram
         static const int STANDARD_PORT = 55556;
         static const int LISTEN_BACKLOG = 50;
         static const int BUFFER_SIZE = 4096;
-        static const int SELECT_TIMEOUT_MICROSECONDS = 500000;
         static const int NAME_LENGTH = 50;
 
         void Start() override;

@@ -57,6 +57,7 @@ namespace gram{
 
             Server:
 
+            - Print content of associated output file
             - Server settings
             - Message handling
 

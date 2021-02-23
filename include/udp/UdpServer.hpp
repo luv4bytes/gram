@@ -29,6 +29,7 @@ SOFTWARE. */
 #include <arpa/inet.h>
 #include <netdb.h>
 
+#include "poll.h"
 #include "fcntl.h"
 #include <unistd.h>
 #include <thread>
