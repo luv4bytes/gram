@@ -92,6 +92,8 @@ void gram::UdpServer::Stop()
         throw GramException("Error closing server socket -> " + std::string(strerror(errno)));
 
     WaitThread.detach();   
+
+    std::cout << "Stopped server " << ServerId << std::endl;
 }
 
 void gram::UdpServer::setSocketOptions()

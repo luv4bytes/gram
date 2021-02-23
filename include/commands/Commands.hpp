@@ -26,10 +26,8 @@ SOFTWARE. */
 
 #include "../globals/Globals.hpp"
 
-#include "../tcp/TcpClient.hpp"
 #include "../tcp/TcpServer.hpp"
 
-#include "../udp/UdpClient.hpp"
 #include "../udp/UdpServer.hpp"
 
 #include "../lua_api/LuaApi.hpp"
@@ -54,10 +52,6 @@ namespace gram{
 
         /*
             TODO: 
-
-            Server:
-
-            - Message handling
 
             Clients:
             

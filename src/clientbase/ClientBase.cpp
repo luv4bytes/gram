@@ -18,49 +18,37 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/udp/UdpClient.hpp"
+#include "../../include/clientbase/ClientBase.hpp"
 
-gram::UdpClient::UdpClient()
+gram::ClientBase::ClientBase()
 {
 }
 
-gram::UdpClient::~UdpClient()
+gram::ClientBase::ClientBase(std::string endpointIpOrName, int port)
+{
+    EndpointIpOrName = endpointIpOrName;
+    Port = port;
+}
+
+gram::ClientBase::~ClientBase()
 {
 }
 
-gram::UdpConnection* gram::UdpClient::CreateConnection()
+void gram::ClientBase::Open()
 {
-    UdpConnection* connection = new UdpConnection();
-
-    return connection;
 }
 
-gram::UdpConnection* gram::UdpClient::CreateConnection(std::string endpointIpOrName, int port)
+void gram::ClientBase::Close()
 {
-    UdpConnection* connection = new UdpConnection(endpointIpOrName, port);
-
-    return connection;
 }
 
-void gram::UdpClient::OpenConnection(UdpConnection* connection)
+void gram::ClientBase::Send(std::string message)
 {
-    if (connection == nullptr)
+    if (message.empty())
         return;
 
-    connection->Open();
-}
+    int sent = send(socketFd, message.c_str(), message.length(), 0);
 
-void gram::UdpClient::CloseConnection(UdpConnection* connection)
-{
-    if (connection == nullptr)
-        connection->Close();
-}
-
-void gram::UdpClient::CloseAllConnections()
-{
-    if (Connections.empty())
-        return;
-
-    for(size_t i = 0; i < Connections.size(); i++)
-        Connections.at(i)->Close();
+    if (sent == -1)
+        throw GramException("Error sending message -> " + std::string(strerror(errno)));
 }

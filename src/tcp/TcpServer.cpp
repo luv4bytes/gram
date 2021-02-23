@@ -71,7 +71,7 @@ void gram::TcpServer::Start()
     setSocketOptions();
 
     address.sin_family = AF_INET;
-    address.sin_port = htons(STANDARD_PORT);
+    address.sin_port = htons(Port);
     address.sin_addr.s_addr = INADDR_ANY;
 
     int bound = bind(socketFd, (struct sockaddr *)&address, sizeof(address));
@@ -111,6 +111,8 @@ void gram::TcpServer::Stop()
     WaitThread.detach();
     for (int i = 0; i < ConnectionThreads.size(); i++)
         ConnectionThreads.at(i).detach();
+
+    std::cout << "Stopped server " << ServerId << std::endl;
 }
 
 void gram::TcpServer::waitForConnections()

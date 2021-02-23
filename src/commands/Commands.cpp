@@ -418,13 +418,14 @@ void gram::Commands::createHelpCommand()
 
     help.AssignHandler([](){
         
-        std::string format = "   %-25s|  %-10s|  %-30s\n";
+        const char* format = "   %-25s|  %-15s|  %-30s\n";
 
         printf("Following commands can be used to control gram:\n\n");
+        printf(format, "Long command", "Short command", "Description");
         printf("--------------------------------------------------------------\n");
 
         for(size_t i = 0; i < GlobalCommandsPtr->AvailableCommands.size(); i++)
-            printf(format.c_str(), GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(),
+            printf(format, GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(),
                            GlobalCommandsPtr->AvailableCommands.at(i).ShortCommand.c_str(),
                            GlobalCommandsPtr->AvailableCommands.at(i).Description.c_str());
 

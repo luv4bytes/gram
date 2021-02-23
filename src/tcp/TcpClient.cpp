@@ -22,53 +22,57 @@ SOFTWARE. */
 
 gram::TcpClient::TcpClient()
 {
+    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (socketFd == -1)
+        throw GramException("Error creating socket -> " + std::string(strerror(errno)));
+}
+
+gram::TcpClient::TcpClient(std::string endpointIpOrName, int port)
+{
+    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (socketFd == -1)
+        throw GramException("Error creating socket -> " + std::string(strerror(errno)));
+
+    EndpointIpOrName = endpointIpOrName;
+    Port = port;
 }
 
 gram::TcpClient::~TcpClient()
 {
-    for(size_t i = 0; i < Connections.size(); i++)
-        delete(Connections.at(i));
+    Close();
 }
 
-gram::TcpConnection* gram::TcpClient::CreateConnection()
+void gram::TcpClient::Open()
 {
-    TcpConnection* connection = new TcpConnection();
+    struct addrinfo* addresses;
 
-    Connections.push_back(connection);
+    int gotInfo = getaddrinfo(EndpointIpOrName.c_str(), std::to_string(Port).c_str(), nullptr, &addresses);
 
-    return connection;
-}
-
-gram::TcpConnection* gram::TcpClient::CreateConnection(std::string endpointIpOrName, int port)
-{
-    TcpConnection* connection = new TcpConnection(endpointIpOrName, port);
+    if (gotInfo != 0)
+        throw GramException("Error getting address information -> " + std::string(gai_strerror(gotInfo)));
     
-    Connections.push_back(connection);
+    struct addrinfo* target = addresses->ai_next;
 
-    return connection;
+    int connected = connect(socketFd, target->ai_addr, target->ai_addrlen);
+
+    if (connected == -1)
+        throw GramException("Error connecting to target -> " + std::string(strerror(errno)));
+
+    IsOpen = true;
 }
 
-void gram::TcpClient::OpenConnection(TcpConnection* connection)
+void gram::TcpClient::Close()
 {
-    if (connection == nullptr)
-        return;
+    if (socketFd == 0)
+        return;        
+    
+    int closed = close(socketFd);
 
-    connection->Open();
-}
+    if (closed == -1)
+        throw GramException("Error closing socket -> " + std::string(strerror(errno)));
 
-void gram::TcpClient::CloseConnection(TcpConnection* connection)
-{
-    if (connection == nullptr)
-        return;
-
-    connection->Close();
-}
-
-void gram::TcpClient::CloseAllConnections()
-{
-    if (Connections.empty())
-        return;
-
-    for(size_t i = 0; i < Connections.size(); i++)
-        Connections.at(i)->Close();    
+    socketFd = 0;
+    IsOpen = false;
 }

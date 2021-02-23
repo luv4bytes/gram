@@ -37,10 +37,10 @@ void gram::ServerBaseManager::AddServer(ServerBase* server)
 void gram::ServerBaseManager::StopAllServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
+    {
         Servers.at(i)->Stop();
-
-    for(size_t i = 0; i < Servers.size(); i++)
         delete(Servers.at(i));
+    }
 
     Servers.clear();
 }

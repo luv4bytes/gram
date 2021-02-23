@@ -18,40 +18,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef TCPCONNECTION_H
-#define TCPCONNECTION_H
+#ifndef CLIENTBASE_HPP
+#define CLIENTBASE_HPP
 
 #include <string>
-#include "string.h"
-#include <errno.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <unistd.h>
-
+#include "string.h"
 #include "../exceptions/GramException.hpp"
 
 namespace gram
 {
-    class TcpConnection
+    class ClientBase
     {
-
-    private:
-
+    protected:
         int socketFd;
 
     public:
-        TcpConnection();
-        TcpConnection(std::string endpointIpOrName, int port);
-        ~TcpConnection();
+        ClientBase();
+        ClientBase(std::string endpointIpOrName, int port);
 
-        bool Connected;
+        ~ClientBase();
+
+        bool IsOpen;
 
         std::string EndpointIpOrName;
         int Port;
 
-        void Open();
-        void Close();
+        virtual void Open();
+        virtual void Close();
 
         void Send(std::string message);
     };

@@ -21,29 +21,25 @@ SOFTWARE. */
 #ifndef TCPCLIENT_H
 #define TCPCLIENT_H
 
-#include <vector>
-#include "TcpConnection.hpp"
+#include <string>
+#include "string.h"
+#include <errno.h>
+#include "unistd.h"
+
+#include "../clientbase/ClientBase.hpp"
 #include "../exceptions/GramException.hpp"
 
 namespace gram
 {
-    class TcpClient
+    class TcpClient : public ClientBase
     {
-
-    private:
-
     public:
         TcpClient();
+        TcpClient(std::string endpointIpOrName, int port);
         ~TcpClient();
 
-        std::vector<TcpConnection*> Connections;
-
-        TcpConnection* CreateConnection();
-        TcpConnection* CreateConnection(std::string endpointIpOrName, int port);
-
-        void OpenConnection(TcpConnection* connection);
-        void CloseConnection(TcpConnection* connection);
-        void CloseAllConnections();
+        void Open() override;
+        void Close() override;
     };
 };
 
