@@ -55,18 +55,10 @@ namespace gram{
         /*
             TODO: 
 
-            Clients:
-
-            - Tests
-
             Lua:
             
             - Define API
             - Implement API
-
-            Commands:
-
-            - Command input structure
         */
 
         void createCommands();
@@ -81,7 +73,7 @@ namespace gram{
         void createStartServerUdpCommand();
 
         void createStopAllServersCommand();
-        void createStopServerCommand(); // TODO Only stop server
+        void createStopServerCommand();
 
         void createListServerCommand();
 
