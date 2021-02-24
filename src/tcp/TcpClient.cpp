@@ -22,6 +22,7 @@ SOFTWARE. */
 
 gram::TcpClient::TcpClient()
 {
+    Type = TCP;    
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (socketFd == -1)
@@ -30,6 +31,7 @@ gram::TcpClient::TcpClient()
 
 gram::TcpClient::TcpClient(std::string endpointIpOrName, int port)
 {
+    Type = TCP;
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (socketFd == -1)
@@ -65,15 +67,11 @@ void gram::TcpClient::Open()
 
 void gram::TcpClient::Close()
 {
-    if (socketFd == 0)
-        return;        
-    
     int closed = close(socketFd);
 
     if (closed == -1)
         throw GramException("Error closing socket -> " + std::string(strerror(errno)));
 
-    socketFd = 0;
     IsOpen = false;
 }
 
@@ -104,6 +102,8 @@ gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
     port = atoi(bufS.substr(pos + 1, bufS.size()).c_str());
 
     TcpClient* client = new TcpClient(endpoint, port);
+
+    std::cout << "Created client " + client->ClientId << std::endl;
 
     return client;
 }

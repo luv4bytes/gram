@@ -57,8 +57,8 @@ namespace gram{
             Clients:
             
             - Open and Close
-            - Create clients
-            - List clients
+            - Close all clients
+            - Send
 
             - Tests
 
@@ -95,6 +95,11 @@ namespace gram{
         /* CLIENTS */
         
         void createStartTcpClientCommand();
+
+        void createListClientsCommand();
+
+        void createOpenTcpClientCommand();
+        void createCloseTcpClientCommand();
 
     };
 };

@@ -49,6 +49,11 @@ void gram::Commands::createCommands()
     createPrintServerOutputFileCommand();
 
     createStartTcpClientCommand();
+
+    createListClientsCommand();
+
+    createOpenTcpClientCommand();
+    createCloseTcpClientCommand();
 }
 
 void gram::Commands::createExitCommand()
@@ -449,6 +454,93 @@ void gram::Commands::createStartTcpClientCommand()
     });
 
     AvailableCommands.push_back(startTcpClient);
+}
+
+void gram::Commands::createListClientsCommand()
+{
+    Command listClients;
+    listClients.CommandName = "list clients";
+    listClients.ShortCommand = "lcl";
+    listClients.Description = "Prints out a list of all clients";
+
+    listClients.AssignHandler([](){
+
+        GlobalClientManager.PrintClients();
+    });
+
+    AvailableCommands.push_back(listClients);
+}
+
+void gram::Commands::createOpenTcpClientCommand()
+{
+    Command openTcpClient;
+    openTcpClient.CommandName = "open tcp client";
+    openTcpClient.ShortCommand = "otc";
+    openTcpClient.Description = "Opens the connection to specified endpoint";
+
+    openTcpClient.AssignHandler([](){
+
+        std::string clientId;
+
+        std::cout << "Client Id: ";
+        if (!(std::cin >> clientId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            
+            throw GramException("Client id not valid");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+            return ((client->ClientId.compare(clientId) == 0) && (client->Type == ClientBase::TCP));
+        });
+
+        if (client == nullptr)
+            return;
+
+        client->Open();
+    });
+
+    AvailableCommands.push_back(openTcpClient);
+}
+
+void gram::Commands::createCloseTcpClientCommand()
+{
+    Command closeTcpClient;
+    closeTcpClient.CommandName = "close tcp client";
+    closeTcpClient.ShortCommand = "ctc";
+    closeTcpClient.Description = "Closes the specified TCP client";
+
+    closeTcpClient.AssignHandler([](){
+
+        std::string clientId;
+
+        std::cout << "Client Id: ";
+
+        if (!(std::cin >> clientId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting client id");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+            return ((client->ClientId.compare(clientId) == 0) && (client->Type == ClientBase::TCP));
+        });
+
+        if (client == nullptr)
+            return;
+
+        client->Close();
+        GlobalClientManager.RemoveClient(client);
+    });
+
+    AvailableCommands.push_back(closeTcpClient);
 }
 
 void gram::Commands::WaitForCommand()
