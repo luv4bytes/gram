@@ -56,6 +56,9 @@ void gram::Commands::createCommands()
     createOpenClientCommand();
     createCloseClientCommand();
 
+    createClientSendFileCommand();
+    createClientSendTextCommand();
+
     createCloseAllClientsCommand();
 }
 
@@ -562,6 +565,101 @@ void gram::Commands::createCloseClientCommand()
     });
 
     AvailableCommands.push_back(closeTcpClient);
+}
+
+void gram::Commands::createClientSendFileCommand()
+{
+    Command sendFile;
+    sendFile.CommandName = "client send file";
+    sendFile.ShortCommand = "csf";
+    sendFile.Description = "Send a given file to the endpoint";
+
+    sendFile.AssignHandler([](){
+
+        std::string clientId;
+        std::string filePath;
+
+        std::cout << "Client Id: ";
+
+        if (!(std::cin >> clientId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting client id");
+        }
+
+        std::cout << "File path: ";
+
+        if (!(std::cin >> filePath))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting file path");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+                return (client->ClientId.compare(clientId) == 0);
+        });
+
+        if (client == nullptr)
+            return;
+
+        client->SendFile(filePath);
+    });
+    
+    AvailableCommands.push_back(sendFile);
+}
+
+void gram::Commands::createClientSendTextCommand()
+{
+    Command sendText;
+    sendText.CommandName = "client send text";
+    sendText.ShortCommand = "cst";
+    sendText.Description = "Send a given text to the endpoint";
+
+    sendText.AssignHandler([](){
+
+        std::string clientId;
+        char buffer[ClientBase::MSG_BUFFER_SIZE];
+        memset(buffer, 0, ClientBase::MSG_BUFFER_SIZE);
+
+        std::cout << "Client Id: ";
+
+        if (!(std::cin >> clientId))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting client id");
+        }
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Enter text: ";
+
+        if (!(std::cin.getline(buffer, ClientBase::MSG_BUFFER_SIZE)))
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            throw GramException("Error setting text");
+        }
+
+        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+                return (client->ClientId.compare(clientId) == 0);
+        });
+
+        if (client == nullptr)
+            return;
+
+        client->SendText(std::string(buffer));
+    });
+    
+    AvailableCommands.push_back(sendText);
 }
 
 void gram::Commands::createCloseAllClientsCommand()

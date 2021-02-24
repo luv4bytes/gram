@@ -58,6 +58,8 @@ namespace gram{
             Clients:
             
             - Send
+                - Files
+                - Text
 
             - Tests
 
@@ -104,6 +106,9 @@ namespace gram{
 
         void createOpenClientCommand();
         void createCloseClientCommand();
+
+        void createClientSendFileCommand();
+        void createClientSendTextCommand();
 
         void createCloseAllClientsCommand();
     };

@@ -45,12 +45,39 @@ void gram::ClientBase::Close()
 {
 }
 
-void gram::ClientBase::Send(std::string message)
+void gram::ClientBase::SendText(std::string message)
 {
     if (message.empty())
         return;
 
     int sent = send(socketFd, message.c_str(), message.length(), 0);
+
+    if (sent == -1)
+        throw GramException("Error sending message -> " + std::string(strerror(errno)));
+}
+
+void gram::ClientBase::SendFile(std::string filePath)
+{
+    if (filePath.empty())
+        return;
+
+    std::ifstream stream;
+    stream.open(filePath);
+
+    if (!stream.is_open())
+        throw GramException("Error opening file to send");
+
+    stream.seekg(0, std::ios::end);
+    size_t len = stream.tellg();
+
+    char buffer[len];
+    memset(buffer, 0, len);
+
+    stream.seekg(0, std::ios::beg);
+    stream.read(buffer, len);
+    stream.close();
+
+    int sent = send(socketFd, buffer, len, 0);
 
     if (sent == -1)
         throw GramException("Error sending message -> " + std::string(strerror(errno)));

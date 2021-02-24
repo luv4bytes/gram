@@ -22,6 +22,7 @@ SOFTWARE. */
 #define CLIENTBASE_HPP
 
 #include <string>
+#include <fstream>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -48,6 +49,8 @@ namespace gram
             UDP
         };
 
+        static const int MSG_BUFFER_SIZE = 65535;
+
         bool IsOpen;
 
         std::string ClientId;
@@ -58,7 +61,8 @@ namespace gram
         virtual void Open();
         virtual void Close();
 
-        void Send(std::string message);
+        void SendText(std::string message);
+        void SendFile(std::string filePath);
 
         std::string ClientTypeName();
 
