@@ -18,68 +18,54 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/clientbase/ClientBase.hpp"
+#include "../../include/clientbase/ClientBaseManager.hpp"
 
-gram::ClientBase::ClientBase()
+void gram::ClientBaseManager::AddClient(ClientBase* client)
 {
-    createId();
-}
-
-gram::ClientBase::ClientBase(std::string endpointIpOrName, int port)
-{
-    createId();
-
-    EndpointIpOrName = endpointIpOrName;
-    Port = port;
-}
-
-gram::ClientBase::~ClientBase()
-{
-}
-
-void gram::ClientBase::Open()
-{
-}
-
-void gram::ClientBase::Close()
-{
-}
-
-void gram::ClientBase::Send(std::string message)
-{
-    if (message.empty())
+    if (client == nullptr)
         return;
 
-    int sent = send(socketFd, message.c_str(), message.length(), 0);
-
-    if (sent == -1)
-        throw GramException("Error sending message -> " + std::string(strerror(errno)));
+    Clients.push_back(client);
 }
 
-std::string gram::ClientBase::ClientTypeName()
+void gram::ClientBaseManager::CloseAllClients()
 {
-    switch(Type)
+    for(size_t i = 0; i < Clients.size(); i++)
     {
-        case TCP:
-            return "TCP";
-
-        case UDP:
-            return "UDP";
+        Clients.at(i)->Close();
+        delete(Clients.at(i));
     }
 
-    return "none";
+    Clients.clear();
 }
 
-void gram::ClientBase::createId()
+void gram::ClientBaseManager::PrintClients()
 {
-    char str[UUID_STR_LEN];
-    uuid_t uuid;
+    for(size_t i = 0; i < Clients.size(); i++)
+    {
+        ClientBase* client = Clients.at(i);
+        std::cout << client->ClientId << " (" << client->ClientTypeName() << ") - Port: " << client->Port << std::endl;
+    }
+}
 
-    uuid_generate(uuid);
-    uuid_unparse(uuid, str);
-    uuid_clear(uuid);
+void gram::ClientBaseManager::RemoveClient(ClientBase* client)
+{
+    if (client == nullptr)
+        return;
 
-    std::string id("C" + std::string(str).substr(0, 3));
+    for(size_t i = 0; i < Clients.size(); i++)
+    {
+        if (Clients.at(i)->ClientId.compare(client->ClientId) == 0)
+        {
+            Clients.erase(Clients.begin() + i);
+            break;
+        }
+    }
 
-    ClientId = id;
+    delete(client);
+}
+
+void gram::ClientBaseManager::CleanUp()
+{
+    CloseAllClients();
 }

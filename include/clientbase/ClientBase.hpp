@@ -26,6 +26,7 @@ SOFTWARE. */
 #include <arpa/inet.h>
 #include <netdb.h>
 #include "string.h"
+#include "uuid/uuid.h"
 #include "../exceptions/GramException.hpp"
 
 namespace gram
@@ -41,15 +42,28 @@ namespace gram
 
         ~ClientBase();
 
+        enum ClientType
+        {
+            TCP,
+            UDP
+        };
+
         bool IsOpen;
 
+        std::string ClientId;
         std::string EndpointIpOrName;
         int Port;
+        ClientType Type;
 
         virtual void Open();
         virtual void Close();
 
         void Send(std::string message);
+
+        std::string ClientTypeName();
+
+    private:
+        void createId();
     };
 };
 

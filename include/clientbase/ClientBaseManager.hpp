@@ -18,68 +18,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/clientbase/ClientBase.hpp"
+#ifndef CLIENTBASEMANAGER_H
+#define CLIENTBASEMANAGER_H
 
-gram::ClientBase::ClientBase()
+#include "ClientBase.hpp"
+#include <iostream>
+#include <vector>
+
+namespace gram
 {
-    createId();
-}
-
-gram::ClientBase::ClientBase(std::string endpointIpOrName, int port)
-{
-    createId();
-
-    EndpointIpOrName = endpointIpOrName;
-    Port = port;
-}
-
-gram::ClientBase::~ClientBase()
-{
-}
-
-void gram::ClientBase::Open()
-{
-}
-
-void gram::ClientBase::Close()
-{
-}
-
-void gram::ClientBase::Send(std::string message)
-{
-    if (message.empty())
-        return;
-
-    int sent = send(socketFd, message.c_str(), message.length(), 0);
-
-    if (sent == -1)
-        throw GramException("Error sending message -> " + std::string(strerror(errno)));
-}
-
-std::string gram::ClientBase::ClientTypeName()
-{
-    switch(Type)
+    class ClientBaseManager
     {
-        case TCP:
-            return "TCP";
+    public:
+        std::vector<ClientBase*> Clients;
 
-        case UDP:
-            return "UDP";
-    }
+        void AddClient(ClientBase* client);
 
-    return "none";
-}
+        void CloseAllClients();
+        void PrintClients();
 
-void gram::ClientBase::createId()
-{
-    char str[UUID_STR_LEN];
-    uuid_t uuid;
+        template <typename F>
+        ClientBase* WhereClient(F predicate)
+        {
+            for(size_t i = 0; i < Clients.size(); i++)
+                if (predicate(Clients.at(i)))
+                    return Clients.at(i);
 
-    uuid_generate(uuid);
-    uuid_unparse(uuid, str);
-    uuid_clear(uuid);
+            return nullptr;
+        }
 
-    std::string id("C" + std::string(str).substr(0, 3));
+        void RemoveClient(ClientBase* client);
 
-    ClientId = id;
-}
+        void CleanUp();
+    };
+};
+
+#endif

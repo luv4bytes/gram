@@ -65,6 +65,9 @@ namespace gram
         void WriteMessageToFile(std::string message); 
         void WriteMessageToRingbuffer(std::string message);
 
+        void PrintRingbuffer();
+        void PrintOutputFile();
+
         std::string ServerTypeName();
 
     private:

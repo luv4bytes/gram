@@ -116,6 +116,34 @@ void gram::ServerBase::WriteMessageToRingbuffer(std::string message)
     }
 }
 
+void gram::ServerBase::PrintRingbuffer()
+{
+    std::cout << RingBuffer << std::endl;
+}
+
+void gram::ServerBase::PrintOutputFile()
+{
+    std::ifstream stream;
+    stream.open(Settings.OutputFile.Value);
+
+    if (!stream.is_open())
+        throw GramException("Error opening output file");
+
+    stream.seekg(0, std::ios::end);
+    size_t len = stream.tellg();
+
+    char buffer[len];
+    memset(buffer, 0, len);
+
+    stream.seekg(0, std::ios::beg);
+    stream.read(buffer, len);
+
+    std::string bufferS(buffer);
+    std::cout << bufferS << std::endl;
+
+    stream.close();
+}
+
 std::string gram::ServerBase::ServerTypeName()
 {
     switch(Type)

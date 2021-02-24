@@ -22,6 +22,7 @@ SOFTWARE. */
 
 gram::UdpServer::UdpServer()
 {
+    Type = UDP;
 }
 
 gram::UdpServer::~UdpServer()
@@ -51,7 +52,6 @@ gram::UdpServer* gram::UdpServer::PromptAndCreateNewServer()
 
     UdpServer* server = new UdpServer();
     server->ServerName = name;
-    server->Type = UDP;
 
     if (port == 0)
         port = STANDARD_PORT;

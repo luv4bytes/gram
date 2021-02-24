@@ -76,3 +76,34 @@ void gram::TcpClient::Close()
     socketFd = 0;
     IsOpen = false;
 }
+
+static inline void trim(std::string& s)
+{
+    s.erase(0, s.find_first_not_of(' '));
+    s.erase(s.find_last_not_of(' ') + 1);
+}
+
+gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
+{
+    int bufsz = 150;
+    char bufP[bufsz];
+    memset(bufP, 0, bufsz);
+    int port;
+    std::string endpoint;
+
+    std::cout << "[server]:[port]: ";
+    if (!(std::cin.getline(bufP, bufsz)))
+        throw GramException("Please specify endpoint and port");
+
+    std::string bufS(bufP);
+    size_t pos = bufS.find(':');
+
+    endpoint = bufS.substr(0, pos);
+    trim(endpoint);
+
+    port = atoi(bufS.substr(pos + 1, bufS.size()).c_str());
+
+    TcpClient* client = new TcpClient(endpoint, port);
+
+    return client;
+}

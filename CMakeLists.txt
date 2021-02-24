@@ -7,6 +7,7 @@ add_compile_definitions(GRAM_VERSION="1.0")
 
 add_executable(gram main.cpp
                     src/clientbase/ClientBase.cpp
+                    src/clientbase/ClientBaseManager.cpp
                     src/tcp/TcpServer.cpp
                     src/tcp/TcpClient.cpp
                     src/udp/UdpServer.cpp
@@ -116,6 +117,7 @@ add_test(Lua_Initialize_Test Lua_Initialize)
 
 add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cpp
                             src/clientbase/ClientBase.cpp
+                            src/clientbase/ClientBaseManager.cpp
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpServer.cpp
                             src/udp/UdpServer.cpp

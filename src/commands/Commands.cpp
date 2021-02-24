@@ -30,6 +30,8 @@ void gram::Commands::createCommands()
     createExitCommand();
     createQuitCommand();
 
+    createHelpCommand();
+
     createStartServerTcpCommand();
     createStartServerUdpCommand();
 
@@ -46,7 +48,7 @@ void gram::Commands::createCommands()
     createPrintServerRingbufferCommand();
     createPrintServerOutputFileCommand();
 
-    createHelpCommand();
+    createStartTcpClientCommand();
 }
 
 void gram::Commands::createExitCommand()
@@ -58,6 +60,7 @@ void gram::Commands::createExitCommand()
     cmdExit.AssignHandler([](){
 
         GlobalServerManager.CleanUp();
+        GlobalClientManager.CleanUp();
 
         exit(0);
     });
@@ -74,11 +77,38 @@ void gram::Commands::createQuitCommand()
     quit.AssignHandler([](){
 
         GlobalServerManager.CleanUp();
+        GlobalClientManager.CleanUp();
 
         exit(0);
     });
 
     AvailableCommands.push_back(quit);
+}
+
+void gram::Commands::createHelpCommand()
+{
+    Command help;
+    help.CommandName = "help";
+    help.Description = "Prints information about commands";
+
+    help.AssignHandler([](){
+        
+        const char* format = "   %-25s|  %-15s|  %-30s\n";
+
+        printf("Following commands can be used to control gram:\n\n");
+        printf(format, "Long command", "Short command", "Description");
+        printf("--------------------------------------------------------------\n");
+
+        for(size_t i = 0; i < GlobalCommandsPtr->AvailableCommands.size(); i++)
+            printf(format, GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(),
+                           GlobalCommandsPtr->AvailableCommands.at(i).ShortCommand.c_str(),
+                           GlobalCommandsPtr->AvailableCommands.at(i).Description.c_str());
+
+        printf("\n\ngram is licensed under MIT License\n");
+        printf("Lukas Pfeifer - https://github.com/luv4bytes\n");
+    });
+
+    AvailableCommands.push_back(help);
 }
 
 void gram::Commands::createStartServerTcpCommand()
@@ -351,7 +381,7 @@ void gram::Commands::createPrintServerRingbufferCommand()
         if (server == nullptr)
             return;
 
-        std::cout << server->RingBuffer << std::endl;
+        server->PrintRingbuffer();
     });
 
     AvailableCommands.push_back(printRingbuffer);
@@ -386,54 +416,10 @@ void gram::Commands::createPrintServerOutputFileCommand()
         if (server == nullptr)
             return;
 
-        std::ifstream stream;
-        stream.open(server->Settings.OutputFile.Value);
-
-        if (!stream.is_open())
-            throw GramException("Error opening output file");
-
-        stream.seekg(0, std::ios::end);
-        size_t len = stream.tellg();
-
-        char buffer[len];
-        memset(buffer, 0, len);
-
-        stream.seekg(0, std::ios::beg);
-        stream.read(buffer, len);
-
-        std::string bufferS(buffer);
-        std::cout << bufferS << std::endl;
-
-        stream.close();
+        server->PrintOutputFile();
     });
 
     AvailableCommands.push_back(printOutputFile);
-}
-
-void gram::Commands::createHelpCommand()
-{
-    Command help;
-    help.CommandName = "help";
-    help.Description = "Prints information about commands";
-
-    help.AssignHandler([](){
-        
-        const char* format = "   %-25s|  %-15s|  %-30s\n";
-
-        printf("Following commands can be used to control gram:\n\n");
-        printf(format, "Long command", "Short command", "Description");
-        printf("--------------------------------------------------------------\n");
-
-        for(size_t i = 0; i < GlobalCommandsPtr->AvailableCommands.size(); i++)
-            printf(format, GlobalCommandsPtr->AvailableCommands.at(i).CommandName.c_str(),
-                           GlobalCommandsPtr->AvailableCommands.at(i).ShortCommand.c_str(),
-                           GlobalCommandsPtr->AvailableCommands.at(i).Description.c_str());
-
-        printf("\n\ngram is licensed under MIT License\n");
-        printf("Lukas Pfeifer - https://github.com/luv4bytes\n");
-    });
-
-    AvailableCommands.push_back(help);
 }
 
 static inline void trim(std::string& s)
@@ -446,6 +432,23 @@ static inline void tolower(std::string& s)
 {
     for(size_t i = 0; i < s.size(); i++)
         s[i] = std::tolower(s[i]);
+}
+
+void gram::Commands::createStartTcpClientCommand()
+{
+    Command startTcpClient;
+    startTcpClient.CommandName = "start client tcp";
+    startTcpClient.ShortCommand = "ctcp";
+    startTcpClient.Description = "Start a new TCP client";
+
+    startTcpClient.AssignHandler([](){
+        
+        TcpClient* client = TcpClient::PromptAndCreateClient();
+
+        GlobalClientManager.AddClient(client);
+    });
+
+    AvailableCommands.push_back(startTcpClient);
 }
 
 void gram::Commands::WaitForCommand()

@@ -27,6 +27,7 @@ SOFTWARE. */
 #include "../globals/Globals.hpp"
 
 #include "../tcp/TcpServer.hpp"
+#include "../tcp/TcpClient.hpp"
 
 #include "../udp/UdpServer.hpp"
 
@@ -55,16 +56,26 @@ namespace gram{
 
             Clients:
             
+            - Open and Close
             - Create clients
             - List clients
-            - Close clients
-            - Close single client
+
+            - Tests
+
+            Lua:
+            
+            - Define API
+            - Implement API
         */
 
         void createCommands();
         void createExitCommand();
         void createQuitCommand();
-        
+
+        void createHelpCommand();
+
+        /* SERVER */
+
         void createStartServerTcpCommand();
         void createStartServerUdpCommand();
 
@@ -81,7 +92,10 @@ namespace gram{
         void createPrintServerRingbufferCommand();
         void createPrintServerOutputFileCommand();
 
-        void createHelpCommand();
+        /* CLIENTS */
+        
+        void createStartTcpClientCommand();
+
     };
 };
 

@@ -22,6 +22,7 @@ SOFTWARE. */
 #define TCPCLIENT_H
 
 #include <string>
+#include <iostream>
 #include "string.h"
 #include <errno.h>
 #include "unistd.h"
@@ -40,6 +41,8 @@ namespace gram
 
         void Open() override;
         void Close() override;
+
+        static TcpClient* PromptAndCreateClient();
     };
 };
 

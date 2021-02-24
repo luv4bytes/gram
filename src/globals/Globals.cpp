@@ -21,5 +21,6 @@ SOFTWARE. */
 #include "../../include/globals/Globals.hpp"
 
 gram::ServerBaseManager GlobalServerManager;
+gram::ClientBaseManager GlobalClientManager;
 gram::Commands* GlobalCommandsPtr;
 gram::SettingsInfo GlobalSettingsInfo;

@@ -21,6 +21,7 @@ SOFTWARE. */
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include "../clientbase/ClientBaseManager.hpp"
 #include "../serverbase/ServerBaseManager.hpp"
 #include "../settings/SettingsInfo.hpp"
 
@@ -29,6 +30,7 @@ namespace gram{
 }
 
 extern gram::ServerBaseManager GlobalServerManager;
+extern gram::ClientBaseManager GlobalClientManager;
 extern gram::Commands* GlobalCommandsPtr;
 extern gram::SettingsInfo GlobalSettingsInfo;
 
