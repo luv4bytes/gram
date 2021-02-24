@@ -121,6 +121,20 @@ add_executable(TcpClient_Close tests/tcp/TcpClient/TcpClient_Close.cpp
 target_link_libraries(TcpClient_Close uuid)
 add_test(TcpClient_Close_Test TcpClient_Close)
 
+add_executable(TcpClient_SendFile tests/tcp/TcpClient/TcpClient_SendFile.cpp
+                            src/clientbase/ClientBase.cpp
+                            src/tcp/TcpClient.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(TcpClient_SendFile uuid)
+add_test(TcpClient_SendFile_Test TcpClient_SendFile)
+
+add_executable(TcpClient_SendText tests/tcp/TcpClient/TcpClient_SendText.cpp
+                            src/clientbase/ClientBase.cpp
+                            src/tcp/TcpClient.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(TcpClient_SendText uuid)
+add_test(TcpClient_SendText_Test TcpClient_SendText)
+
 # ########## UdpClient Tests ##########
 
 add_executable(UdpClient_Open tests/udp/UdpClient/UdpClient_Open.cpp

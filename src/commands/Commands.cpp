@@ -36,8 +36,7 @@ void gram::Commands::createCommands()
     createStartServerUdpCommand();
 
     createStopAllServersCommand();
-    createStopServerTcpCommand();
-    createStopServerUdpCommand();
+    createStopServerCommand();
 
     createListServerCommand();
     
@@ -173,12 +172,12 @@ void gram::Commands::createStopAllServersCommand()
     AvailableCommands.push_back(stopAllServers);
 }
 
-void gram::Commands::createStopServerTcpCommand()
+void gram::Commands::createStopServerCommand()
 {
     Command stopServerTcp;
-    stopServerTcp.CommandName = "stop server tcp";
-    stopServerTcp.ShortCommand = "sstcp";
-    stopServerTcp.Description = "Stops a TCP server with given id";
+    stopServerTcp.CommandName = "stop server";
+    stopServerTcp.ShortCommand = "stops";
+    stopServerTcp.Description = "Stops a server with given id";
 
     stopServerTcp.AssignHandler([](){
 
@@ -195,7 +194,7 @@ void gram::Commands::createStopServerTcpCommand()
         }
 
         ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
-            return ((server->ServerId.compare(serverId) == 0) && (server->Type == ServerBase::TCP));
+            return (server->ServerId.compare(serverId) == 0);
         });
 
         if (server == nullptr)
@@ -211,46 +210,6 @@ void gram::Commands::createStopServerTcpCommand()
     });
 
     AvailableCommands.push_back(stopServerTcp);
-}
-
-void gram::Commands::createStopServerUdpCommand()
-{
-    Command stopServerUdp;
-    stopServerUdp.CommandName = "stop server udp";
-    stopServerUdp.ShortCommand = "ssudp";
-    stopServerUdp.Description = "Stops a UDP server with given id";
-
-    stopServerUdp.AssignHandler([](){
-
-        std::string serverId;
-
-        std::cout << "Server Id: ";
-
-        if (!(std::cin >> serverId))
-        {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            throw GramException("Error setting server id");
-        }
-
-        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
-            return ((server->ServerId.compare(serverId) == 0) && (server->Type == ServerBase::UDP));
-        });
-
-        if (server == nullptr)
-        {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            return;
-        }
-
-        server->Stop();
-        GlobalServerManager.RemoveServer(server);
-
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    });
-
-    AvailableCommands.push_back(stopServerUdp);
 }
 
 void gram::Commands::createListServerCommand()

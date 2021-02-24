@@ -56,10 +56,6 @@ namespace gram{
             TODO: 
 
             Clients:
-            
-            - Send
-                - Files
-                - Text
 
             - Tests
 
@@ -85,8 +81,7 @@ namespace gram{
         void createStartServerUdpCommand();
 
         void createStopAllServersCommand();
-        void createStopServerTcpCommand(); // TODO Only stop server
-        void createStopServerUdpCommand();
+        void createStopServerCommand(); // TODO Only stop server
 
         void createListServerCommand();
 
