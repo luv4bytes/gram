@@ -18,21 +18,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/tcp/TcpClient.hpp"
+#include "../../include/udp/UdpClient.hpp"
 
-gram::TcpClient::TcpClient()
+gram::UdpClient::UdpClient()
 {
-    Type = TCP;    
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    Type = UDP;    
+    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
     if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
 }
 
-gram::TcpClient::TcpClient(std::string endpointIpOrName, int port)
+gram::UdpClient::UdpClient(std::string endpointIpOrName, int port)
 {
-    Type = TCP;
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    Type = UDP;
+    socketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
     if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
@@ -41,11 +41,11 @@ gram::TcpClient::TcpClient(std::string endpointIpOrName, int port)
     Port = port;
 }
 
-gram::TcpClient::~TcpClient()
+gram::UdpClient::~UdpClient()
 {
 }
 
-void gram::TcpClient::Open()
+void gram::UdpClient::Open()
 {
     struct addrinfo* addresses;
 
@@ -64,7 +64,7 @@ void gram::TcpClient::Open()
     IsOpen = true;
 }
 
-void gram::TcpClient::Close()
+void gram::UdpClient::Close()
 {
     int closed = close(socketFd);
 
@@ -80,7 +80,7 @@ static inline void trim(std::string& s)
     s.erase(s.find_last_not_of(' ') + 1);
 }
 
-gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
+gram::UdpClient* gram::UdpClient::PromptAndCreateClient()
 {
     int bufsz = 150;
     char bufP[bufsz];
@@ -100,7 +100,7 @@ gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
 
     port = atoi(bufS.substr(pos + 1, bufS.size()).c_str());
 
-    TcpClient* client = new TcpClient(endpoint, port);
+    UdpClient* client = new UdpClient(endpoint, port);
 
     std::cout << "Created client " + client->ClientId << std::endl;
 

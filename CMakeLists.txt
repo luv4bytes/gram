@@ -11,6 +11,7 @@ add_executable(gram main.cpp
                     src/tcp/TcpServer.cpp
                     src/tcp/TcpClient.cpp
                     src/udp/UdpServer.cpp
+                    src/udp/UdpClient.cpp
                     src/serverbase/ServerBase.cpp
                     src/serverbase/ServerBaseManager.cpp
                     src/lua_api/LuaApi.cpp
@@ -104,6 +105,38 @@ target_link_libraries(ServerBaseManager_CleanUp pthread)
 target_link_libraries(ServerBaseManager_CleanUp uuid)
 add_test(ServerBaseManager_CleanUp_Test ServerBaseManager_CleanUp)
 
+# ########## TcpClient Tests ##########
+
+add_executable(TcpClient_Open tests/tcp/TcpClient/TcpClient_Open.cpp
+                            src/clientbase/ClientBase.cpp
+                            src/tcp/TcpClient.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(TcpClient_Open uuid)
+add_test(TcpClient_Open_Test TcpClient_Open)
+
+add_executable(TcpClient_Close tests/tcp/TcpClient/TcpClient_Close.cpp
+                            src/clientbase/ClientBase.cpp
+                            src/tcp/TcpClient.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(TcpClient_Close uuid)
+add_test(TcpClient_Close_Test TcpClient_Close)
+
+# ########## UdpClient Tests ##########
+
+add_executable(UdpClient_Open tests/udp/UdpClient/UdpClient_Open.cpp
+                            src/clientbase/ClientBase.cpp
+                            src/udp/UdpClient.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(UdpClient_Open uuid)
+add_test(UdpClient_Open_Test UdpClient_Open)
+
+add_executable(UdpClient_Close tests/udp/UdpClient/UdpClient_Close.cpp
+                            src/clientbase/ClientBase.cpp
+                            src/udp/UdpClient.cpp
+                            src/exceptions/GramException.cpp)
+target_link_libraries(UdpClient_Close uuid)
+add_test(UdpClient_Close_Test UdpClient_Close)
+
 # ########## Lua Tests ##########
 
 add_executable(Lua_Initialize tests/lua_api/Lua_Initialize.cpp
@@ -120,6 +153,7 @@ add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cp
                             src/clientbase/ClientBaseManager.cpp
                             src/tcp/TcpClient.cpp
                             src/tcp/TcpServer.cpp
+                            src/udp/UdpClient.cpp
                             src/udp/UdpServer.cpp
                             src/serverbase/ServerBase.cpp
                             src/serverbase/ServerBaseManager.cpp

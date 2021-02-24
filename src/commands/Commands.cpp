@@ -49,11 +49,14 @@ void gram::Commands::createCommands()
     createPrintServerOutputFileCommand();
 
     createStartTcpClientCommand();
+    createStartUdpClientCommand();
 
     createListClientsCommand();
+    
+    createOpenClientCommand();
+    createCloseClientCommand();
 
-    createOpenTcpClientCommand();
-    createCloseTcpClientCommand();
+    createCloseAllClientsCommand();
 }
 
 void gram::Commands::createExitCommand()
@@ -156,6 +159,7 @@ void gram::Commands::createStopAllServersCommand()
 {
     Command stopAllServers;
     stopAllServers.CommandName = "stop server all";
+    stopAllServers.ShortCommand = "ssa";
     stopAllServers.Description = "Stops all running servers";
 
     stopAllServers.AssignHandler([](){
@@ -456,6 +460,23 @@ void gram::Commands::createStartTcpClientCommand()
     AvailableCommands.push_back(startTcpClient);
 }
 
+void gram::Commands::createStartUdpClientCommand()
+{
+    Command startUdpClient;
+    startUdpClient.CommandName = "start client udp";
+    startUdpClient.ShortCommand = "cudp";
+    startUdpClient.Description = "Start a new UDP client";
+
+    startUdpClient.AssignHandler([](){
+
+        UdpClient* client = UdpClient::PromptAndCreateClient();
+
+        GlobalClientManager.AddClient(client);
+    });
+
+    AvailableCommands.push_back(startUdpClient);
+}
+
 void gram::Commands::createListClientsCommand()
 {
     Command listClients;
@@ -471,14 +492,14 @@ void gram::Commands::createListClientsCommand()
     AvailableCommands.push_back(listClients);
 }
 
-void gram::Commands::createOpenTcpClientCommand()
+void gram::Commands::createOpenClientCommand()
 {
-    Command openTcpClient;
-    openTcpClient.CommandName = "open tcp client";
-    openTcpClient.ShortCommand = "otc";
-    openTcpClient.Description = "Opens the connection to specified endpoint";
+    Command openClient;
+    openClient.CommandName = "open client";
+    openClient.ShortCommand = "oc";
+    openClient.Description = "Opens the connection to specified endpoint";
 
-    openTcpClient.AssignHandler([](){
+    openClient.AssignHandler([](){
 
         std::string clientId;
 
@@ -494,7 +515,7 @@ void gram::Commands::createOpenTcpClientCommand()
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         
         ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
-            return ((client->ClientId.compare(clientId) == 0) && (client->Type == ClientBase::TCP));
+            return (client->ClientId.compare(clientId) == 0);
         });
 
         if (client == nullptr)
@@ -503,15 +524,15 @@ void gram::Commands::createOpenTcpClientCommand()
         client->Open();
     });
 
-    AvailableCommands.push_back(openTcpClient);
+    AvailableCommands.push_back(openClient);
 }
 
-void gram::Commands::createCloseTcpClientCommand()
+void gram::Commands::createCloseClientCommand()
 {
     Command closeTcpClient;
-    closeTcpClient.CommandName = "close tcp client";
-    closeTcpClient.ShortCommand = "ctc";
-    closeTcpClient.Description = "Closes the specified TCP client";
+    closeTcpClient.CommandName = "close client";
+    closeTcpClient.ShortCommand = "cc";
+    closeTcpClient.Description = "Closes the specified client";
 
     closeTcpClient.AssignHandler([](){
 
@@ -530,7 +551,7 @@ void gram::Commands::createCloseTcpClientCommand()
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
-            return ((client->ClientId.compare(clientId) == 0) && (client->Type == ClientBase::TCP));
+            return (client->ClientId.compare(clientId) == 0);
         });
 
         if (client == nullptr)
@@ -541,6 +562,21 @@ void gram::Commands::createCloseTcpClientCommand()
     });
 
     AvailableCommands.push_back(closeTcpClient);
+}
+
+void gram::Commands::createCloseAllClientsCommand()
+{
+    Command closeAllClients;
+    closeAllClients.CommandName = "close all clients";
+    closeAllClients.ShortCommand = "cac";
+    closeAllClients.Description = "Closes all clients";
+
+    closeAllClients.AssignHandler([](){
+
+        GlobalClientManager.CloseAllClients();
+    });
+
+    AvailableCommands.push_back(closeAllClients);
 }
 
 void gram::Commands::WaitForCommand()

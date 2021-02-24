@@ -30,6 +30,7 @@ SOFTWARE. */
 #include "../tcp/TcpClient.hpp"
 
 #include "../udp/UdpServer.hpp"
+#include "../udp/UdpClient.hpp"
 
 #include "../lua_api/LuaApi.hpp"
 
@@ -56,8 +57,6 @@ namespace gram{
 
             Clients:
             
-            - Open and Close
-            - Close all clients
             - Send
 
             - Tests
@@ -66,6 +65,10 @@ namespace gram{
             
             - Define API
             - Implement API
+
+            Commands:
+
+            - Command input structure
         */
 
         void createCommands();
@@ -80,7 +83,7 @@ namespace gram{
         void createStartServerUdpCommand();
 
         void createStopAllServersCommand();
-        void createStopServerTcpCommand();
+        void createStopServerTcpCommand(); // TODO Only stop server
         void createStopServerUdpCommand();
 
         void createListServerCommand();
@@ -93,14 +96,16 @@ namespace gram{
         void createPrintServerOutputFileCommand();
 
         /* CLIENTS */
-        
+    
         void createStartTcpClientCommand();
+        void createStartUdpClientCommand();
 
         void createListClientsCommand();
 
-        void createOpenTcpClientCommand();
-        void createCloseTcpClientCommand();
+        void createOpenClientCommand();
+        void createCloseClientCommand();
 
+        void createCloseAllClientsCommand();
     };
 };
 

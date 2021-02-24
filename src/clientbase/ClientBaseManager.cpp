@@ -33,6 +33,8 @@ void gram::ClientBaseManager::CloseAllClients()
     for(size_t i = 0; i < Clients.size(); i++)
     {
         Clients.at(i)->Close();
+        std::cout << "Closed client " << Clients.at(i)->ClientId << std::endl;
+
         delete(Clients.at(i));
     }
 
