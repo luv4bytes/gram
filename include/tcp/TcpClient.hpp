@@ -25,7 +25,6 @@ SOFTWARE. */
 #include <iostream>
 #include "string.h"
 #include <errno.h>
-#include "unistd.h"
 
 #include "../clientbase/ClientBase.hpp"
 #include "../exceptions/GramException.hpp"
@@ -38,9 +37,6 @@ namespace gram
         TcpClient();
         TcpClient(std::string endpointIpOrName, int port);
         ~TcpClient();
-
-        void Open() override;
-        void Close() override;
 
         static TcpClient* PromptAndCreateClient();
     };

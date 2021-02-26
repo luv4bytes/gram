@@ -39,9 +39,6 @@ namespace gram
         UdpClient(std::string endpointIpOrName, int port);
         ~UdpClient();
 
-        void Open() override;
-        void Close() override;
-
         static UdpClient* PromptAndCreateClient();
     };
 };

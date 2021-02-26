@@ -18,18 +18,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#include "../../include/tcp/TcpClient.hpp"
+#include "../../include/tcp/TcpSslClient.hpp"
 
-gram::TcpClient::TcpClient()
-{
-    Type = TCP;    
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
-
-    if (socketFd == -1)
-        throw GramException("Error creating socket -> " + std::string(strerror(errno)));
-}
-
-gram::TcpClient::TcpClient(std::string endpointIpOrName, int port)
+gram::TcpSslClient::TcpSslClient()
 {
     Type = TCP;
     socketFd = socket(AF_INET, SOCK_STREAM, 0);
@@ -37,12 +28,67 @@ gram::TcpClient::TcpClient(std::string endpointIpOrName, int port)
     if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
 
+    setupSsl();
+}
+
+gram::TcpSslClient::TcpSslClient(std::string endpointIpOrName, int port)
+{
+    Type = TCP;    
+    socketFd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (socketFd == -1)
+        throw GramException("Error creating socket -> " + std::string(strerror(errno)));
+
+    setupSsl();
+
     EndpointIpOrName = endpointIpOrName;
     Port = port;
 }
 
-gram::TcpClient::~TcpClient()
+gram::TcpSslClient::~TcpSslClient()
 {
+    if (Ssl != NULL)
+        SSL_free(Ssl);
+
+    if (SslContext != NULL)
+        SSL_CTX_free(SslContext);
+}
+
+void gram::TcpSslClient::setupSsl()
+{
+    const SSL_METHOD* method = TLS_client_method();
+
+    SslContext = SSL_CTX_new(method);
+
+    if (!SslContext)
+        throw GramException("Error setting up SSL context");
+
+    Ssl = SSL_new(SslContext);
+
+    if (!Ssl)
+        throw GramException("Error setting up SSL");
+    
+    SSL_set_fd(Ssl, socketFd);
+}
+
+void gram::TcpSslClient::Open()
+{
+    // TODO:
+}
+
+void gram::TcpSslClient::Close()
+{
+    // TODO:
+}
+
+void gram::TcpSslClient::SendText(std::string message)
+{
+    // TODO:
+}
+
+void gram::TcpSslClient::SendFile(std::string filePath)
+{
+    // TODO:
 }
 
 static inline void trim(std::string& s)
@@ -51,7 +97,7 @@ static inline void trim(std::string& s)
     s.erase(s.find_last_not_of(' ') + 1);
 }
 
-gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
+gram::TcpSslClient* gram::TcpSslClient::PromptAndCreateClient()
 {
     int bufsz = 150;
     char bufP[bufsz];
@@ -71,7 +117,7 @@ gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
 
     port = atoi(bufS.substr(pos + 1, bufS.size()).c_str());
 
-    TcpClient* client = new TcpClient(endpoint, port);
+    TcpSslClient* client = new TcpSslClient(endpoint, port);
 
     std::cout << "Created client " + client->ClientId << std::endl;
 

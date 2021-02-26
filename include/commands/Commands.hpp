@@ -28,6 +28,7 @@ SOFTWARE. */
 
 #include "../tcp/TcpServer.hpp"
 #include "../tcp/TcpClient.hpp"
+#include "../tcp/TcpSslClient.hpp"
 
 #include "../udp/UdpServer.hpp"
 #include "../udp/UdpClient.hpp"
@@ -54,6 +55,12 @@ namespace gram{
 
         /*
             TODO: 
+
+            - SSL
+
+            Server:
+
+                - SSL -> Set certs
 
             Lua:
             
@@ -87,6 +94,7 @@ namespace gram{
         /* CLIENTS */
     
         void createStartTcpClientCommand();
+        void createStartTcpSslClientCommand();
         void createStartUdpClientCommand();
 
         void createListClientsCommand();

@@ -45,35 +45,6 @@ gram::UdpClient::~UdpClient()
 {
 }
 
-void gram::UdpClient::Open()
-{
-    struct addrinfo* addresses;
-
-    int gotInfo = getaddrinfo(EndpointIpOrName.c_str(), std::to_string(Port).c_str(), nullptr, &addresses);
-
-    if (gotInfo != 0)
-        throw GramException("Error getting address information -> " + std::string(gai_strerror(gotInfo)));
-    
-    struct addrinfo* target = addresses->ai_next;
-
-    int connected = connect(socketFd, target->ai_addr, target->ai_addrlen);
-
-    if (connected == -1)
-        throw GramException("Error connecting to target -> " + std::string(strerror(errno)));
-
-    IsOpen = true;
-}
-
-void gram::UdpClient::Close()
-{
-    int closed = close(socketFd);
-
-    if (closed == -1)
-        throw GramException("Error closing socket -> " + std::string(strerror(errno)));
-
-    IsOpen = false;
-}
-
 static inline void trim(std::string& s)
 {
     s.erase(0, s.find_first_not_of(' '));

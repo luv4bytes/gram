@@ -10,6 +10,7 @@ add_executable(gram main.cpp
                     src/clientbase/ClientBaseManager.cpp
                     src/tcp/TcpServer.cpp
                     src/tcp/TcpClient.cpp
+                    src/tcp/TcpSslClient.cpp
                     src/udp/UdpServer.cpp
                     src/udp/UdpClient.cpp
                     src/serverbase/ServerBase.cpp
@@ -29,6 +30,7 @@ include(CPack)
 target_link_libraries(gram uuid)
 target_link_libraries(gram pthread)
 target_link_libraries(gram lua)
+target_link_libraries(gram ssl crypto)
 
 include(CTest)
 enable_testing()
@@ -164,8 +166,9 @@ add_test(Lua_Initialize_Test Lua_Initialize)
 
 add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cpp
                             src/clientbase/ClientBase.cpp
-                            src/clientbase/ClientBaseManager.cpp
+                            src/clientbase/ClientBaseManager.cpp                            
                             src/tcp/TcpClient.cpp
+                            src/tcp/TcpSslClient.cpp
                             src/tcp/TcpServer.cpp
                             src/udp/UdpClient.cpp
                             src/udp/UdpServer.cpp
@@ -180,6 +183,7 @@ add_executable(Commands_CreateCommands tests/commands/Commands_CreateCommands.cp
 
 target_link_libraries(Commands_CreateCommands pthread)
 target_link_libraries(Commands_CreateCommands uuid)
+target_link_libraries(Commands_CreateCommands ssl crypto)
 add_test(Commands_CreateCommands_Test Commands_CreateCommands)
 
 # ########## Settings Tests ##########

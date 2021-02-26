@@ -18,60 +18,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-#ifndef CLIENTBASE_HPP
-#define CLIENTBASE_HPP
+#ifndef TCPSSLCLIENT_H
+#define TCPSSLCLIENT_H
 
-#include <string>
-#include <fstream>
+#include <openssl/ssl.h>
 
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-
-#include "string.h"
-#include "uuid/uuid.h"
-
-#include "../exceptions/GramException.hpp"
+#include "../clientbase/ClientBase.hpp"
+#include <iostream>
 
 namespace gram
 {
-    class ClientBase
+    class TcpSslClient : public ClientBase
     {
-    protected:
-        int socketFd;
-
     public:
-        ClientBase();
-        ClientBase(std::string endpointIpOrName, int port);
+        TcpSslClient();
+        TcpSslClient(std::string endpointIpOrName, int port);
+        ~TcpSslClient() override;
 
-        virtual ~ClientBase();
+        SSL* Ssl;
+        SSL_CTX* SslContext;
 
-        enum ClientType
-        {
-            TCP,
-            UDP
-        };
+        void setupSsl();
 
-        static const int MSG_BUFFER_SIZE = 65535;
+        void Open() override;
+        void Close() override;
 
-        bool IsOpen;
+        void SendText(std::string message) override;
+        void SendFile(std::string filePath) override;
 
-        std::string ClientId;
-        std::string EndpointIpOrName;
-        int Port;
-        ClientType Type;
-
-        virtual void Open();
-        virtual void Close();
-
-        virtual void SendText(std::string message);
-        virtual void SendFile(std::string filePath);
-
-        std::string ClientTypeName();
-
-    private:
-        void createId();
+        static TcpSslClient* PromptAndCreateClient();
     };
 };
 
