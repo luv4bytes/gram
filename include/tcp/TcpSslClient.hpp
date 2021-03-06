@@ -22,6 +22,7 @@ SOFTWARE. */
 #define TCPSSLCLIENT_H
 
 #include <openssl/ssl.h>
+#include <openssl/err.h>
 
 #include "../clientbase/ClientBase.hpp"
 #include <iostream>
@@ -37,8 +38,6 @@ namespace gram
 
         SSL* Ssl;
         SSL_CTX* SslContext;
-
-        void setupSsl();
 
         void Open() override;
         void Close() override;

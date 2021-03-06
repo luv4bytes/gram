@@ -27,8 +27,6 @@ gram::TcpSslClient::TcpSslClient()
 
     if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
-
-    setupSsl();
 }
 
 gram::TcpSslClient::TcpSslClient(std::string endpointIpOrName, int port)
@@ -39,46 +37,61 @@ gram::TcpSslClient::TcpSslClient(std::string endpointIpOrName, int port)
     if (socketFd == -1)
         throw GramException("Error creating socket -> " + std::string(strerror(errno)));
 
-    setupSsl();
-
     EndpointIpOrName = endpointIpOrName;
     Port = port;
 }
 
 gram::TcpSslClient::~TcpSslClient()
 {
-    if (Ssl != NULL)
-        SSL_free(Ssl);
-
-    if (SslContext != NULL)
-        SSL_CTX_free(SslContext);
-}
-
-void gram::TcpSslClient::setupSsl()
-{
-    const SSL_METHOD* method = TLS_client_method();
-
-    SslContext = SSL_CTX_new(method);
-
-    if (!SslContext)
-        throw GramException("Error setting up SSL context");
-
-    Ssl = SSL_new(SslContext);
-
-    if (!Ssl)
-        throw GramException("Error setting up SSL");
-    
-    SSL_set_fd(Ssl, socketFd);
 }
 
 void gram::TcpSslClient::Open()
 {
-    // TODO:
+    struct addrinfo* addresses;
+
+    int gotInfo = getaddrinfo(EndpointIpOrName.c_str(), std::to_string(Port).c_str(), nullptr, &addresses);
+
+    if (gotInfo != 0)
+        throw GramException("Error getting address information -> " + std::string(gai_strerror(gotInfo)));
+    
+    struct addrinfo* target = addresses->ai_next;
+
+    int connected = connect(socketFd, target->ai_addr, target->ai_addrlen);
+
+    if (connected == -1)
+        throw GramException("Error connecting to target -> " + std::string(strerror(errno)));
+
+    const SSL_METHOD* method = TLS_client_method();
+    SslContext = SSL_CTX_new(method);
+    Ssl = SSL_new(SslContext);
+    
+    SSL_set_fd(Ssl, socketFd);
+
+    int sslConnect = SSL_connect(Ssl);
+
+    if (sslConnect == -1)
+        throw GramException(ERR_lib_error_string(ERR_get_error()));
+
+    IsOpen = true;
 }
 
 void gram::TcpSslClient::Close()
 {
-    // TODO:
+    SSL_shutdown(Ssl);
+
+    int closed = close(socketFd);
+
+    if (closed == -1)
+        throw GramException("Error closing socket -> " + std::string(strerror(errno)));
+
+    if (Ssl != NULL)
+        SSL_free(Ssl);
+
+    if (IsOpen)
+        if (SslContext != NULL)
+            SSL_CTX_free(SslContext);
+
+    IsOpen = false;
 }
 
 void gram::TcpSslClient::SendText(std::string message)
