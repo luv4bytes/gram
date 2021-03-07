@@ -6,11 +6,11 @@ int main()
 {
     gram::ServerBaseManager manager;
 
-    gram::TcpServer* serverTcp = new gram::TcpServer();
+    std::shared_ptr<gram::TcpServer> serverTcp = std::shared_ptr<gram::TcpServer>(new gram::TcpServer());
     serverTcp->Start();
     manager.AddServer(serverTcp);
 
-    gram::UdpServer* serverUdp = new gram::UdpServer();
+    std::shared_ptr<gram::UdpServer> serverUdp = std::shared_ptr<gram::UdpServer>(new gram::UdpServer());
     serverUdp->Start();
     manager.AddServer(serverUdp);
 

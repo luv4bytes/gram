@@ -4,7 +4,7 @@
 int main()
 {
     gram::ServerBaseManager manager;
-    gram::UdpServer* server = new gram::UdpServer();
+    std::shared_ptr<gram::UdpServer> server = std::shared_ptr<gram::UdpServer>(new gram::UdpServer());
 
     manager.AddServer(server);
 

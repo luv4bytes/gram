@@ -3,7 +3,7 @@
 int main()
 {
     gram::ServerBaseManager manager;
-    gram::ServerBase* server = new gram::ServerBase();
+    std::shared_ptr<gram::ServerBase> server = std::shared_ptr<gram::ServerBase>(new gram::ServerBase());
 
     manager.AddServer(server);
 
