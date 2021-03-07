@@ -35,6 +35,8 @@ SOFTWARE. */
 #include "fcntl.h"
 #include <thread>
 
+#include <memory>
+
 #include "../serverbase/ServerBase.hpp"
 #include "../settings/ServerSettings.hpp"
 #include "../exceptions/GramException.hpp"
@@ -55,7 +57,7 @@ namespace gram
         void Start() override;
         void Stop() override;
 
-        static TcpServer* PromptAndCreateNewServer();
+        static std::shared_ptr<TcpServer> PromptAndCreateNewServer();
 
     private:
         int socketFd;

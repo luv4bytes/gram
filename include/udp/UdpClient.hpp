@@ -27,6 +27,8 @@ SOFTWARE. */
 #include <errno.h>
 #include "unistd.h"
 
+#include <memory>
+
 #include "../clientbase/ClientBase.hpp"
 #include "../exceptions/GramException.hpp"
 
@@ -39,7 +41,7 @@ namespace gram
         UdpClient(std::string endpointIpOrName, int port);
         ~UdpClient();
 
-        static UdpClient* PromptAndCreateClient();
+        static std::shared_ptr<UdpClient> PromptAndCreateClient();
     };
 };
 

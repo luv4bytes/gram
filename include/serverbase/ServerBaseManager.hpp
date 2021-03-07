@@ -23,6 +23,8 @@ SOFTWARE. */
 
 #include "ServerBase.hpp"
 
+#include <memory>
+
 namespace gram
 {
     class ServerBaseManager
@@ -31,16 +33,16 @@ namespace gram
 
         ~ServerBaseManager();
 
-        std::vector<ServerBase*> Servers;
+        std::vector<std::shared_ptr<ServerBase>> Servers;
 
-        void AddServer(ServerBase* server);
+        void AddServer(std::shared_ptr<ServerBase> server);
 
         void StopAllServers();
 
         void PrintServers();
 
         template <typename F>
-        ServerBase* WhereServer(F predicate)
+        std::shared_ptr<ServerBase> WhereServer(F predicate)
         {
             for(size_t i = 0; i < Servers.size(); i++)
                 if (predicate(Servers.at(i)))
@@ -49,7 +51,7 @@ namespace gram
             return nullptr;
         }
 
-        void RemoveServer(ServerBase* server);
+        void RemoveServer(std::shared_ptr<ServerBase> server);
 
         void CleanUp();
     };

@@ -29,7 +29,7 @@ gram::TcpServer::~TcpServer()
 {
 }
 
-gram::TcpServer* gram::TcpServer::PromptAndCreateNewServer()
+std::shared_ptr<gram::TcpServer> gram::TcpServer::PromptAndCreateNewServer()
 {
     int port = 0;
     char name[TcpServer::NAME_LENGTH];
@@ -50,7 +50,8 @@ gram::TcpServer* gram::TcpServer::PromptAndCreateNewServer()
     std::cout << "Name (optional, 50 chars): ";
     std::cin.getline(name, TcpServer::NAME_LENGTH);
 
-    TcpServer* server = new TcpServer();
+    std::shared_ptr<TcpServer> server = std::shared_ptr<TcpServer>(new TcpServer());
+
     server->ServerName = name;
 
     if (port == 0)

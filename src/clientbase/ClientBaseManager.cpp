@@ -20,7 +20,7 @@ SOFTWARE. */
 
 #include "../../include/clientbase/ClientBaseManager.hpp"
 
-void gram::ClientBaseManager::AddClient(ClientBase* client)
+void gram::ClientBaseManager::AddClient(std::shared_ptr<ClientBase> client)
 {
     if (client == nullptr)
         return;
@@ -34,8 +34,6 @@ void gram::ClientBaseManager::CloseAllClients()
     {
         Clients.at(i)->Close();
         std::cout << "Closed client " << Clients.at(i)->ClientId << std::endl;
-
-        delete(Clients.at(i));
     }
 
     Clients.clear();
@@ -45,12 +43,12 @@ void gram::ClientBaseManager::PrintClients()
 {
     for(size_t i = 0; i < Clients.size(); i++)
     {
-        ClientBase* client = Clients.at(i);
+        std::shared_ptr<ClientBase> client = Clients.at(i);
         std::cout << client->ClientId << " (" << client->ClientTypeName() << ") - Port: " << client->Port << std::endl;
     }
 }
 
-void gram::ClientBaseManager::RemoveClient(ClientBase* client)
+void gram::ClientBaseManager::RemoveClient(std::shared_ptr<ClientBase> client)
 {
     if (client == nullptr)
         return;
@@ -63,8 +61,6 @@ void gram::ClientBaseManager::RemoveClient(ClientBase* client)
             break;
         }
     }
-
-    delete(client);
 }
 
 void gram::ClientBaseManager::CleanUp()

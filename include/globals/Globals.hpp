@@ -34,4 +34,6 @@ extern gram::ClientBaseManager GlobalClientManager;
 extern gram::Commands* GlobalCommandsPtr;
 extern gram::SettingsInfo GlobalSettingsInfo;
 
+extern std::string PROJECT_URL;
+
 #endif

@@ -34,6 +34,8 @@ SOFTWARE. */
 #include <unistd.h>
 #include <thread>
 
+#include <memory>
+
 #include "../serverbase/ServerBase.hpp"
 #include "../settings/ServerSettings.hpp"
 #include "../exceptions/GramException.hpp"
@@ -52,7 +54,7 @@ namespace gram
         void Start() override;
         void Stop() override;
 
-        static UdpServer* PromptAndCreateNewServer();
+        static std::shared_ptr<UdpServer> PromptAndCreateNewServer();
 
     private:
         int socketFd;

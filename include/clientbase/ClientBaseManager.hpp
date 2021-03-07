@@ -25,20 +25,22 @@ SOFTWARE. */
 #include <iostream>
 #include <vector>
 
+#include <memory>
+
 namespace gram
 {
     class ClientBaseManager
     {
     public:
-        std::vector<ClientBase*> Clients;
+        std::vector<std::shared_ptr<ClientBase>> Clients;
 
-        void AddClient(ClientBase* client);
+        void AddClient(std::shared_ptr<ClientBase> client);
 
         void CloseAllClients();
         void PrintClients();
 
         template <typename F>
-        ClientBase* WhereClient(F predicate)
+        std::shared_ptr<ClientBase> WhereClient(F predicate)
         {
             for(size_t i = 0; i < Clients.size(); i++)
                 if (predicate(Clients.at(i)))
@@ -47,7 +49,7 @@ namespace gram
             return nullptr;
         }
 
-        void RemoveClient(ClientBase* client);
+        void RemoveClient(std::shared_ptr<ClientBase> client);
 
         void CleanUp();
     };

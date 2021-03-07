@@ -31,6 +31,7 @@ void gram::Commands::createCommands()
     createQuitCommand();
 
     createHelpCommand();
+    createOpenProjectCommand();
 
     createStartServerTcpCommand();
     createStartServerUdpCommand();
@@ -122,6 +123,23 @@ void gram::Commands::createHelpCommand()
     AvailableCommands.push_back(help);
 }
 
+void gram::Commands::createOpenProjectCommand()
+{
+    Command openProject;
+    openProject.CommandName = "open project";
+    openProject.Description = "Opens the github project using xdg-open";
+    openProject.ShortCommand = "op";
+
+    openProject.AssignHandler([](){
+
+        std::string cmd = "xdg-open " + PROJECT_URL;
+        system(cmd.c_str());
+
+    });
+
+    AvailableCommands.push_back(openProject);
+}
+
 void gram::Commands::createStartServerTcpCommand()
 {
     Command tcpServer;
@@ -131,7 +149,7 @@ void gram::Commands::createStartServerTcpCommand()
 
     tcpServer.AssignHandler([](){
 
-        TcpServer* newServer = TcpServer::PromptAndCreateNewServer();
+        std::shared_ptr<TcpServer> newServer = TcpServer::PromptAndCreateNewServer();
         newServer->Start();
 
         GlobalServerManager.AddServer(newServer);
@@ -149,10 +167,10 @@ void gram::Commands::createStartServerUdpCommand()
 
     udpServer.AssignHandler([](){
 
-        UdpServer* newServer = UdpServer::PromptAndCreateNewServer();
+        std::shared_ptr<UdpServer> newServer = UdpServer::PromptAndCreateNewServer();
         newServer->Start();
 
-        GlobalServerManager.AddServer(newServer);        
+        GlobalServerManager.AddServer(newServer);
     });
 
     AvailableCommands.push_back(udpServer);
@@ -194,7 +212,7 @@ void gram::Commands::createStopServerCommand()
             throw GramException("Error setting server id");
         }
 
-        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+        std::shared_ptr<ServerBase> server = GlobalServerManager.WhereServer([=](std::shared_ptr<ServerBase> server){
             return (server->ServerId.compare(serverId) == 0);
         });
 
@@ -265,7 +283,7 @@ void gram::Commands::createListServerSettingsCommand()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+        std::shared_ptr<ServerBase> server = GlobalServerManager.WhereServer([=](std::shared_ptr<ServerBase> server){
             return server->ServerId.compare(serverId) == 0;
         });
 
@@ -311,7 +329,7 @@ void gram::Commands::createSetServerSettingCommand()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+        std::shared_ptr<ServerBase> server = GlobalServerManager.WhereServer([=](std::shared_ptr<ServerBase> server){
             return server->ServerId.compare(serverId) == 0;
         });
 
@@ -346,7 +364,7 @@ void gram::Commands::createPrintServerRingbufferCommand()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+        std::shared_ptr<ServerBase> server = GlobalServerManager.WhereServer([=](std::shared_ptr<ServerBase> server){
             return (server->ServerId.compare(serverId) == 0);
         });
         
@@ -381,7 +399,7 @@ void gram::Commands::createPrintServerOutputFileCommand()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        ServerBase* server = GlobalServerManager.WhereServer([=](ServerBase* server){
+        std::shared_ptr<ServerBase> server = GlobalServerManager.WhereServer([=](std::shared_ptr<ServerBase> server){
             return (server->ServerId.compare(serverId) == 0);
         });
 
@@ -415,7 +433,7 @@ void gram::Commands::createStartTcpClientCommand()
 
     startTcpClient.AssignHandler([](){
         
-        TcpClient* client = TcpClient::PromptAndCreateClient();
+        std::shared_ptr<TcpClient> client = TcpClient::PromptAndCreateClient();
 
         GlobalClientManager.AddClient(client);
     });
@@ -432,7 +450,7 @@ void gram::Commands::createStartTcpSslClientCommand()
 
     startTcpSslClient.AssignHandler([](){
 
-        TcpSslClient* client = TcpSslClient::PromptAndCreateClient();
+        std::shared_ptr<TcpSslClient> client = TcpSslClient::PromptAndCreateClient();
 
         GlobalClientManager.AddClient(client);
     });
@@ -449,7 +467,7 @@ void gram::Commands::createStartUdpClientCommand()
 
     startUdpClient.AssignHandler([](){
 
-        UdpClient* client = UdpClient::PromptAndCreateClient();
+        std::shared_ptr<UdpClient> client = UdpClient::PromptAndCreateClient();
 
         GlobalClientManager.AddClient(client);
     });
@@ -494,7 +512,7 @@ void gram::Commands::createOpenClientCommand()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         
-        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+        std::shared_ptr<ClientBase> client = GlobalClientManager.WhereClient([=](std::shared_ptr<ClientBase> client){
             return (client->ClientId.compare(clientId) == 0);
         });
 
@@ -530,7 +548,7 @@ void gram::Commands::createCloseClientCommand()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+        std::shared_ptr<ClientBase> client = GlobalClientManager.WhereClient([=](std::shared_ptr<ClientBase> client){
             return (client->ClientId.compare(clientId) == 0);
         });
 
@@ -578,7 +596,7 @@ void gram::Commands::createClientSendFileCommand()
 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+        std::shared_ptr<ClientBase> client = GlobalClientManager.WhereClient([=](std::shared_ptr<ClientBase> client){
                 return (client->ClientId.compare(clientId) == 0);
         });
 
@@ -626,7 +644,7 @@ void gram::Commands::createClientSendTextCommand()
             throw GramException("Error setting text");
         }
 
-        ClientBase* client = GlobalClientManager.WhereClient([=](ClientBase* client){
+        std::shared_ptr<ClientBase> client = GlobalClientManager.WhereClient([=](std::shared_ptr<ClientBase> client){
                 return (client->ClientId.compare(clientId) == 0);
         });
 

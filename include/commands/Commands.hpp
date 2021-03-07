@@ -73,6 +73,7 @@ namespace gram{
         void createQuitCommand();
 
         void createHelpCommand();
+        void createOpenProjectCommand();
 
         /* SERVER */
 

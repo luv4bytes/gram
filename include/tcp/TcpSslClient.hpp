@@ -26,6 +26,7 @@ SOFTWARE. */
 
 #include "../clientbase/ClientBase.hpp"
 #include <iostream>
+#include <memory>
 
 namespace gram
 {
@@ -45,7 +46,7 @@ namespace gram
         void SendText(std::string message) override;
         void SendFile(std::string filePath) override;
 
-        static TcpSslClient* PromptAndCreateClient();
+        static std::shared_ptr<TcpSslClient> PromptAndCreateClient();
     };
 };
 

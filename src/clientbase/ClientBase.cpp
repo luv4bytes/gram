@@ -82,23 +82,9 @@ void gram::ClientBase::SendFile(std::string filePath)
     if (filePath.empty())
         return;
 
-    std::ifstream stream;
-    stream.open(filePath);
+    std::string content = ReadFileContent(filePath);
 
-    if (!stream.is_open())
-        throw GramException("Error opening file to send");
-
-    stream.seekg(0, std::ios::end);
-    size_t len = stream.tellg();
-
-    char buffer[len];
-    memset(buffer, 0, len);
-
-    stream.seekg(0, std::ios::beg);
-    stream.read(buffer, len);
-    stream.close();
-
-    int sent = send(socketFd, buffer, len, 0);
+    int sent = send(socketFd, content.c_str(), content.size(), 0);
 
     if (sent == -1)
         throw GramException("Error sending message -> " + std::string(strerror(errno)));
@@ -116,6 +102,32 @@ std::string gram::ClientBase::ClientTypeName()
     }
 
     return "none";
+}
+
+std::string gram::ClientBase::ReadFileContent(std::string filePath)
+{
+    if (filePath.empty())
+        throw GramException("File path to read was empty");
+
+    std::ifstream stream;
+    stream.open(filePath);
+
+    if (!stream.is_open())
+        throw GramException("Error opening file to send");
+
+    stream.seekg(0, std::ios::end);
+    size_t len = stream.tellg();
+
+    char buffer[len];
+    memset(buffer, 0, len);
+
+    stream.seekg(0, std::ios::beg);
+    stream.read(buffer, len);
+    stream.close();
+
+    std::string result(buffer);
+
+    return result;
 }
 
 void gram::ClientBase::createId()

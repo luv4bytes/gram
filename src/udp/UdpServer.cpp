@@ -29,7 +29,7 @@ gram::UdpServer::~UdpServer()
 {
 }
 
-gram::UdpServer* gram::UdpServer::PromptAndCreateNewServer()
+std::shared_ptr<gram::UdpServer> gram::UdpServer::PromptAndCreateNewServer()
 {
     int port = 0;
     char name[UdpServer::NAME_LENGTH];
@@ -50,7 +50,7 @@ gram::UdpServer* gram::UdpServer::PromptAndCreateNewServer()
     std::cout << "Name (optional, 50 chars): ";
     std::cin.getline(name, UdpServer::NAME_LENGTH);
 
-    UdpServer* server = new UdpServer();
+    std::shared_ptr<UdpServer> server = std::shared_ptr<UdpServer>(new UdpServer());
     server->ServerName = name;
 
     if (port == 0)

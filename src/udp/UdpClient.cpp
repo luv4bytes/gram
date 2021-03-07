@@ -51,7 +51,7 @@ static inline void trim(std::string& s)
     s.erase(s.find_last_not_of(' ') + 1);
 }
 
-gram::UdpClient* gram::UdpClient::PromptAndCreateClient()
+std::shared_ptr<gram::UdpClient> gram::UdpClient::PromptAndCreateClient()
 {
     int bufsz = 150;
     char bufP[bufsz];
@@ -71,7 +71,7 @@ gram::UdpClient* gram::UdpClient::PromptAndCreateClient()
 
     port = atoi(bufS.substr(pos + 1, bufS.size()).c_str());
 
-    UdpClient* client = new UdpClient(endpoint, port);
+    std::shared_ptr<UdpClient> client = std::shared_ptr<UdpClient>(new UdpClient(endpoint, port));
 
     std::cout << "Created client " + client->ClientId << std::endl;
 

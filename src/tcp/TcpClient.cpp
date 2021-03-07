@@ -51,7 +51,7 @@ static inline void trim(std::string& s)
     s.erase(s.find_last_not_of(' ') + 1);
 }
 
-gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
+std::shared_ptr<gram::TcpClient> gram::TcpClient::PromptAndCreateClient()
 {
     int bufsz = 150;
     char bufP[bufsz];
@@ -71,7 +71,7 @@ gram::TcpClient* gram::TcpClient::PromptAndCreateClient()
 
     port = atoi(bufS.substr(pos + 1, bufS.size()).c_str());
 
-    TcpClient* client = new TcpClient(endpoint, port);
+    std::shared_ptr<TcpClient> client = std::shared_ptr<TcpClient>(new TcpClient(endpoint, port));
 
     std::cout << "Created client " + client->ClientId << std::endl;
 

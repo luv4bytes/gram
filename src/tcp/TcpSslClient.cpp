@@ -96,12 +96,26 @@ void gram::TcpSslClient::Close()
 
 void gram::TcpSslClient::SendText(std::string message)
 {
-    // TODO:
+    if (message.empty())
+        return;
+
+    int sent = SSL_write(Ssl, message.c_str(), message.size());
+
+    if (sent == -1)
+        throw GramException(ERR_lib_error_string(SSL_get_error(Ssl, sent)));
 }
 
 void gram::TcpSslClient::SendFile(std::string filePath)
 {
-    // TODO:
+    if (filePath.empty())
+        return;
+
+    std::string content = ReadFileContent(filePath);
+
+    int sent = SSL_write(Ssl, content.c_str(), content.size());
+
+    if (sent == -1)
+        throw GramException(ERR_lib_error_string(SSL_get_error(Ssl, sent)));
 }
 
 static inline void trim(std::string& s)
@@ -110,7 +124,7 @@ static inline void trim(std::string& s)
     s.erase(s.find_last_not_of(' ') + 1);
 }
 
-gram::TcpSslClient* gram::TcpSslClient::PromptAndCreateClient()
+std::shared_ptr<gram::TcpSslClient> gram::TcpSslClient::PromptAndCreateClient()
 {
     int bufsz = 150;
     char bufP[bufsz];
@@ -130,7 +144,7 @@ gram::TcpSslClient* gram::TcpSslClient::PromptAndCreateClient()
 
     port = atoi(bufS.substr(pos + 1, bufS.size()).c_str());
 
-    TcpSslClient* client = new TcpSslClient(endpoint, port);
+    std::shared_ptr<TcpSslClient> client = std::shared_ptr<TcpSslClient>(new TcpSslClient(endpoint, port));
 
     std::cout << "Created client " + client->ClientId << std::endl;
 

@@ -68,6 +68,8 @@ namespace gram
         virtual void SendText(std::string message);
         virtual void SendFile(std::string filePath);
 
+        std::string ReadFileContent(std::string filePath);
+
         std::string ClientTypeName();
 
     private:

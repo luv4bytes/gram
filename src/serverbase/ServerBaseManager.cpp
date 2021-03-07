@@ -22,11 +22,9 @@ SOFTWARE. */
 
 gram::ServerBaseManager::~ServerBaseManager()
 {
-    for(size_t i = 0; i < Servers.size(); i++)
-        delete(Servers.at(i));
 }
 
-void gram::ServerBaseManager::AddServer(ServerBase* server)
+void gram::ServerBaseManager::AddServer(std::shared_ptr<ServerBase> server)
 {
     if (server == nullptr)
         return;
@@ -37,10 +35,7 @@ void gram::ServerBaseManager::AddServer(ServerBase* server)
 void gram::ServerBaseManager::StopAllServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
-    {
         Servers.at(i)->Stop();
-        delete(Servers.at(i));
-    }
 
     Servers.clear();
 }
@@ -49,12 +44,12 @@ void gram::ServerBaseManager::PrintServers()
 {
     for(size_t i = 0; i < Servers.size(); i++)
     {
-        ServerBase* server = Servers.at(i);
+        std::shared_ptr<ServerBase> server = Servers.at(i);
         std::cout << server->ServerId << " (" << server->ServerTypeName() << ") - Port: " << server->Port << " - Name: " << server->ServerName << std::endl;
     }
 }
 
-void gram::ServerBaseManager::RemoveServer(ServerBase* server)
+void gram::ServerBaseManager::RemoveServer(std::shared_ptr<ServerBase> server)
 {
     if (server == nullptr)
         return;
@@ -67,8 +62,6 @@ void gram::ServerBaseManager::RemoveServer(ServerBase* server)
             break;
         }
     }
-
-    delete(server);
 }
 
 void gram::ServerBaseManager::CleanUp()

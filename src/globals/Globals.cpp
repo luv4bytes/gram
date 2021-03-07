@@ -24,3 +24,5 @@ gram::ServerBaseManager GlobalServerManager;
 gram::ClientBaseManager GlobalClientManager;
 gram::Commands* GlobalCommandsPtr;
 gram::SettingsInfo GlobalSettingsInfo;
+
+std::string PROJECT_URL = "https://github.com/luv4bytes/gram";

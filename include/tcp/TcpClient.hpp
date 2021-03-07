@@ -26,6 +26,8 @@ SOFTWARE. */
 #include "string.h"
 #include <errno.h>
 
+#include <memory>
+
 #include "../clientbase/ClientBase.hpp"
 #include "../exceptions/GramException.hpp"
 
@@ -38,7 +40,7 @@ namespace gram
         TcpClient(std::string endpointIpOrName, int port);
         ~TcpClient();
 
-        static TcpClient* PromptAndCreateClient();
+        static std::shared_ptr<TcpClient> PromptAndCreateClient();
     };
 };
 
