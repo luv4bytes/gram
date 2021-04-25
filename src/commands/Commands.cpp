@@ -49,7 +49,6 @@ void gram::Commands::createCommands()
     createPrintServerOutputFileCommand();
 
     createStartTcpClientCommand();
-    createStartTcpSslClientCommand();
     createStartUdpClientCommand();
 
     createListClientsCommand();
@@ -439,23 +438,6 @@ void gram::Commands::createStartTcpClientCommand()
     });
 
     AvailableCommands.push_back(startTcpClient);
-}
-
-void gram::Commands::createStartTcpSslClientCommand()
-{
-    Command startTcpSslClient;
-    startTcpSslClient.CommandName = "start client tcp ssl";
-    startTcpSslClient.ShortCommand = "ctcp ssl";
-    startTcpSslClient.Description = "Start a new TCP client with SSL encryption";
-
-    startTcpSslClient.AssignHandler([](){
-
-        std::shared_ptr<TcpSslClient> client = TcpSslClient::PromptAndCreateClient();
-
-        GlobalClientManager.AddClient(client);
-    });
-
-    AvailableCommands.push_back(startTcpSslClient);
 }
 
 void gram::Commands::createStartUdpClientCommand()

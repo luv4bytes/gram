@@ -19,18 +19,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 #include "include/commands/Commands.hpp"
-#include "openssl/ssl.h"
-#include "openssl/err.h"
 
 int main(int argc, char** argv)
 {
     try
     {
         std::cout << "gram " << GRAM_VERSION << "\nType \"help\" to get a list of commands!" << std::endl;
-
-        SSL_library_init();
-        OpenSSL_add_all_algorithms();
-        SSL_load_error_strings();
 
         gram::Commands Commands;
         GlobalCommandsPtr = &Commands;
