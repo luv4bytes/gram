@@ -50,21 +50,6 @@ namespace gram{
 
     private:
 
-        /*
-            TODO: 
-
-            - SSL
-
-            Server:
-
-                - SSL -> Set certs
-
-            Lua:
-            
-            - Define API
-            - Implement API
-        */
-
         void createCommands();
         void createExitCommand();
         void createQuitCommand();
