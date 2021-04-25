@@ -14,7 +14,6 @@ add_executable(gram main.cpp
                     src/udp/UdpClient.cpp
                     src/serverbase/ServerBase.cpp
                     src/serverbase/ServerBaseManager.cpp
-                    src/lua_api/LuaApi.cpp
                     src/commands/Commands.cpp
                     src/commands/Command.cpp
                     src/settings/ServerSettings.cpp
@@ -28,7 +27,6 @@ include(CPack)
 
 target_link_libraries(gram uuid)
 target_link_libraries(gram pthread)
-target_link_libraries(gram lua)
 
 include(CTest)
 enable_testing()
@@ -150,15 +148,6 @@ add_executable(UdpClient_Close tests/udp/UdpClient/UdpClient_Close.cpp
                             src/exceptions/GramException.cpp)
 target_link_libraries(UdpClient_Close uuid)
 add_test(UdpClient_Close_Test UdpClient_Close)
-
-# ########## Lua Tests ##########
-
-add_executable(Lua_Initialize tests/lua_api/Lua_Initialize.cpp
-                            src/lua_api/LuaApi.cpp
-                            src/exceptions/GramException.cpp)
-target_link_libraries(Lua_Initialize lua)
-add_test(Lua_Initialize_Test Lua_Initialize)
-
 
 # ########## Commands Tests ##########
 

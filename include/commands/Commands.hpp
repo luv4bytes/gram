@@ -28,12 +28,9 @@ SOFTWARE. */
 
 #include "../tcp/TcpServer.hpp"
 #include "../tcp/TcpClient.hpp"
-#include "../tcp/TcpSslClient.hpp"
 
 #include "../udp/UdpServer.hpp"
 #include "../udp/UdpClient.hpp"
-
-#include "../lua_api/LuaApi.hpp"
 
 #include "Command.hpp"
 
